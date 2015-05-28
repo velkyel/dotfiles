@@ -35,7 +35,9 @@
 (setq fill-column 100)
 ;; (fset 'yes-or-no-p 'y-or-n-p)
 
-;; (set-background-color "gray90")
+(if (kelly?)
+    (set-background-color "gray90")
+  (load-theme 'flatui t))
 
 ;; (progn
 ;;   (set-face-attribute 'cursor nil
@@ -173,8 +175,6 @@
 (require 'google-translate)
 (require 'google-translate-default-ui)
 ;; (require 'google-translate-smooth-ui)
-
-(load-theme 'flatui t)
 
 (require 'wgrep)
 (require 'wgrep-ag)
