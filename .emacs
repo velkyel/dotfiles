@@ -35,10 +35,6 @@
 (setq fill-column 100)
 ;; (fset 'yes-or-no-p 'y-or-n-p)
 
-(if (kelly?)
-    (set-background-color "gray90")
-  (load-theme 'flatui t))
-
 ;; (progn
 ;;   (set-face-attribute 'cursor nil
 ;;                       :background "#EC407A"
@@ -160,6 +156,10 @@
 (require 'define-word)
 (require 'repl-toggle)
 (require 'sx)
+
+(if (kelly?)
+    (set-background-color "gray90")
+  (load-theme 'flatui t))
 
 (exec-path-from-shell-initialize)
 
