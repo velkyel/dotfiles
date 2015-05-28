@@ -7,6 +7,10 @@
       font-lock-maximum-decoration 1
       vc-diff-switches "-u")
 
+(defun kelly? ()
+  (or (string= system-name "typhoon.autokelly.local")
+      (string= system-name "idev02.autokelly.local")))
+
 ;; (setq compilation-skip-threshold 2)
 
 (delete-selection-mode +1)
@@ -145,7 +149,7 @@
     (package-install p)))
 
 (elpy-enable)
-(when (equal system-type 'darwin)
+(when (or (equal system-type 'darwin) (kelly?))
   (setq elpy-modules (delete 'elpy-module-flymake elpy-modules)))
 ;; ...nepodarilo se mi zatim zprovoznit
 
@@ -185,90 +189,88 @@
 (add-to-list 'auto-mode-alist '("\\.vsh\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.fsh\\'" . glsl-mode))
 
-;;; email:
+(when (not (kelly?))
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t)
+  (setq smtpmail-auth-credentials "~/.authinfo")
+  (when (equal system-type 'gnu/linux)
+    (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
+  (when (equal system-type 'darwin)
+    (setq mu4e-mu-binary "/usr/local/bin/mu")
+    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
 
-(setq epa-file-cache-passphrase-for-symmetric-encryption t)
-(setq smtpmail-auth-credentials "~/.authinfo")
+  (require 'mu4e)
 
-(when (equal system-type 'gnu/linux)
-  (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
+  (when (equal system-type 'gnu/linux)
+    (setq mu4e-mu-binary "/usr/bin/mu"))
 
-(when (equal system-type 'darwin)
-  (setq mu4e-mu-binary "/usr/local/bin/mu")
-  (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
+  (setq mu4e-maildir "~/Maildir"
+        mu4e-drafts-folder "/[Gmail].Drafts"
+        mu4e-sent-folder   "/[Gmail].Sent Mail"
+        mu4e-trash-folder  "/[Gmail].Trash"
+        mu4e-maildir-shortcuts
+        '( ("/INBOX"             . ?i)
+           ("/[Gmail].Sent Mail" . ?s)
+           ("/[Gmail].Trash"     . ?t)
+           ("/[Gmail].All Mail"  . ?a))
+        mu4e-get-mail-command "offlineimap -q"
+        mu4e-update-interval nil
+        mu4e-view-show-images t
+        mu4e-html2text-command "html2text -utf8"
+        mu4e-headers-skip-duplicates t
+        user-mail-address "capak@inputwish.com"
+        user-full-name  "Libor Čapák"
+        mail-signature nil
+        mail-signature-file nil
+        message-signature nil
+        mu4e-compose-signature nil
+        mu4e-compose-signature-auto-include nil
+        mu4e-sent-message-behaviour 'delete
+        mu4e-hide-index-messages t
+        mu4e-view-show-addresses t
+        mu4e-date-format-long "%d.%m.%Y"
+        mu4e-headers-date-format "%d.%m.%y"
+        mu4e-confirm-quit nil)
+  ;; (setq mu4e-use-fancy-chars t)
 
-(require 'mu4e)
+  (require 'smtpmail)
 
-(when (equal system-type 'gnu/linux)
-  (setq mu4e-mu-binary "/usr/bin/mu"))
+  ;; (defadvice smtpmail-send-it (around fix-using-openssl activate)
+  ;;   (let ((tls-program
+  ;;          '("openssl s_client -connect %h:%p -no_ssl2 -ign_eof -starttls smtp"))
+  ;;         tls-program)
+  ;;     ad-do-it))
 
-(setq mu4e-maildir "~/Maildir"
-      mu4e-drafts-folder "/[Gmail].Drafts"
-      mu4e-sent-folder   "/[Gmail].Sent Mail"
-      mu4e-trash-folder  "/[Gmail].Trash"
-      mu4e-maildir-shortcuts
-      '( ("/INBOX"             . ?i)
-         ("/[Gmail].Sent Mail" . ?s)
-         ("/[Gmail].Trash"     . ?t)
-         ("/[Gmail].All Mail"  . ?a))
-      mu4e-get-mail-command "offlineimap -q"
-      mu4e-update-interval nil
-      mu4e-view-show-images t
-      mu4e-html2text-command "html2text -utf8"
-      mu4e-headers-skip-duplicates t
-      user-mail-address "capak@inputwish.com"
-      user-full-name  "Libor Čapák"
-      mail-signature nil
-      mail-signature-file nil
-      message-signature nil
-      mu4e-compose-signature nil
-      mu4e-compose-signature-auto-include nil
-      mu4e-sent-message-behaviour 'delete
-      mu4e-hide-index-messages t
-      mu4e-view-show-addresses t
-      mu4e-date-format-long "%d.%m.%Y"
-      mu4e-headers-date-format "%d.%m.%y"
-      mu4e-confirm-quit nil)
-;; (setq mu4e-use-fancy-chars t)
+  (setq message-send-mail-function 'smtpmail-send-it
+        ;;smtpmail-stream-type 'ssl
+        starttls-use-gnutls t
+        smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+        smtpmail-auth-credentials '(("smtp.gmail.com" 587 "capak44@gmail.com" nil))
+        smtpmail-default-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-smtp-service 587)
 
-(require 'smtpmail)
+  (setq message-kill-buffer-on-exit t)
 
-;; (defadvice smtpmail-send-it (around fix-using-openssl activate)
-;;   (let ((tls-program
-;;          '("openssl s_client -connect %h:%p -no_ssl2 -ign_eof -starttls smtp"))
-;;         tls-program)
-;;     ad-do-it))
+  (defun mu4e-msgv-action-view-in-browser (msg)
+    "View the body of the message in a web browser."
+    (interactive)
+    (let ((html (mu4e-msg-field (mu4e-message-at-point t) :body-html))
+          (tmpfile (format "%s/%d.html" temporary-file-directory (random))))
+      (unless html (error "No html part for this message"))
+      (with-temp-file tmpfile
+        (insert
+         "<html>"
+         "<head><meta http-equiv=\"content-type\""
+         "content=\"text/html;charset=UTF-8\">"
+         html))
+      (browse-url (concat "file://" tmpfile))))
 
-(setq message-send-mail-function 'smtpmail-send-it
-      ;;smtpmail-stream-type 'ssl
-      starttls-use-gnutls t
-      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-      smtpmail-auth-credentials '(("smtp.gmail.com" 587 "capak44@gmail.com" nil))
-      smtpmail-default-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 587)
+  (add-to-list 'mu4e-view-actions
+               '("View in browser" . mu4e-msgv-action-view-in-browser) t)
 
-(setq message-kill-buffer-on-exit t)
+  (setq mu4e-html2text-command "html2text -utf8 -width 72")
 
-(defun mu4e-msgv-action-view-in-browser (msg)
-  "View the body of the message in a web browser."
-  (interactive)
-  (let ((html (mu4e-msg-field (mu4e-message-at-point t) :body-html))
-        (tmpfile (format "%s/%d.html" temporary-file-directory (random))))
-    (unless html (error "No html part for this message"))
-    (with-temp-file tmpfile
-      (insert
-       "<html>"
-       "<head><meta http-equiv=\"content-type\""
-       "content=\"text/html;charset=UTF-8\">"
-       html))
-    (browse-url (concat "file://" tmpfile))))
-
-(add-to-list 'mu4e-view-actions
-             '("View in browser" . mu4e-msgv-action-view-in-browser) t)
-
-(setq mu4e-html2text-command "html2text -utf8 -width 72")
-
+  (global-set-key (kbd "C-c m") 'mu4e))
 
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "M-r") 'recompile)
@@ -276,6 +278,5 @@
 (global-set-key (kbd "C-c t") 'visit-term-buffer)
 (global-set-key (kbd "C-;") 'ace-jump-mode)
 (global-set-key (kbd "C-,") 'ace-jump-buffer)
-(global-set-key (kbd "C-c m") 'mu4e)
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
