@@ -1,6 +1,5 @@
 
-(setq compile-command "scons"
-      compilation-ask-about-save nil
+(setq compilation-ask-about-save nil
       next-line-add-newlines nil
       inhibit-startup-message t
       initial-scratch-message nil
@@ -190,6 +189,8 @@
 (add-to-list 'auto-mode-alist '("\\.fsh\\'" . glsl-mode))
 
 (when (not (kelly?))
+  (setq compile-command "scons")
+
   (setq epa-file-cache-passphrase-for-symmetric-encryption t)
   (setq smtpmail-auth-credentials "~/.authinfo")
   (when (equal system-type 'gnu/linux)
