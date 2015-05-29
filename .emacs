@@ -213,6 +213,11 @@
            ("/[Gmail].Sent Mail" . ?s)
            ("/[Gmail].Trash"     . ?t)
            ("/[Gmail].All Mail"  . ?a))
+        mu4e-bookmarks '( ("flag:unread AND NOT flag:trashed AND NOT maildir:/[Gmail].Trash AND NOT maildir:/[Gmail].Spam" "Unread messages"      ?u)
+                          ("date:today..now"                  "Today's messages"     ?t)
+                          ("date:7d..now"                     "Last 7 days"          ?w)
+                          ("mime:image/*"                     "Messages with images" ?p)
+                          ("size:2M..500M"                    "Big messages"         ?b))
         mu4e-get-mail-command "offlineimap -q"
         mu4e-update-interval nil
         mu4e-view-show-images t
