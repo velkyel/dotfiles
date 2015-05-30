@@ -63,7 +63,6 @@
     (switch-to-buffer-other-window "*shell*")))
 
 (setq auto-mode-alist (append '(("\\.mm?$" . objc-mode)) auto-mode-alist))
-(setq auto-mode-alist (append '(("\\.json?$" . js-mode)) auto-mode-alist))
 (setq auto-mode-alist (append '(("\\.as?$" . js-mode)) auto-mode-alist))
 
 (defun my-c-mode-font-lock-if0 (limit)
