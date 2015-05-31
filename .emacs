@@ -138,6 +138,7 @@
                       sx
                       rainbow-mode
                       flatui-theme
+                      json-mode
                       ;; swiper
                       glsl-mode))
 
@@ -155,7 +156,7 @@
 
 (require 'rainbow-mode)
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-
+(require 'json-mode)
 (require 'define-word)
 (require 'repl-toggle)
 (require 'sx)
