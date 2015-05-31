@@ -136,6 +136,7 @@
                       define-word
                       repl-toggle
                       sx
+                      rainbow-mode
                       flatui-theme
                       ;; swiper
                       glsl-mode))
@@ -152,13 +153,24 @@
 (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
 (require 'expand-region)
 
+(require 'rainbow-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+
 (require 'define-word)
 (require 'repl-toggle)
 (require 'sx)
 
 (if (kelly?)
     (set-background-color "gray90")
-  (load-theme 'flatui t))
+  (progn
+    (load-theme 'flatui t)
+    (flatui/with-color-variables
+      (custom-theme-set-faces
+       'flatui
+       `(ace-jump-face-background
+         ((t (:foreground ,concrete :background ,clouds :inverse-video nil))))
+       `(ace-jump-face-foreground
+         ((t (:foreground ,alizarin :background ,clouds :inverse-video nil))))))))
 
 (exec-path-from-shell-initialize)
 
