@@ -163,15 +163,7 @@
 
 (if (kelly?)
     (set-background-color "gray90")
-  (progn
-    (load-theme 'flatui t)
-    (flatui/with-color-variables
-      (custom-theme-set-faces
-       'flatui
-       `(ace-jump-face-background
-         ((t (:foreground ,concrete :background ,clouds :inverse-video nil))))
-       `(ace-jump-face-foreground
-         ((t (:foreground ,alizarin :background ,clouds :inverse-video nil))))))))
+  (load-theme 'flatui t))
 
 (exec-path-from-shell-initialize)
 
