@@ -242,6 +242,10 @@
         mu4e-confirm-quit nil)
   ;; (setq mu4e-use-fancy-chars t)
 
+  (set-face-attribute 'mu4e-unread-face nil
+                      :inherit font-lock-preprocessor-face
+                      :bold t)
+
   (require 'smtpmail)
 
   ;; (defadvice smtpmail-send-it (around fix-using-openssl activate)
