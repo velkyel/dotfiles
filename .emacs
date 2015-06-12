@@ -191,6 +191,7 @@
 (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.vsh\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.fsh\\'" . glsl-mode))
+(add-to-list 'auto-mode-alist '("\\.usf\\'" . glsl-mode))     ;; unreal engine
 
 (when (not (kelly?))
   (setq compile-command "scons")
