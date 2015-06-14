@@ -139,7 +139,6 @@
                       rainbow-mode
                       flatui-theme
                       json-mode
-                      ;; swiper
                       glsl-mode))
 
 (dolist (p df/packages)
@@ -226,7 +225,7 @@
         mu4e-get-mail-command "offlineimap -q"
         mu4e-update-interval nil
         mu4e-view-show-images t
-        mu4e-html2text-command "html2text -utf8"
+        mu4e-html2text-command "html2text -utf8 -width 72"
         mu4e-headers-skip-duplicates t
         user-mail-address "capak@inputwish.com"
         user-full-name  "Libor Čapák"
@@ -282,8 +281,6 @@
 
   (add-to-list 'mu4e-view-actions
                '("View in browser" . mu4e-msgv-action-view-in-browser) t)
-
-  (setq mu4e-html2text-command "html2text -utf8 -width 72")
 
   (global-set-key (kbd "C-c m") 'mu4e))
 
