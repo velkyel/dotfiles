@@ -32,7 +32,6 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
-(setq fill-column 100)
 ;; (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; (progn
@@ -89,9 +88,11 @@
   nil)
 
 (defun my-c-mode-common-hook ()
-  (font-lock-add-keywords
-   nil
-   '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end))
+  (progn
+    (font-lock-add-keywords
+     nil
+     '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
+    (setq fill-column 100)))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
