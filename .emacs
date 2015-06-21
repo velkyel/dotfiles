@@ -137,6 +137,7 @@
                       define-word
                       repl-toggle
                       sx
+                      imenu-anywhere
                       rainbow-mode
                       flatui-theme
                       json-mode
@@ -160,6 +161,8 @@
 (require 'define-word)
 (require 'repl-toggle)
 (require 'sx)
+
+(require 'imenu-anywhere)
 
 (if (kelly?)
     (set-background-color "gray90")
@@ -293,3 +296,4 @@
 (global-set-key (kbd "C-,") 'ace-jump-buffer)
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
+(global-set-key (kbd "C-.") 'imenu-anywhere)
