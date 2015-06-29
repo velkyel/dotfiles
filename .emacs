@@ -10,6 +10,8 @@
   (or (string= system-name "typhoon.autokelly.local")
       (string= system-name "idev02.autokelly.local")))
 
+(setq gc-cons-threshold 20000000)
+
 ;; (setq compilation-skip-threshold 2)
 
 (delete-selection-mode +1)
@@ -45,7 +47,7 @@
 
 (require 'whitespace)
 (setq whitespace-line-column 100)             ;; limit line length
-(setq whitespace-style '(face trailing lines-tail))
+(setq whitespace-style '(face trailing newline))
 (add-hook 'prog-mode-hook 'whitespace-mode)
 
 ;(setq-default line-spacing nil)
@@ -114,7 +116,6 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (package-initialize)
 
 (defvar df/packages '(clojure-mode
@@ -161,6 +162,10 @@
 (require 'define-word)
 (require 'repl-toggle)
 (require 'sx)
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (font-lock-add-keywords nil
+                                    '(("\\<\\(FIXME\\|TODO\\):" 1 font-lock-preprocessor-face prepend)))))
 
 (require 'imenu-anywhere)
 
