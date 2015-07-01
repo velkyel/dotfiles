@@ -142,6 +142,8 @@
                       rainbow-mode
                       flatui-theme
                       json-mode
+                      anzu
+                      undo-tree
                       glsl-mode))
 
 (dolist (p df/packages)
@@ -168,6 +170,12 @@
                                     '(("\\<\\(FIXME\\|TODO\\):" 1 font-lock-preprocessor-face prepend)))))
 
 (require 'imenu-anywhere)
+(require 'anzu)
+(global-anzu-mode +1)
+
+(require 'undo-tree)
+(global-undo-tree-mode 1)           ;; C-x u
+(defalias 'redo 'undo-tree-redo)
 
 (if (kelly?)
     (set-background-color "gray90")
@@ -302,3 +310,5 @@
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 (global-set-key (kbd "C-.") 'imenu-anywhere)
+(global-set-key (kbd "M-%") 'anzu-query-replace)
+(global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp)
