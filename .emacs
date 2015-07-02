@@ -3,7 +3,7 @@
       next-line-add-newlines nil
       inhibit-startup-message t
       initial-scratch-message nil
-      font-lock-maximum-decoration 1
+      font-lock-maximum-decoration '((racket-mode . t) (t . 1))
       vc-diff-switches "-u")
 
 (defun kelly? ()
@@ -136,7 +136,6 @@
                       swift-mode
                       elpy
                       define-word
-                      repl-toggle
                       sx
                       imenu-anywhere
                       rainbow-mode
@@ -163,7 +162,6 @@
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 (require 'json-mode)
 (require 'define-word)
-(require 'repl-toggle)
 (require 'sx)
 (add-hook 'prog-mode-hook
           (lambda ()
