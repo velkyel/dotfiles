@@ -144,6 +144,7 @@
                       json-mode
                       anzu
                       undo-tree
+                      racket-mode
                       glsl-mode))
 
 (dolist (p df/packages)
@@ -176,6 +177,8 @@
 (require 'undo-tree)
 (global-undo-tree-mode 1)           ;; C-x u
 (defalias 'redo 'undo-tree-redo)
+
+(require 'racket-mode)
 
 (if (kelly?)
     (set-background-color "gray90")
@@ -312,3 +315,7 @@
 (global-set-key (kbd "C-.") 'imenu-anywhere)
 (global-set-key (kbd "M-%") 'anzu-query-replace)
 (global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp)
+
+(add-hook 'racket-mode-hook          ;; same as C-c C-k
+          (lambda ()
+            (define-key racket-mode-map (kbd "C-c r") 'racket-run)))
