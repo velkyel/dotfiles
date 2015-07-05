@@ -94,7 +94,8 @@
     (font-lock-add-keywords
      nil
      '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
-    (setq fill-column 100)))
+    (setq fill-column 100)
+    (setq c-hungry-delete-key t)))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
