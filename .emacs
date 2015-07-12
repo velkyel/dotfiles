@@ -1,5 +1,6 @@
 
 (setq compilation-ask-about-save nil
+      compilation-scroll-output 'first-error
       next-line-add-newlines nil
       inhibit-startup-message t
       initial-scratch-message nil
