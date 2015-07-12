@@ -302,7 +302,10 @@
   (add-to-list 'mu4e-view-actions
                '("View in browser" . mu4e-msgv-action-view-in-browser) t)
 
-  (global-set-key (kbd "C-c m") 'mu4e))
+  (global-set-key (kbd "C-c m") '(lambda ()
+                                   (interactive)
+                                   (mu4e)
+                                   (mu4e-update-mail-and-index nil))))
 
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "M-r") 'recompile)
