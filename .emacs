@@ -97,7 +97,8 @@
      nil
      '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
     (setq fill-column 100)
-    (setq c-hungry-delete-key t)))
+    ;; (setq c-hungry-delete-key t)
+    ))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
@@ -128,8 +129,7 @@
                       vc-darcs
                       ninja-mode
                       ag
-                      ace-jump-mode
-                      ace-jump-buffer
+                      avy
                       google-translate
                       wgrep
                       wgrep-ag
@@ -192,10 +192,7 @@
 (autoload 'vc-darcs-find-file-hook "vc-darcs")
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
-(autoload 'ace-jump-mode "ace-jump-mode" "Emacs quick move minor mode" t)
-(eval-after-load "ace-jump-mode" '(ace-jump-mode-enable-mark-sync))
-
-(require 'ace-jump-buffer)
+(require 'avy)
 (require 'google-translate)
 (require 'google-translate-default-ui)
 ;; (require 'google-translate-smooth-ui)
@@ -312,8 +309,8 @@
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C-c t") 'visit-term-buffer)
-(global-set-key (kbd "C-;") 'ace-jump-mode)
-(global-set-key (kbd "C-,") 'ace-jump-buffer)
+(global-set-key (kbd "M-g w") 'avy-goto-word-or-subword-1)
+(global-set-key (kbd "M-g l") 'avy-goto-line)
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 (global-set-key (kbd "C-.") 'imenu-anywhere)
