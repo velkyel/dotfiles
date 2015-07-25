@@ -147,6 +147,7 @@
                       anzu
                       undo-tree
                       racket-mode
+                      processing-mode
                       glsl-mode))
 
 (dolist (p df/packages)
