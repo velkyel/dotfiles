@@ -310,7 +310,7 @@
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "C-c t") 'visit-term-buffer)
-(global-set-key (kbd "M-g w") 'avy-goto-word-or-subword-1)
+(global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
 (global-set-key (kbd "M-g l") 'avy-goto-line)
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
