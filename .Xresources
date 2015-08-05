@@ -1,5 +1,5 @@
 XTerm*termName: xterm-256color
-URxvt*font: xft:Inconsolata-15:antialias=true:hinting=true
+URxvt*font: xft:Inconsolata-14:antialias=true:hinting=true
 ! URxvt*font: xft: DroidSansMono-14:antialias=true:hinting=true
 URxvt*scrollBar: false
 URxvt*background: grey80

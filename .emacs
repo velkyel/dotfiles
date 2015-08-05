@@ -115,7 +115,7 @@
   (set-default-font "Inconsolata-18"))
 
 (when (and window-system (equal system-type 'gnu/linux))
-  (set-default-font "Inconsolata-15"))
+  (set-default-font "Inconsolata-14"))
 ;; (setq x-alt-keysym 'meta)
 
 (require 'package)
@@ -148,6 +148,7 @@
                       undo-tree
                       racket-mode
                       processing-mode
+                      csharp-mode
                       glsl-mode))
 
 (dolist (p df/packages)
