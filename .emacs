@@ -112,7 +112,7 @@
   (setq mac-option-modifier 'nil)
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
-  (set-default-font "Inconsolata-18"))
+  (set-default-font "Inconsolata-17"))
 
 (when (and window-system (equal system-type 'gnu/linux))
   (set-default-font "Inconsolata-14"))
