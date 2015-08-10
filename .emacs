@@ -13,9 +13,9 @@
       (string= system-name "idev03.autokelly.local")))
 
 (setq gc-cons-threshold 20000000)
-
 ;; (setq compilation-skip-threshold 2)
 
+(defalias 'after 'with-eval-after-load)
 (delete-selection-mode +1)
 (show-paren-mode 1)
 (transient-mark-mode t)
@@ -29,6 +29,7 @@
 (iswitchb-mode t)   ;; substring buffer switch
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
+(setq-default abbrev-mode t)
 (winner-mode t)   ;; C-c <left|right>
 (set-language-environment "czech")
 (setq default-input-method "czech-qwerty")
@@ -46,11 +47,6 @@
 ;;                       :inherit nil
 ;;                       :background "#EAEAEA"
 ;;                       :foreground "#3f525b"))   ;; (color-darken-name "#546E7A" 10)))))
-
-(require 'whitespace)
-(setq whitespace-line-column 100)             ;; limit line length
-(setq whitespace-style '(face trailing newline))
-(add-hook 'prog-mode-hook 'whitespace-mode)
 
 ;(setq-default line-spacing nil)
 (global-auto-revert-mode 1)
@@ -149,11 +145,24 @@
                       racket-mode
                       processing-mode
                       csharp-mode
+                      diminish
                       glsl-mode))
 
 (dolist (p df/packages)
   (when (not (package-installed-p p))
     (package-install p)))
+
+(require 'diminish)
+(after 'anzu (diminish 'anzu-mode))
+(after 'undo-tree (diminish 'undo-tree-mode " ψ"))
+(after 'rainbow-mode (diminish 'rainbow-mode))
+(after 'abbrev (diminish 'abbrev-mode))
+(after 'whitespace (diminish 'whitespace-mode " ⌴"))
+
+(require 'whitespace)
+(setq whitespace-line-column 100)             ;; limit line length
+(setq whitespace-style '(face trailing newline))
+(add-hook 'prog-mode-hook 'whitespace-mode)
 
 (elpy-enable)
 (when (or (equal system-type 'darwin) (kelly?))
