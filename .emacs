@@ -146,6 +146,7 @@
                       processing-mode
                       csharp-mode
                       diminish
+                      fillcode
                       glsl-mode))
 
 (dolist (p df/packages)
@@ -163,6 +164,11 @@
 (setq whitespace-line-column 100)             ;; limit line length
 (setq whitespace-style '(face trailing newline))
 (add-hook 'prog-mode-hook 'whitespace-mode)
+
+(add-hook 'c-mode-common-hook 'fillcode-mode)
+(add-hook 'python-mode-hook 'fillcode-mode)
+(add-hook 'shell-script-mode-hook 'fillcode-mode)
+(add-hook 'sql-mode-hook 'fillcode-mode)
 
 (elpy-enable)
 (when (or (equal system-type 'darwin) (kelly?))
