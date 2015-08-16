@@ -5,6 +5,8 @@
       inhibit-startup-message t
       initial-scratch-message nil
       font-lock-maximum-decoration '((racket-mode . t) (t . 1))
+      load-prefer-newer t
+      require-final-newline t
       vc-diff-switches "-u")
 
 (defun kelly? ()
@@ -115,7 +117,13 @@
 ;; (setq x-alt-keysym 'meta)
 
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+
+(setq package-pinned-packages
+      '((cider          . "melpa-stable")
+        (clojure-mode   . "melpa-stable")))
+
 (package-initialize)
 
 (defvar df/packages '(clojure-mode
@@ -140,25 +148,36 @@
                       rainbow-mode
                       flatui-theme
                       json-mode
-                      anzu
                       undo-tree
                       racket-mode
                       processing-mode
                       csharp-mode
                       diminish
                       fillcode
+                      company
+                      cider
+                      ;; ac-cider
                       glsl-mode))
+
+(package-refresh-contents)
 
 (dolist (p df/packages)
   (when (not (package-installed-p p))
     (package-install p)))
 
+(global-company-mode)
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+
+(require 'saveplace)
+(setq-default save-place t)
+
 (require 'diminish)
-(after 'anzu (diminish 'anzu-mode))
 (after 'undo-tree (diminish 'undo-tree-mode " ψ"))
 (after 'rainbow-mode (diminish 'rainbow-mode))
 (after 'abbrev (diminish 'abbrev-mode))
-(after 'whitespace (diminish 'whitespace-mode " ⌴"))
+(after 'whitespace (diminish 'whitespace-mode " _"))
 
 (require 'whitespace)
 (setq whitespace-line-column 100)             ;; limit line length
@@ -170,12 +189,19 @@
 (add-hook 'shell-script-mode-hook 'fillcode-mode)
 (add-hook 'sql-mode-hook 'fillcode-mode)
 
+(add-hook 'cider-mode-hook #'eldoc-mode)
+(setq cider-auto-mode nil
+      nrepl-log-messages nil
+      nrepl-hide-special-buffers t
+      cider-repl-use-pretty-printing t
+      cider-prompt-save-file-on-load nil)
+
 (elpy-enable)
 (when (or (equal system-type 'darwin) (kelly?))
   (setq elpy-modules (delete 'elpy-module-flymake elpy-modules)))
 ;; ...nepodarilo se mi zatim zprovoznit
 
-(add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
+;; (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
 (require 'expand-region)
 
 (require 'rainbow-mode)
@@ -189,8 +215,6 @@
                                     '(("\\<\\(FIXME\\|TODO\\):" 1 font-lock-preprocessor-face prepend)))))
 
 (require 'imenu-anywhere)
-(require 'anzu)
-(global-anzu-mode +1)
 
 (require 'undo-tree)
 (global-undo-tree-mode 1)           ;; C-x u
@@ -323,16 +347,21 @@
                                    (mu4e-update-mail-and-index nil))))
 
 (global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "C-=") 'er/expand-region)
+(global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-c t") 'visit-term-buffer)
 (global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
 (global-set-key (kbd "M-g l") 'avy-goto-line)
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 (global-set-key (kbd "C-.") 'imenu-anywhere)
-(global-set-key (kbd "M-%") 'anzu-query-replace)
-(global-set-key (kbd "C-M-%") 'anzu-query-replace-regexp)
 
 (add-hook 'racket-mode-hook          ;; same as C-c C-k
           (lambda ()
