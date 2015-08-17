@@ -156,7 +156,6 @@
                       fillcode
                       company
                       cider
-                      ;; ac-cider
                       glsl-mode))
 
 (package-refresh-contents)
@@ -189,19 +188,12 @@
 (add-hook 'shell-script-mode-hook 'fillcode-mode)
 (add-hook 'sql-mode-hook 'fillcode-mode)
 
-(add-hook 'cider-mode-hook #'eldoc-mode)
-(setq cider-auto-mode nil
-      nrepl-log-messages nil
-      nrepl-hide-special-buffers t
-      cider-repl-use-pretty-printing t
-      cider-prompt-save-file-on-load nil)
-
 (elpy-enable)
 (when (or (equal system-type 'darwin) (kelly?))
   (setq elpy-modules (delete 'elpy-module-flymake elpy-modules)))
 ;; ...nepodarilo se mi zatim zprovoznit
 
-;; (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
+(add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
 (require 'expand-region)
 
 (require 'rainbow-mode)
@@ -219,8 +211,6 @@
 (require 'undo-tree)
 (global-undo-tree-mode 1)           ;; C-x u
 (defalias 'redo 'undo-tree-redo)
-
-(require 'racket-mode)
 
 (if (kelly?)
     (set-background-color "gray90")
@@ -251,9 +241,7 @@
 (add-to-list 'auto-mode-alist '("\\.fsh\\'" . glsl-mode))
 (add-to-list 'auto-mode-alist '("\\.usf\\'" . glsl-mode))     ;; unreal engine
 
-(when (not (kelly?))
-  (setq compile-command "scons")
-
+(defun setup-mu4e ()
   (setq epa-file-cache-passphrase-for-symmetric-encryption t)
   (setq smtpmail-auth-credentials "~/.authinfo")
   (when (equal system-type 'gnu/linux)
@@ -346,6 +334,24 @@
                                    (mu4e)
                                    (mu4e-update-mail-and-index nil))))
 
+(defun setup-cider ()
+  (require 'cider)
+  (add-hook 'cider-mode-hook #'eldoc-mode)
+  ;; (setq cider-auto-mode nil)
+  ;; (setq nrepl-log-messages nil)
+  ;; (setq nrepl-hide-special-buffers t)
+  (setq cider-repl-use-pretty-printing t)
+  (setq cider-prompt-save-file-on-load nil))
+
+(when (not (kelly?))
+  (setq compile-command "scons")
+  (setup-mu4e)
+  (setup-cider)
+  (require 'racket-mode)
+  (add-hook 'racket-mode-hook          ;; same as C-c C-k
+            (lambda ()
+              (define-key racket-mode-map (kbd "C-c r") 'racket-run))))
+
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 'recompile)
@@ -362,7 +368,3 @@
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 (global-set-key (kbd "C-.") 'imenu-anywhere)
-
-(add-hook 'racket-mode-hook          ;; same as C-c C-k
-          (lambda ()
-            (define-key racket-mode-map (kbd "C-c r") 'racket-run)))
