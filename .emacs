@@ -148,6 +148,7 @@
                       company
                       cider
                       shrink-whitespace
+                      company-c-headers
                       glsl-mode))
 
 (package-refresh-contents)
@@ -156,6 +157,8 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+(require 'company)
+(setq company-backends (delete 'company-semantic company-backends))
 (global-company-mode)
 
 (require 'uniquify)
@@ -345,7 +348,8 @@
               (define-key racket-mode-map (kbd "C-c r") 'racket-run))))
 
 (global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "TAB") #'company-indent-or-complete-common)
+(define-key c-mode-map (kbd "TAB") 'company-indent-or-complete-common)
+(define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "C-=") 'er/expand-region)
 (global-set-key (kbd "M-/") 'hippie-expand)
