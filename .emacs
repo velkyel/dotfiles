@@ -149,6 +149,7 @@
                       cider
                       shrink-whitespace
                       company-c-headers
+                      switch-window
                       glsl-mode))
 
 (package-refresh-contents)
@@ -365,3 +366,4 @@
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 (global-set-key (kbd "C-.") 'imenu-anywhere)
 (global-set-key (kbd "M-\\") 'shrink-whitespace)
+(global-set-key (kbd "C-x o") 'switch-window)
