@@ -41,15 +41,6 @@
 
 ;; (fset 'yes-or-no-p 'y-or-n-p)
 
-;; (progn
-;;   (set-face-attribute 'cursor nil
-;;                       :background "#EC407A"
-;;                       :inverse-video t)
-;;   (set-face-attribute 'default nil
-;;                       :inherit nil
-;;                       :background "#EAEAEA"
-;;                       :foreground "#3f525b"))   ;; (color-darken-name "#546E7A" 10)))))
-
 ;(setq-default line-spacing nil)
 (global-auto-revert-mode 1)
 
@@ -113,7 +104,7 @@
   (set-default-font "Inconsolata-17"))
 
 (when (and window-system (equal system-type 'gnu/linux))
-  (set-default-font "Inconsolata-14"))
+  (set-default-font "Inconsolata-13"))
 ;; (setq x-alt-keysym 'meta)
 
 (require 'package)
@@ -156,6 +147,7 @@
                       fillcode
                       company
                       cider
+                      shrink-whitespace
                       glsl-mode))
 
 (package-refresh-contents)
@@ -368,3 +360,4 @@
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 (global-set-key (kbd "C-.") 'imenu-anywhere)
+(global-set-key (kbd "M-\\") 'shrink-whitespace)
