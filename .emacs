@@ -349,6 +349,13 @@
             (lambda ()
               (define-key racket-mode-map (kbd "C-c r") 'racket-run))))
 
+(define-key function-key-map "\e[$" (kbd "C-$"))
+(define-key function-key-map "\e[%" (kbd "C-%"))
+(define-key function-key-map "\e[," (kbd "C-,"))
+(define-key function-key-map "\e[;" (kbd "C-;"))
+(define-key function-key-map "\e[=" (kbd "C-="))
+(define-key function-key-map "\e[." (kbd "C-."))
+
 (global-set-key (kbd "RET") 'newline-and-indent)
 (define-key c-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 (define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)

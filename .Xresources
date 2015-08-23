@@ -5,6 +5,13 @@ URxvt*background: grey80
 Urxvt*foreground: black
 Urxvt*depth: 32
 
+URxvt.keysym.C-semicolon: \033[;
+URxvt.keysym.C-comma:     \033[,
+URxvt.keysym.C-period:    \033[.
+URxvt.keysym.C-dollar:    \033[$
+URxvt.keysym.C-percent:   \033[%
+URxvt.keysym.C-equal:     \033[=
+
 URxvt*color0:             #2e3436
 URxvt*color8:             #7e807b
 ! red dark/light
