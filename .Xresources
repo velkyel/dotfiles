@@ -4,6 +4,8 @@ URxvt*scrollBar: false
 URxvt*background: grey80
 Urxvt*foreground: black
 Urxvt*depth: 32
+URxvt.iso14755: false
+URxvt.iso14755_52: false
 
 URxvt.keysym.C-semicolon: \033[;
 URxvt.keysym.C-comma:     \033[,
