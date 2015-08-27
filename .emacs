@@ -9,6 +9,12 @@
       require-final-newline t
       vc-diff-switches "-u")
 
+(if window-system
+    (progn
+      (tool-bar-mode -1)
+      (scroll-bar-mode -1)
+      (fringe-mode 2)))
+
 (defun kelly? ()
   (or (string= system-name "typhoon.autokelly.local")
       (string= system-name "idev02.autokelly.local")
@@ -22,10 +28,6 @@
 (show-paren-mode 1)
 (transient-mark-mode t)
 (menu-bar-mode -1)
-(if window-system (tool-bar-mode -1))
-;(if window-system (tabbar-mode -1))
-(if window-system (scroll-bar-mode -1))
-(if window-system (fringe-mode 2))
 (which-function-mode)
 (column-number-mode)
 (iswitchb-mode t)   ;; substring buffer switch
@@ -148,12 +150,10 @@
                       company
                       cider
                       shrink-whitespace
-                      company-c-headers
-                      ace-window
-                      ace-window
                       glsl-mode))
 
-(package-refresh-contents)
+(if (not (file-directory-p package-user-dir))     ;; jinak chci manualne
+    (package-refresh-contents))
 
 (dolist (p df/packages)
   (when (not (package-installed-p p))
@@ -170,10 +170,10 @@
 (setq-default save-place t)
 
 (require 'diminish)
-(after 'undo-tree (diminish 'undo-tree-mode " ψ"))
+(after 'undo-tree (diminish 'undo-tree-mode))
 (after 'rainbow-mode (diminish 'rainbow-mode))
 (after 'abbrev (diminish 'abbrev-mode))
-(after 'whitespace (diminish 'whitespace-mode " _"))
+(after 'whitespace (diminish 'whitespace-mode))
 
 (require 'whitespace)
 (setq whitespace-line-column 100)             ;; limit line length
@@ -374,4 +374,3 @@
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 (global-set-key (kbd "C-.") 'imenu-anywhere)
 (global-set-key (kbd "M-\\") 'shrink-whitespace)
-(global-set-key (kbd "C-x o") 'ace-window)
