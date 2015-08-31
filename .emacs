@@ -103,10 +103,10 @@
   (setq mac-option-modifier 'nil)
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
-  (set-default-font "Inconsolata-17"))
+  (set-default-font "Inconsolata 17"))
 
 (when (and window-system (equal system-type 'gnu/linux))
-  (set-default-font "Inconsolata-13"))
+  (set-default-font "Inconsolata 13"))
 ;; (setq x-alt-keysym 'meta)
 
 (require 'package)
@@ -150,6 +150,7 @@
                       company
                       cider
                       shrink-whitespace
+                      browse-kill-ring
                       glsl-mode))
 
 (if (not (file-directory-p package-user-dir))     ;; jinak chci manualne
@@ -161,7 +162,10 @@
 
 (require 'company)
 (setq company-backends (delete 'company-semantic company-backends))
-(global-company-mode)
+(setq company-idle-delay 0.1)
+(add-hook 'prog-mode-hook (lambda () (company-mode 1)))
+
+(require 'browse-kill-ring)
 
 (require 'uniquify)
 (setq uniquify-buffer-name-style 'forward)
@@ -252,6 +256,9 @@
   (when (equal system-type 'gnu/linux)
     (setq mu4e-mu-binary "/usr/bin/mu"))
 
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types))
+
   (setq mu4e-maildir "~/Maildir"
         mu4e-drafts-folder "/[Gmail].Drafts"
         mu4e-sent-folder   "/[Gmail].Sent Mail"
@@ -269,7 +276,7 @@
         mu4e-get-mail-command "offlineimap -q"
         mu4e-update-interval nil
         mu4e-view-show-images t
-        mu4e-html2text-command "html2text -utf8 -width 72"
+        mu4e-html2text-command "html2text -utf8 -width 72 -style pretty"
         mu4e-headers-skip-duplicates t
         user-mail-address "capak@inputwish.com"
         user-full-name  "Libor Čapák"
@@ -333,7 +340,7 @@
 
 (defun setup-cider ()
   (require 'cider)
-  (add-hook 'cider-mode-hook #'eldoc-mode)
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   ;; (setq cider-auto-mode nil)
   ;; (setq nrepl-log-messages nil)
   ;; (setq nrepl-hide-special-buffers t)
@@ -356,6 +363,9 @@
 (define-key function-key-map "\e[=" (kbd "C-="))
 (define-key function-key-map "\e[." (kbd "C-."))
 
+(define-key (current-global-map) [remap yank-pop] 'browse-kill-ring)   ;; remap yank-pop
+(after 'browse-kill-ring (setq browse-kill-ring-replace-yank t))
+
 (global-set-key (kbd "RET") 'newline-and-indent)
 (define-key c-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 (define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
@@ -374,3 +384,4 @@
 ;; (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line)
 (global-set-key (kbd "C-.") 'imenu-anywhere)
 (global-set-key (kbd "M-\\") 'shrink-whitespace)
+(global-set-key (kbd "M-o") 'other-window)
