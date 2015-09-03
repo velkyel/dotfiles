@@ -1,6 +1,6 @@
 clear mod4
 clear mod1
-add mod1 = Super_L Super_R Alt_L Alt_R
+add mod1 = Meta_L Meta_R Super_L Super_R Alt_L Alt_R
 keycode 94 = grave asciitilde
 keycode 232 = F1
 keycode 233 = F2
