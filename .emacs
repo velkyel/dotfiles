@@ -276,7 +276,7 @@
         mu4e-get-mail-command "offlineimap -q"
         mu4e-update-interval nil
         mu4e-view-show-images t
-        mu4e-html2text-command "html2text -utf8 -width 72 -style pretty"
+        mu4e-html2text-command "w3m -T text/html"
         mu4e-headers-skip-duplicates t
         user-mail-address "capak@inputwish.com"
         user-full-name  "Libor Čapák"
