@@ -147,7 +147,9 @@
                       csharp-mode
                       diminish
                       fillcode
+                      irony
                       company
+                      company-irony
                       cider
                       shrink-whitespace
                       browse-kill-ring
@@ -160,8 +162,14 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
+
 (require 'company)
+(require 'company-irony)
 (setq company-backends (delete 'company-semantic company-backends))
+(add-to-list 'company-backends 'company-irony)
 (setq company-idle-delay 0.1)
 (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
 
@@ -371,7 +379,7 @@
 (define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "C-=") 'er/expand-region)
-(global-set-key (kbd "M-/") 'hippie-expand)
+;; (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-c t") 'visit-term-buffer)
 (global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
 (global-set-key (kbd "M-g l") 'avy-goto-line)
