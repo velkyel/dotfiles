@@ -146,7 +146,6 @@
                       processing-mode
                       csharp-mode
                       diminish
-                      fillcode
                       irony
                       company
                       company-irony
@@ -165,6 +164,14 @@
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'objc-mode-hook 'irony-mode)
+
+(defun my-irony-mode-hook ()
+  (define-key irony-mode-map [remap completion-at-point]
+    'irony-completion-at-point-async)
+  (define-key irony-mode-map [remap complete-symbol]
+    'irony-completion-at-point-async))
+(add-hook 'irony-mode-hook 'my-irony-mode-hook)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
 (require 'company)
 (require 'company-irony)
@@ -191,11 +198,6 @@
 (setq whitespace-line-column 100)             ;; limit line length
 (setq whitespace-style '(face trailing newline))
 (add-hook 'prog-mode-hook 'whitespace-mode)
-
-(add-hook 'c-mode-common-hook 'fillcode-mode)
-(add-hook 'python-mode-hook 'fillcode-mode)
-(add-hook 'shell-script-mode-hook 'fillcode-mode)
-(add-hook 'sql-mode-hook 'fillcode-mode)
 
 (elpy-enable)
 (when (or (equal system-type 'darwin) (kelly?))
