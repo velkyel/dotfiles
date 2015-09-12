@@ -136,7 +136,6 @@
                       swift-mode
                       elpy
                       define-word
-                      sx
                       imenu-anywhere
                       rainbow-mode
                       flatui-theme
@@ -177,7 +176,7 @@
 (require 'company-irony)
 (setq company-backends (delete 'company-semantic company-backends))
 (add-to-list 'company-backends 'company-irony)
-(setq company-idle-delay 0.1)
+;; (setq company-idle-delay 0.1)
 (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
 
 (require 'browse-kill-ring)
@@ -211,7 +210,6 @@
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 (require 'json-mode)
 (require 'define-word)
-(require 'sx)
 (add-hook 'prog-mode-hook
           (lambda ()
             (font-lock-add-keywords nil
