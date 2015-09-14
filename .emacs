@@ -7,11 +7,15 @@
       font-lock-maximum-decoration '((racket-mode . t) (t . 1))
       load-prefer-newer t
       require-final-newline t
+      redisplay-dont-pause t
+      column-number-mode t
+      sentence-end-double-space nil
       vc-diff-switches "-u")
 
 (if window-system
     (progn
       (tool-bar-mode -1)
+      (tooltip-mode -1)
       (scroll-bar-mode -1)
       (fringe-mode 2)))
 
@@ -24,15 +28,15 @@
 ;; (setq compilation-skip-threshold 2)
 
 (defalias 'after 'with-eval-after-load)
-(delete-selection-mode +1)
+(delete-selection-mode t)
 (show-paren-mode 1)
 (transient-mark-mode t)
 (menu-bar-mode -1)
 (which-function-mode)
-(column-number-mode)
 (iswitchb-mode t)   ;; substring buffer switch
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
+(setq-default py-indent-offset 4)
 (setq-default abbrev-mode t)
 (winner-mode t)   ;; C-c <left|right>
 (set-language-environment "czech")
@@ -41,9 +45,11 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
-;; (fset 'yes-or-no-p 'y-or-n-p)
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;(setq-default line-spacing nil)
+(setq global-auto-revert-non-file-buffers t)
+;; (setq auto-revert-verbose nil)
 (global-auto-revert-mode 1)
 
 (defun visit-term-buffer ()
@@ -146,11 +152,14 @@
                       csharp-mode
                       diminish
                       irony
-                      company
-                      company-irony
+                      ;; company
+                      ;; company-irony
                       cider
                       shrink-whitespace
                       browse-kill-ring
+                      nyan-mode
+                      highlight-parentheses
+                      projectile
                       glsl-mode))
 
 (if (not (file-directory-p package-user-dir))     ;; jinak chci manualne
@@ -160,24 +169,34 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
+(require 'projectile)
+(projectile-global-mode)
 
-(defun my-irony-mode-hook ()
-  (define-key irony-mode-map [remap completion-at-point]
-    'irony-completion-at-point-async)
-  (define-key irony-mode-map [remap complete-symbol]
-    'irony-completion-at-point-async))
-(add-hook 'irony-mode-hook 'my-irony-mode-hook)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+;; (add-hook 'c++-mode-hook 'irony-mode)
+;; (add-hook 'c-mode-hook 'irony-mode)
+;; (add-hook 'objc-mode-hook 'irony-mode)
 
-(require 'company)
-(require 'company-irony)
-(setq company-backends (delete 'company-semantic company-backends))
-(add-to-list 'company-backends 'company-irony)
-;; (setq company-idle-delay 0.1)
-(add-hook 'prog-mode-hook (lambda () (company-mode 1)))
+;; (defun my-irony-mode-hook ()
+;;   (define-key irony-mode-map [remap completion-at-point]
+;;     'irony-completion-at-point-async)
+;;   (define-key irony-mode-map [remap complete-symbol]
+;;     'irony-completion-at-point-async))
+;; (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
+;; (require 'company)
+;; (require 'company-irony)
+;; (setq company-backends (delete 'company-semantic company-backends)
+;;       company-global-modes '(not term-mode)
+;;       company-transformers '(company-sort-by-occurrence)
+;;       company-minimum-prefix-length 2
+;;       company-selection-wrap-around t
+;;       company-show-numbers t
+;;       company-require-match nil
+;;       company-dabbrev-downcase nil)
+;; (add-to-list 'company-backends 'company-irony)
+;; ;; (setq company-idle-delay 0.1)
+;; (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
 
 (require 'browse-kill-ring)
 
@@ -192,6 +211,12 @@
 (after 'rainbow-mode (diminish 'rainbow-mode))
 (after 'abbrev (diminish 'abbrev-mode))
 (after 'whitespace (diminish 'whitespace-mode))
+(after 'highlight-parentheses (diminish 'highlight-parentheses-mode))
+
+(require 'nyan-mode)
+(nyan-mode 1)
+(setq nyan-bar-length 16
+      naya-wavy-trail t)
 
 (require 'whitespace)
 (setq whitespace-line-column 100)             ;; limit line length
@@ -206,8 +231,10 @@
 (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
 (require 'expand-region)
 
+(require 'highlight-parentheses)
 (require 'rainbow-mode)
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+(add-hook 'emacs-lisp-mode-hook 'highlight-parentheses-mode)
 (require 'json-mode)
 (require 'define-word)
 (add-hook 'prog-mode-hook
@@ -374,15 +401,19 @@
 (define-key (current-global-map) [remap yank-pop] 'browse-kill-ring)   ;; remap yank-pop
 (after 'browse-kill-ring (setq browse-kill-ring-replace-yank t))
 
-(global-set-key (kbd "RET") 'newline-and-indent)
-(define-key c-mode-map (kbd "TAB") 'company-indent-or-complete-common)
-(define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
+(define-key global-map (kbd "RET") 'newline-and-indent)
+;; (define-key c-mode-map (kbd "TAB") 'company-indent-or-complete-common)
+;; (define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "C-=") 'er/expand-region)
 ;; (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-c t") 'visit-term-buffer)
+(global-set-key (kbd "C-c C-f") 'projectile-find-file)
+
 (global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
 (global-set-key (kbd "M-g l") 'avy-goto-line)
+(after 'isearch (define-key isearch-mode-map (kbd "C-;") 'avy-isearch))
+
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
