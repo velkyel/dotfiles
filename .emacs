@@ -9,7 +9,6 @@
       require-final-newline t
       redisplay-dont-pause t
       column-number-mode t
-      sentence-end-double-space nil
       vc-diff-switches "-u")
 
 (if window-system
@@ -406,7 +405,6 @@
 ;; (define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "C-=") 'er/expand-region)
-;; (global-set-key (kbd "M-/") 'hippie-expand)
 (global-set-key (kbd "C-c t") 'visit-term-buffer)
 (global-set-key (kbd "C-c C-f") 'projectile-find-file)
 
