@@ -51,18 +51,21 @@
 ;; (setq auto-revert-verbose nil)
 (global-auto-revert-mode 1)
 
+(require 'em-alias)
+(setq eshell-command-aliases-list (append '(("l" "ls -lcrt")
+                                            ("d" "dired $1")
+                                            ("ff" "find-file $1"))
+                                          eshell-command-aliases-list))
+
 (defun visit-term-buffer ()
   "Create or visit a terminal buffer."
   (interactive)
-  (if (not (get-buffer "*shell*"))
+  (if (not (get-buffer "*eshell*"))
       (progn
         (split-window-sensibly (selected-window))
         (other-window 1)
-        (shell))
-    (switch-to-buffer-other-window "*shell*")))
-
-(setq auto-mode-alist (append '(("\\.mm?$" . objc-mode)) auto-mode-alist))
-(setq auto-mode-alist (append '(("\\.as?$" . js-mode)) auto-mode-alist))
+        (eshell))
+    (switch-to-buffer-other-window "*eshell*")))
 
 (defun my-c-mode-font-lock-if0 (limit)
   (save-restriction
@@ -269,12 +272,16 @@
 (require 'mwim)
 
 (autoload 'glsl-mode "glsl-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.glsl\\'" . glsl-mode))
-(add-to-list 'auto-mode-alist '("\\.vert\\'" . glsl-mode))
-(add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
-(add-to-list 'auto-mode-alist '("\\.vsh\\'" . glsl-mode))
-(add-to-list 'auto-mode-alist '("\\.fsh\\'" . glsl-mode))
-(add-to-list 'auto-mode-alist '("\\.usf\\'" . glsl-mode))     ;; unreal engine
+
+(setq auto-mode-alist (append '(("\\.mm?$" . objc-mode)
+                                ("\\.as?$" . js-mode)
+                                ("\\.glsl\\'" . glsl-mode)
+                                ("\\.vert\\'" . glsl-mode)
+                                ("\\.frag\\'" . glsl-mode)
+                                ("\\.vsh\\'" . glsl-mode)
+                                ("\\.fsh\\'" . glsl-mode)
+                                ("\\.usf\\'" . glsl-mode))     ;; unreal engine
+                              auto-mode-alist))
 
 (defun setup-mu4e ()
   (setq epa-file-cache-passphrase-for-symmetric-encryption t)
