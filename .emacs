@@ -215,11 +215,6 @@
 (after 'whitespace (diminish 'whitespace-mode))
 (after 'highlight-parentheses (diminish 'highlight-parentheses-mode))
 
-(require 'nyan-mode)
-(nyan-mode 1)
-(setq nyan-bar-length 16
-      naya-wavy-trail t)
-
 (require 'whitespace)
 (setq whitespace-line-column 100)             ;; limit line length
 (setq whitespace-style '(face trailing newline))
@@ -257,7 +252,7 @@
 (exec-path-from-shell-initialize)
 
 (setq vc-disable-async-diff nil)        ;; hotfix: vc-darcs je modul o ktery se zjevne nikdo moc nestara
-(add-to-list 'vc-handled-backends 'DARCS)
+(add-to-list 'vc-handled-backends 'DARCS t)
 (autoload 'vc-darcs-find-file-hook "vc-darcs")
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
@@ -389,6 +384,10 @@
   (setq cider-prompt-save-file-on-load nil))
 
 (when (not (kelly?))
+  (require 'nyan-mode)
+  (nyan-mode 1)
+  (setq nyan-bar-length 16
+        naya-wavy-trail t)
   (setq compile-command "scons")
   (setup-mu4e)
   (setup-cider)
@@ -396,6 +395,9 @@
   (add-hook 'racket-mode-hook          ;; same as C-c C-k
             (lambda ()
               (define-key racket-mode-map (kbd "C-c r") 'racket-run))))
+
+(defalias 'g 'grep)
+(defalias 'pg 'projectile-grep)
 
 (define-key function-key-map "\e[$" (kbd "C-$"))
 (define-key function-key-map "\e[%" (kbd "C-%"))
