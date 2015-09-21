@@ -1,10 +1,15 @@
 
 (require 'package)
+(package-initialize)
+
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 
-(setq package-enable-at-startup nil)
-(package-initialize)
+(if (not (package-installed-p 'use-package))
+    (progn
+      (package-refresh-contents)
+      (package-install 'use-package)))
+
 (eval-when-compile (require 'use-package))
 (require 'diminish)
 (require 'bind-key)
@@ -234,8 +239,7 @@
 
 (use-package mu4e
   :if (not (kelly?))
-  :defer t
-  :config
+  :init
   (when (equal system-type 'gnu/linux)
     (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
   (when (equal system-type 'darwin)
@@ -243,6 +247,7 @@
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
   (when (equal system-type 'gnu/linux)
     (setq mu4e-mu-binary "/usr/bin/mu"))
+  :config
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
   (setq epa-file-cache-passphrase-for-symmetric-encryption t
@@ -299,7 +304,6 @@
 
   (add-to-list 'mu4e-view-actions
                '("View in browser" . mu4e-msgv-action-view-in-browser) t)
-  :init
   (defun run ()
     (interactive)
     (mu4e)
@@ -431,4 +435,3 @@
 ;; (add-to-list 'company-backends 'company-irony)
 ;; ;; (setq company-idle-delay 0.1)
 ;; (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
-
