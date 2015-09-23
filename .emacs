@@ -60,11 +60,10 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-                                        ;(setq-default line-spacing nil)
+;(setq-default line-spacing nil)
 (setq global-auto-revert-non-file-buffers t)
 ;; (setq auto-revert-verbose nil)
 (global-auto-revert-mode 1)
-
 
 ;; ; check if we're on OSX
 (when (featurep 'ns-win)
@@ -85,7 +84,6 @@
                                               ("d" "dired $1")
                                               ("ff" "find-file $1"))
                                             eshell-command-aliases-list)))
-
 
 (use-package eshell
   :init 
@@ -206,6 +204,8 @@
 (use-package ag)
 (use-package wgrep)
 (use-package wgrep-ag)
+(use-package diffview
+  :ensure t)
 
 (use-package mwim
   :bind ("C-a" . mwim-beginning-of-code-or-line))
@@ -301,7 +301,6 @@
          "content=\"text/html;charset=UTF-8\">"
          html))
       (browse-url (concat "file://" tmpfile))))
-
   (add-to-list 'mu4e-view-actions
                '("View in browser" . mu4e-msgv-action-view-in-browser) t)
   (defun run ()
