@@ -156,10 +156,12 @@
 
 (use-package elpy
   :defer t
+  :config
+  (remove-hook 'elpy-modules 'elpy-module-yasnippet)
+  (when (or (equal system-type 'darwin) (kelly?))
+    (remove-hook 'elpy-modules 'elpy-module-flymake)))
   :init
   (elpy-enable)
-  (when (or (equal system-type 'darwin) (kelly?))
-    (setq elpy-modules (delete 'elpy-module-flymake elpy-modules))))
 
 (use-package expand-region
   :defer t
