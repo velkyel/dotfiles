@@ -11,6 +11,7 @@
       (package-install 'use-package)))
 
 (eval-when-compile (require 'use-package))
+(setq use-package-always-ensure t)
 (require 'diminish)
 (require 'bind-key)
 
@@ -23,6 +24,9 @@
       require-final-newline t
       redisplay-dont-pause t
       column-number-mode t
+      make-backup-files nil
+      delete-auto-save-files t
+      uniquify-buffer-name-style 'forward
       vc-diff-switches "-u")
 
 (if window-system
@@ -46,7 +50,7 @@
 (transient-mark-mode t)
 (menu-bar-mode -1)
 (which-function-mode)
-(iswitchb-mode t)   ;; substring buffer switch
+;; (iswitchb-mode t)   ;; substring buffer switch
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default py-indent-offset 4)
@@ -78,26 +82,6 @@
   (set-default-font "Inconsolata 13"))
 ;; (setq x-alt-keysym 'meta)
 
-(use-package em-alias
-  :config
-  (setq eshell-command-aliases-list (append '(("l" "ls -lcrt")
-                                              ("d" "dired $1")
-                                              ("ff" "find-file $1"))
-                                            eshell-command-aliases-list)))
-
-(use-package eshell
-  :init 
-  (defun visit-term-buffer ()
-    "Create or visit a terminal buffer."
-    (interactive)
-    (if (not (get-buffer "*eshell*"))
-        (progn
-          (split-window-sensibly (selected-window))
-          (other-window 1)
-          (eshell))
-      (switch-to-buffer-other-window "*eshell*")))
-  (bind-key "C-c t" 'visit-term-buffer))
-
 (use-package json-mode)
 (use-package lua-mode)
 (use-package rust-mode)
@@ -109,15 +93,51 @@
   :bind ("C-c C-f" . projectile-find-file)
   :init
   (projectile-global-mode)
-  (defalias 'pg 'projectile-grep))
+  :bind ("M-g" . projectile-grep))
+  ;; (defalias 'pg 'projectile-grep))
 
-(use-package uniquify
-  :init (setq uniquify-buffer-name-style 'forward))
+(use-package helm
+  :defer t
+  :init
+  (setq helm-mode-fuzzy-match t
+        helm-competion-in-region-fuzzy-match t)
+  (helm-push-mark-mode 1)
+  (define-key global-map [remap list-buffers] 'helm-buffers-list)
+  (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
+  :bind (("M-x" . helm-M-x)
+         ("C-x b" . helm-buffers-list)
+         ("C-." . helm-imenu-in-all-buffers)
+         ("M-y" . helm-show-kill-ring)
+         ("C-c <SPC>" . helm-all-mark-rings)))
+
+(use-package helm-projectile
+  :init
+  (setq projectile-completion-system 'helm)
+  (helm-projectile-on))
+
+(use-package eshell
+  :defer t
+  :config
+  (setq eshell-command-aliases-list (append '(("l" "ls -lcrt")
+                                              ("d" "dired $1")
+                                              ("ff" "find-file $1"))
+                                            eshell-command-aliases-list))
+  :init
+  (defun visit-term-buffer ()
+    "Create or visit a terminal buffer."
+    (interactive)
+    (if (not (get-buffer "*eshell*"))
+        (progn
+          (split-window-sensibly (selected-window))
+          (other-window 1)
+          (eshell))
+      (switch-to-buffer-other-window "*eshell*")))
+  (bind-key "C-c t" 'visit-term-buffer))
 
 (use-package avy
   :defer t
-  :bind (("C-;" . avy-goto-word-or-subword-1)
-         ("M-g l" . avy-goto-line))
+  :bind (("C-;" . avy-goto-word-or-subword-1))
+         ;;("M-g l" . avy-goto-line))
   :init (after 'isearch (define-key isearch-mode-map (kbd "C-;") 'avy-isearch)))
 
 (use-package saveplace
@@ -177,20 +197,6 @@
             (font-lock-add-keywords nil
                                     '(("\\<\\(FIXME\\|TODO\\):" 1 font-lock-preprocessor-face prepend)))))
 
-(use-package ibuffer-mode
-  :defer t
-  :bind ("C-x C-b" . ibuffer))
-
-(use-package imenu-anywhere
-  :defer t
-  :bind ("C-." . imenu-anywhere))
-
-(use-package undo-tree
-  :diminish undo-tree-mode
-  :init
-  (global-undo-tree-mode 1)           ;; C-x u
-  (defalias 'redo 'undo-tree-redo))
-
 (if (kelly?)
     (set-background-color "gray90")
   (use-package flatui-theme
@@ -203,23 +209,16 @@
   :defer t
   :init (require 'google-translate-default-ui))
 
-(use-package ag)
-(use-package wgrep)
-(use-package wgrep-ag)
-(use-package diffview
-  :ensure t)
+;; (use-package ag)
+;; (use-package wgrep)
+;; (use-package wgrep-ag)
+(use-package diffview)
 
 (use-package mwim
   :bind ("C-a" . mwim-beginning-of-code-or-line))
 ;; ("C-e" . mwim-end-of-code-or-line)
 
-(use-package objc-mode
-  :defer t
-  :mode "\\.mm?$")
-
-(use-package js-mode
-  :defer t
-  :mode "\\.as?$")
+(add-to-list 'auto-mode-alist '("\\.mm$" . objc-mode))
 
 (use-package glsl-mode
   :defer t
@@ -239,9 +238,7 @@
         smtpmail-smtp-server "smtp.gmail.com"
         smtpmail-smtp-service 587))
 
-(use-package mu4e
-  :if (not (kelly?))
-  :init
+(when (not (kelly?))
   (when (equal system-type 'gnu/linux)
     (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
   (when (equal system-type 'darwin)
@@ -249,7 +246,7 @@
     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
   (when (equal system-type 'gnu/linux)
     (setq mu4e-mu-binary "/usr/bin/mu"))
-  :config
+  (require 'mu4e)
   (when (fboundp 'imagemagick-register-types)
     (imagemagick-register-types))
   (setq epa-file-cache-passphrase-for-symmetric-encryption t
@@ -309,42 +306,37 @@
     (interactive)
     (mu4e)
     (mu4e-update-mail-and-index nil))
-  (bind-key "C-c m" 'run))
+  (global-set-key (kbd "C-c m") 'run))
 
-(use-package c-mode
-  :defer t
-  :init
-  (defun my-c-mode-font-lock-if0 (limit)
-    (save-restriction
-      (widen)
-      (save-excursion
-        (goto-char (point-min))
-        (let ((depth 0) str start start-depth)
-          (while (re-search-forward "^\\s-*#\\s-*\\(if\\|else\\|endif\\)" limit 'move)
-            (setq str (match-string 1))
-            (if (string= str "if")
-                (progn
-                  (setq depth (1+ depth))
-                  (when (and (null start) (looking-at "\\s-+0"))
-                    (setq start (match-end 0)
-                          start-depth depth)))
-              (when (and start (= depth start-depth))
-                (c-put-font-lock-face start (match-beginning 0) 'font-lock-comment-face)
-                (setq start nil))
-              (when (string= str "endif")
-                (setq depth (1- depth)))))
-          (when (and start (> depth 0))
-            (c-put-font-lock-face start (point) 'font-lock-comment-face)))))
-    nil)
-  (defun my-c-mode-common-hook ()
-    (progn
-      (font-lock-add-keywords
-       nil
-       '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
-      (setq fill-column 100)
-      ;; (setq c-hungry-delete-key t)
-      ))
-  (add-hook 'c-mode-common-hook 'my-c-mode-common-hook))
+(defun my-c-mode-font-lock-if0 (limit)
+  (save-restriction
+    (widen)
+    (save-excursion
+      (goto-char (point-min))
+      (let ((depth 0) str start start-depth)
+        (while (re-search-forward "^\\s-*#\\s-*\\(if\\|else\\|endif\\)" limit 'move)
+          (setq str (match-string 1))
+          (if (string= str "if")
+              (progn
+                (setq depth (1+ depth))
+                (when (and (null start) (looking-at "\\s-+0"))
+                  (setq start (match-end 0)
+                        start-depth depth)))
+            (when (and start (= depth start-depth))
+              (c-put-font-lock-face start (match-beginning 0) 'font-lock-comment-face)
+              (setq start nil))
+            (when (string= str "endif")
+              (setq depth (1- depth)))))
+        (when (and start (> depth 0))
+          (c-put-font-lock-face start (point) 'font-lock-comment-face)))))
+  nil)
+(defun my-c-mode-common-hook ()
+  (progn
+    (font-lock-add-keywords
+     nil
+     '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
+    (setq fill-column 100)))
+(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 (use-package nyan-mode
   :if (not (kelly?))
@@ -376,23 +368,14 @@
 (when (not (kelly?))
   (setq compile-command "scons"))
 
-(use-package isearch
-  :diminish isearch-mode
-  :defer t
-  :config
-  (setq search-highlight t
-        isearch-allow-scroll t)
-  :bind (("C-s" . isearch-forward-regexp)
-         ("C-r" . isearch-backward-regexp)
-         ("C-M-s" . isearch-forward)
-         ("C-M-r" . isearch-backward)))
-
-(use-package isearch+
-  :ensure t)
-
-(use-package isearch-dabbrev
-  :ensure t
-  :config (bind-key "TAB" 'isearch-dabbrev-expand isearch-mode-map))
+;; isearch
+;;  :diminish isearch-mode
+(setq search-highlight t
+      isearch-allow-scroll t)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
 
 (defalias 'g 'grep)
 
