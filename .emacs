@@ -103,7 +103,7 @@
         helm-competion-in-region-fuzzy-match t)
   (helm-push-mark-mode 1)
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
-  (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
+  ;; (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
   :bind (("M-x" . helm-M-x)
          ("C-x b" . helm-buffers-list)
          ("C-." . helm-imenu-in-all-buffers)
