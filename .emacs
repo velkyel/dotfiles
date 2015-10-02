@@ -87,7 +87,6 @@
 (use-package rust-mode)
 (use-package swift-mode)
 (use-package processing-mode)
-(use-package csharp-mode)
 
 (use-package projectile
   :bind ("C-c C-f" . projectile-find-file)
