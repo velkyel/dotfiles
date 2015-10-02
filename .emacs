@@ -58,9 +58,15 @@
 (winner-mode t)   ;; C-c <left|right>
 (set-language-environment "czech")
 (setq default-input-method "czech-qwerty")
-(prefer-coding-system 'utf-8)
-(set-terminal-coding-system 'utf-8)
-(set-keyboard-coding-system 'utf-8)
+(if (kelly?)
+    (progn
+      (prefer-coding-system 'iso-latin-2-unix)
+      (set-terminal-coding-system 'iso-latin-2-unix)
+      (set-keyboard-coding-system 'iso-latin-2-unix))
+  (progn
+    (prefer-coding-system 'utf-8)
+    (set-terminal-coding-system 'utf-8)
+    (set-keyboard-coding-system 'utf-8)))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
