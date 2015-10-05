@@ -94,12 +94,16 @@
 (use-package swift-mode)
 (use-package processing-mode)
 
+(use-package diffview)
+
+(use-package ag)
+(use-package helm-ag)
+
 (use-package projectile
   :bind ("C-c C-f" . projectile-find-file)
   :init
   (projectile-global-mode)
-  :bind ("M-g" . projectile-grep))
-  ;; (defalias 'pg 'projectile-grep))
+  :bind ("M-g" . helm-projectile-ag))
 
 (use-package helm
   :defer t
@@ -213,11 +217,6 @@
 (use-package google-translate
   :defer t
   :init (require 'google-translate-default-ui))
-
-;; (use-package ag)
-;; (use-package wgrep)
-;; (use-package wgrep-ag)
-(use-package diffview)
 
 (use-package mwim
   :bind ("C-a" . mwim-beginning-of-code-or-line))
@@ -381,8 +380,6 @@
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
-
-(defalias 'g 'grep)
 
 (define-key function-key-map "\e[$" (kbd "C-$"))
 (define-key function-key-map "\e[%" (kbd "C-%"))
