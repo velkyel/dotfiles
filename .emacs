@@ -27,6 +27,7 @@
       make-backup-files nil
       delete-auto-save-files t
       uniquify-buffer-name-style 'forward
+      ediff-window-setup-function 'ediff-setup-windows-plain
       vc-diff-switches "-u")
 
 (if window-system
