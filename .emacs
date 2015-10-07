@@ -112,8 +112,7 @@
 (use-package helm
   :defer t
   :init
-  (setq helm-mode-fuzzy-match t
-        helm-competion-in-region-fuzzy-match t)
+  ;; (setq helm-M-x-fuzzy-match t)
   (helm-push-mark-mode 1)
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
   ;; (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
@@ -121,6 +120,7 @@
          ("C-x b" . helm-buffers-list)
          ("C-." . helm-imenu-in-all-buffers)
          ("M-y" . helm-show-kill-ring)
+         ("M-G" . helm-do-grep-ag)
          ("C-c <SPC>" . helm-all-mark-rings)))
 
 (use-package helm-descbinds
@@ -411,7 +411,6 @@
 ;; (define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "M-G") 'grep)
 
 (setq font-lock-maximum-decoration '((racket-mode . t) (t . 1)))
 
