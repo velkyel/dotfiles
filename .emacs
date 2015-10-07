@@ -121,6 +121,12 @@
          ("M-y" . helm-show-kill-ring)
          ("C-c <SPC>" . helm-all-mark-rings)))
 
+(use-package helm-descbinds
+  :config (helm-descbinds-mode))
+
+;; (use-package helm-swoop
+;;   :bind ("C-s" . helm-swoop))
+
 (use-package helm-projectile
   :init
   (setq projectile-completion-system 'helm)
