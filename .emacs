@@ -98,7 +98,9 @@
 (use-package diffview)
 
 (use-package ag)
-(use-package helm-ag)
+(use-package helm-ag
+  :init
+  (setq helm-ag-insert-at-point 'symbol))
 
 (use-package projectile
   :diminish projectile-mode
