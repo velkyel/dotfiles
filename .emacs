@@ -101,6 +101,7 @@
 (use-package helm-ag)
 
 (use-package projectile
+  :diminish projectile-mode
   :bind ("C-c C-f" . projectile-find-file)
   :init
   (projectile-global-mode)
@@ -264,11 +265,15 @@
            ("/[Gmail].Sent Mail" . ?s)
            ("/[Gmail].Trash"     . ?t)
            ("/[Gmail].All Mail"  . ?a))
-        mu4e-bookmarks '( ("flag:unread AND NOT flag:trashed AND NOT maildir:/[Gmail].Trash AND NOT maildir:/[Gmail].Spam" "Unread messages"      ?u)
-                          ("date:today..now"                  "Today's messages"     ?t)
-                          ("date:7d..now"                     "Last 7 days"          ?w)
-                          ("mime:image/*"                     "Messages with images" ?p)
-                          ("size:2M..500M"                    "Big messages"         ?b))
+        mu4e-bookmarks '(((concat "flag:unread"
+                                  " AND NOT flag:trashed"
+                                  " AND NOT maildir:/[Gmail].Trash"
+                                  " AND NOT maildir:/[Gmail].Spam")
+                          "Unread messages"      ?u)
+                         ("date:today..now"                  "Today's messages"     ?t)
+                         ("date:7d..now"                     "Last 7 days"          ?w)
+                         ("mime:image/*"                     "Messages with images" ?p)
+                         ("size:2M..500M"                    "Big messages"         ?b))
         mu4e-get-mail-command "offlineimap -q"
         mu4e-update-interval nil
         mu4e-view-show-images t
@@ -377,6 +382,10 @@
 ;;  :diminish isearch-mode
 (setq search-highlight t
       isearch-allow-scroll t)
+
+(diminish 'abbrev-mode)
+(diminish 'isearch-mode)
+
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
@@ -394,6 +403,7 @@
 ;; (define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "M-G") 'grep)
 
 (setq font-lock-maximum-decoration '((racket-mode . t) (t . 1)))
 
