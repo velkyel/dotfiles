@@ -100,7 +100,8 @@
 (use-package ag)
 (use-package helm-ag
   :init
-  (setq helm-ag-insert-at-point 'symbol))
+  (setq helm-ag-insert-at-point 'symbol)
+  (add-hook 'helm-ag-mode-hook (lambda () (grep-mode))))
 
 (use-package projectile
   :diminish projectile-mode
