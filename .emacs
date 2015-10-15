@@ -98,7 +98,7 @@
 (use-package diffview)
 
 (use-package clang-format
-  :config
+  :init
   (setq clang-format-executable "clang-format-3.5")
   (setq clang-format-style "{BasedOnStyle: Google, BinPackParameters: false, IndentWidth: 2, ColumnLimit: 100, AlwaysBreakBeforeMultilineStrings: false, NamespaceIndentation: All, BreakBeforeBraces: Stroustrup, Standard: \"C++11\"}")
   (bind-key "C-M-\\" 'clang-format-region c++-mode-map))
