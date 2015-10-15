@@ -349,12 +349,14 @@
         (when (and start (> depth 0))
           (c-put-font-lock-face start (point) 'font-lock-comment-face)))))
   nil)
+
 (defun my-c-mode-common-hook ()
   (progn
     (font-lock-add-keywords
      nil
      '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
     (setq fill-column 100)))
+
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 (use-package nyan-mode
