@@ -104,6 +104,22 @@
   (bind-key "C-M-\\" 'clang-format-region c++-mode-map)
   (bind-key "C-i" 'clang-format c++-mode-map))
 
+(use-package helm
+  :defer t
+  :config
+  (progn
+    (require 'helm-config)
+    ;; (setq helm-M-x-fuzzy-match t)
+    (helm-push-mark-mode 1)
+    (define-key global-map [remap list-buffers] 'helm-buffers-list))
+  ;; (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
+  :bind (("M-x" . helm-M-x)
+         ("C-x b" . helm-buffers-list)
+         ("C-." . helm-imenu-in-all-buffers)
+         ("M-y" . helm-show-kill-ring)
+         ("M-G" . helm-do-grep-ag)
+         ("C-c <SPC>" . helm-all-mark-rings)))
+
 (use-package ag)
 (use-package helm-ag
   :init
@@ -116,20 +132,6 @@
   :init
   (projectile-global-mode)
   :bind ("M-g" . helm-projectile-ag))
-
-(use-package helm
-  :defer t
-  :init
-  ;; (setq helm-M-x-fuzzy-match t)
-  (helm-push-mark-mode 1)
-  (define-key global-map [remap list-buffers] 'helm-buffers-list)
-  ;; (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
-  :bind (("M-x" . helm-M-x)
-         ("C-x b" . helm-buffers-list)
-         ("C-." . helm-imenu-in-all-buffers)
-         ("M-y" . helm-show-kill-ring)
-         ("M-G" . helm-do-grep-ag)
-         ("C-c <SPC>" . helm-all-mark-rings)))
 
 (use-package helm-descbinds
   :config (helm-descbinds-mode))
@@ -328,6 +330,8 @@
       (browse-url (concat "file://" tmpfile))))
   (add-to-list 'mu4e-view-actions
                '("View in browser" . mu4e-msgv-action-view-in-browser) t)
+  (use-package helm-mu
+    :config (define-key mu4e-headers-mode-map (kbd "C-s") 'helm-mu))
   (defun run ()
     (interactive)
     (mu4e)
