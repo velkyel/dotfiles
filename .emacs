@@ -330,13 +330,15 @@
       (browse-url (concat "file://" tmpfile))))
   (add-to-list 'mu4e-view-actions
                '("View in browser" . mu4e-msgv-action-view-in-browser) t)
-  (use-package helm-mu
-    :config (define-key mu4e-headers-mode-map (kbd "C-s") 'helm-mu))
   (defun run ()
     (interactive)
     (mu4e)
     (mu4e-update-mail-and-index nil))
   (global-set-key (kbd "C-c m") 'run))
+
+(use-package helm-mu
+  :if (not (kelly?))
+  :config (define-key mu4e-headers-mode-map (kbd "C-s") 'helm-mu))
 
 (defun my-c-mode-font-lock-if0 (limit)
   (save-restriction
