@@ -48,6 +48,7 @@
 (defalias 'after 'with-eval-after-load)
 (delete-selection-mode t)
 (show-paren-mode 1)
+;; (setq show-paren-style 'expression)
 (transient-mark-mode t)
 (menu-bar-mode -1)
 (which-function-mode)
@@ -231,6 +232,9 @@
   (use-package flatui-theme
     :init (load-theme 'flatui t)))
 
+;; (use-package powerline
+;;   :if (window-system))
+
 (use-package exec-path-from-shell
   :init (exec-path-from-shell-initialize))
 
@@ -293,7 +297,7 @@
                          ("mime:image/*"                     "Messages with images" ?p)
                          ("size:2M..500M"                    "Big messages"         ?b))
         mu4e-get-mail-command "offlineimap -q"
-        mu4e-update-interval nil
+        mu4e-update-interval 300
         mu4e-view-show-images t
         mu4e-html2text-command "w3m -T text/html"
         mu4e-headers-skip-duplicates t
@@ -332,13 +336,22 @@
                '("View in browser" . mu4e-msgv-action-view-in-browser) t)
   (defun run ()
     (interactive)
-    (mu4e)
-    (mu4e-update-mail-and-index nil))
+    (mu4e))
   (global-set-key (kbd "C-c m") 'run))
 
 (use-package helm-mu
   :if (not (kelly?))
   :config (define-key mu4e-headers-mode-map (kbd "C-s") 'helm-mu))
+
+(use-package mu4e-alert
+  :if (not (kelly?))
+  :init
+  (setq mu4e-alert-interesting-mail-query
+        (concat "flag:unread"
+                " AND NOT flag:trashed"
+                " AND NOT maildir:/[Gmail].Trash"
+                " AND NOT maildir:/[Gmail].Spam"))
+  (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
 
 (defun my-c-mode-font-lock-if0 (limit)
   (save-restriction
@@ -371,13 +384,6 @@
     (setq fill-column 100)))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
-
-(use-package nyan-mode
-  :if (not (kelly?))
-  :init
-  (nyan-mode 1)
-  (setq nyan-bar-length 16
-        naya-wavy-trail t))
 
 (use-package cider
   :if (not (kelly?))
