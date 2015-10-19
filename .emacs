@@ -87,7 +87,8 @@
   (set-default-font "Inconsolata 17"))
 
 (when (and window-system (equal system-type 'gnu/linux))
-  (set-default-font "Inconsolata 13"))
+  ;; (set-default-font "Inconsolata 13"))
+  (set-default-font "DejaVu Sans Mono 11"))
 ;; (setq x-alt-keysym 'meta)
 
 (use-package json-mode)
@@ -108,12 +109,12 @@
 (use-package helm
   :defer t
   :config
-  (progn
-    (require 'helm-config)
-    ;; (setq helm-M-x-fuzzy-match t)
-    (helm-push-mark-mode 1)
-    (define-key global-map [remap list-buffers] 'helm-buffers-list))
-  ;; (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
+  (require 'helm-config)
+  ;; (setq helm-M-x-fuzzy-match t)
+  (helm-push-mark-mode 1)
+  (define-key global-map [remap list-buffers] 'helm-buffers-list)
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
   :bind (("M-x" . helm-M-x)
          ("C-x b" . helm-buffers-list)
          ("C-." . helm-imenu-in-all-buffers)
@@ -123,16 +124,14 @@
 
 (use-package ag)
 (use-package helm-ag
-  :init
+  :config
   (setq helm-ag-insert-at-point 'symbol)
   (add-hook 'helm-ag-mode-hook (lambda () (grep-mode))))
 
 (use-package projectile
   :diminish projectile-mode
   :bind ("C-c C-f" . projectile-find-file)
-  :init
-  (projectile-global-mode)
-  :bind ("M-g" . helm-projectile-ag))
+  :config (projectile-global-mode))
 
 (use-package helm-descbinds
   :config (helm-descbinds-mode))
@@ -141,9 +140,11 @@
 ;;   :bind ("C-s" . helm-swoop))
 
 (use-package helm-projectile
-  :init
+  :config
   (setq projectile-completion-system 'helm)
-  (helm-projectile-on))
+  (helm-projectile-on)
+  :bind (("M-g" . helm-projectile-ag)
+         ("M-G" . helm-projectile-grep)))
 
 (use-package eshell
   :defer t
@@ -174,7 +175,7 @@
   :init (setq-default save-place t))
 
 (use-package vc-darcs
-  :init
+  :config
   (setq vc-disable-async-diff nil)                ;; hotfix
   (add-to-list 'vc-handled-backends 'DARCS t)
   (autoload 'vc-darcs-find-file-hook "vc-darcs")
@@ -186,10 +187,10 @@
   :pin melpa-stable)
 
 (use-package pixie-mode
-  :init (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode))
+  :config (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode))
 
 (use-package browse-kill-ring
-  :init
+  :config
   (define-key (current-global-map) [remap yank-pop] 'browse-kill-ring)   ;; remap yank-pop
   (setq browse-kill-ring-replace-yank t))
 
@@ -198,7 +199,6 @@
   :config
   (setq whitespace-line-column 100)             ;; limit line length
   (setq whitespace-style '(face trailing newline))
-  :init
   (add-hook 'prog-mode-hook 'whitespace-mode))
 
 (use-package shrink-whitespace
@@ -227,13 +227,22 @@
             (font-lock-add-keywords nil
                                     '(("\\<\\(FIXME\\|TODO\\):" 1 font-lock-preprocessor-face prepend)))))
 
-(if (kelly?)
-    (set-background-color "gray90")
-  (use-package flatui-theme
-    :init (load-theme 'flatui t)))
+;; (if (kelly?)
+;;   (use-package flatui-theme
+;;     :init (load-theme 'flatui t)))
 
 ;; (use-package powerline
 ;;   :if (window-system))
+
+(set-background-color "gray90")
+
+;; vystup z customize-face:
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color")))))
 
 (use-package exec-path-from-shell
   :init (exec-path-from-shell-initialize))
@@ -316,9 +325,9 @@
         mu4e-confirm-quit nil
         message-kill-buffer-on-exit t)
   ;; (setq mu4e-use-fancy-chars t)
-  (set-face-attribute 'mu4e-unread-face nil
-                      :inherit font-lock-preprocessor-face
-                      :bold t)
+  ;; (set-face-attribute 'mu4e-unread-face nil
+  ;;                     :inherit font-lock-preprocessor-face
+  ;;                     :bold t)
   (defun mu4e-msgv-action-view-in-browser (msg)
     "View the body of the message in a web browser."
     (interactive)
