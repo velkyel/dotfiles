@@ -110,16 +110,19 @@
   :defer t
   :config
   (require 'helm-config)
-  ;; (setq helm-M-x-fuzzy-match t)
+  (setq helm-quick-update t
+        helm-candidate-number-limit 50)
   (helm-push-mark-mode 1)
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
   :bind (("M-x" . helm-M-x)
          ("C-x b" . helm-buffers-list)
+         ("C-x C-f" . helm-find-files)
          ("C-." . helm-imenu-in-all-buffers)
          ("M-y" . helm-show-kill-ring)
          ("M-G" . helm-do-grep-ag)
+         ("C-c h" . helm-command-prefix)
          ("C-c <SPC>" . helm-all-mark-rings)))
 
 (use-package ag)
@@ -136,8 +139,9 @@
 (use-package helm-descbinds
   :config (helm-descbinds-mode))
 
-;; (use-package helm-swoop
-;;   :bind ("C-s" . helm-swoop))
+;; (use-package swiper-helm
+;;   :bind (("C-s" . swiper-helm)
+;;          ("C-r" . swiper-helm)))
 
 (use-package helm-projectile
   :config
