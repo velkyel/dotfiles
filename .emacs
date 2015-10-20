@@ -116,6 +116,7 @@
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+  (add-hook 'helm-grep-mode-hook (lambda () (grep-mode)))
   :bind (("M-x" . helm-M-x)
          ("C-x b" . helm-buffers-list)
          ("C-x C-f" . helm-find-files)
@@ -133,7 +134,6 @@
 
 (use-package projectile
   :diminish projectile-mode
-  :bind ("C-c C-f" . projectile-find-file)
   :config (projectile-global-mode))
 
 (use-package helm-descbinds
@@ -148,7 +148,8 @@
   (setq projectile-completion-system 'helm)
   (helm-projectile-on)
   :bind (("M-g" . helm-projectile-ag)
-         ("M-G" . helm-projectile-grep)))
+         ("M-G" . helm-projectile-grep)
+         ("C-c C-f" . helm-projectile-find-file)))
 
 (use-package eshell
   :defer t
