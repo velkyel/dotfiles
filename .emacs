@@ -274,10 +274,10 @@
         smtpmail-auth-credentials "~/.authinfo"
         ;;smtpmail-stream-type 'ssl
         starttls-use-gnutls t
-        smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-        smtpmail-auth-credentials '(("smtp.gmail.com" 587 "capak44@gmail.com" nil))
-        smtpmail-default-smtp-server "smtp.gmail.com"
-        smtpmail-smtp-server "smtp.gmail.com"
+        smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
+        smtpmail-auth-credentials '(("mail.messagingengine.com" 587 "capak@inputwish.com" nil))
+        smtpmail-default-smtp-server "mail.messagingengine.com"
+        smtpmail-smtp-server "mail.messagingengine.com"
         smtpmail-smtp-service 587))
 
 (when (not (kelly?))
@@ -293,18 +293,18 @@
     (imagemagick-register-types))
   (setq epa-file-cache-passphrase-for-symmetric-encryption t
         mu4e-maildir "~/Maildir"
-        mu4e-drafts-folder "/[Gmail].Drafts"
-        mu4e-sent-folder   "/[Gmail].Sent Mail"
-        mu4e-trash-folder  "/[Gmail].Trash"
+        mu4e-drafts-folder "/INBOX.Drafts"
+        mu4e-sent-folder   "/INBOX.Sent"
+        mu4e-trash-folder  "/INBOX.Trash"
         mu4e-maildir-shortcuts
-        '( ("/INBOX"             . ?i)
-           ("/[Gmail].Sent Mail" . ?s)
-           ("/[Gmail].Trash"     . ?t)
-           ("/[Gmail].All Mail"  . ?a))
+        '( ("/INBOX"         . ?i)
+           ("/INBOX.Sent"    . ?s)
+           ("/INBOX.Trash"   . ?t)
+           ("/INBOX.Archive" . ?a))
         mu4e-bookmarks '(((concat "flag:unread"
                                   " AND NOT flag:trashed"
-                                  " AND NOT maildir:/[Gmail].Trash"
-                                  " AND NOT maildir:/[Gmail].Spam")
+                                  " AND NOT maildir:/INBOX.Trash"
+                                  " AND NOT maildir:/INBOX.Spam")
                           "Unread messages"      ?u)
                          ("date:today..now"                  "Today's messages"     ?t)
                          ("date:7d..now"                     "Last 7 days"          ?w)
@@ -363,8 +363,8 @@
   (setq mu4e-alert-interesting-mail-query
         (concat "flag:unread"
                 " AND NOT flag:trashed"
-                " AND NOT maildir:/[Gmail].Trash"
-                " AND NOT maildir:/[Gmail].Spam"))
+                " AND NOT maildir:/INBOX.Trash"
+                " AND NOT maildir:/INBOX.Spam"))
   (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
 
 (defun my-c-mode-font-lock-if0 (limit)
