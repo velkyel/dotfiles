@@ -100,15 +100,27 @@
 
 (use-package diffview)
 
+(use-package exec-path-from-shell
+  :init (exec-path-from-shell-initialize))
+
 (use-package clang-format
-  :config
+  :init
   (setq clang-format-executable
         (if (executable-find "clang-format") "clang-format"
           (if (executable-find "clang-format-3.8") "clang-format-3.8"
             (if (executable-find "clang-format-3.7") "clang-format-3.7"
               (if (executable-find "clang-format-3.6") "clang-format-3.6"
                 (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
-  (setq clang-format-style "{BasedOnStyle: Google, BinPackParameters: true, IndentWidth: 2, ColumnLimit: 100, AlwaysBreakBeforeMultilineStrings: false, SpacesBeforeTrailingComments: 4, AllowShortFunctionsOnASingleLine: false, NamespaceIndentation: All, BreakBeforeBraces: Stroustrup, Standard: \"C++11\"}")
+  (setq clang-format-style (concat "{BasedOnStyle: Google,"
+                                   " BinPackParameters: true,"
+                                   " IndentWidth: 2,"
+                                   " ColumnLimit: 100,"
+                                   " AlwaysBreakBeforeMultilineStrings: false,"
+                                   " SpacesBeforeTrailingComments: 4,"
+                                   " AllowShortFunctionsOnASingleLine: false,"
+                                   " NamespaceIndentation: All,"
+                                   " BreakBeforeBraces: Stroustrup,"
+                                   " Standard: \"C++11\"}"))
   (bind-key "C-M-\\" 'clang-format-region c++-mode-map)
   (bind-key "C-i" 'clang-format c++-mode-map))
 
@@ -270,9 +282,6 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color")))))
-
-(use-package exec-path-from-shell
-  :init (exec-path-from-shell-initialize))
 
 (use-package google-translate
   :defer t
