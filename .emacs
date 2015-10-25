@@ -152,6 +152,7 @@
 
 (use-package projectile
   :diminish projectile-mode
+  :init (setq projectile-enable-caching t)
   :config (projectile-global-mode))
 
 (use-package helm-descbinds
@@ -164,6 +165,8 @@
   :bind ("M-i" . helm-swoop))
 
 (use-package helm-projectile
+  :init
+  (setq helm-projectile-fuzzy-match nil)
   :config
   (setq projectile-completion-system 'helm)
   (helm-projectile-on)
