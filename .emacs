@@ -96,12 +96,18 @@
 (use-package rust-mode)
 (use-package swift-mode)
 (use-package processing-mode)
+(use-package restart-emacs)
 
 (use-package diffview)
 
 (use-package clang-format
-  :init
-  (setq clang-format-executable (if (kelly?) "clang-format-3.5" "clang-format-3.7"))
+  :config
+  (setq clang-format-executable
+        (if (executable-find "clang-format") "clang-format"
+          (if (executable-find "clang-format-3.8") "clang-format-3.8"
+            (if (executable-find "clang-format-3.7") "clang-format-3.7"
+              (if (executable-find "clang-format-3.6") "clang-format-3.6"
+                (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
   (setq clang-format-style "{BasedOnStyle: Google, BinPackParameters: true, IndentWidth: 2, ColumnLimit: 100, AlwaysBreakBeforeMultilineStrings: false, SpacesBeforeTrailingComments: 4, AllowShortFunctionsOnASingleLine: false, NamespaceIndentation: All, BreakBeforeBraces: Stroustrup, Standard: \"C++11\"}")
   (bind-key "C-M-\\" 'clang-format-region c++-mode-map)
   (bind-key "C-i" 'clang-format c++-mode-map))
@@ -110,7 +116,7 @@
   :defer t
   :config
   (require 'helm-config)
-  (setq helm-quick-update t
+  (setq helm-quick-update nil             ;; blink
         helm-candidate-number-limit 50)
   (helm-push-mark-mode 1)
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
@@ -147,9 +153,23 @@
   :config
   (setq projectile-completion-system 'helm)
   (helm-projectile-on)
+  (defun my-helm-projectile-buffers-list ()
+    (interactive)
+    (unless helm-source-buffers-list
+      (setq helm-source-buffers-list
+            (helm-make-source "Buffers" 'helm-source-buffers)))
+    (helm :sources '(helm-source-buffers-list
+                     helm-source-projectile-recentf-list
+                     helm-source-projectile-files-list
+                     helm-source-recentf
+                     helm-source-buffer-not-found)
+          :buffer "*helm buffers*"
+          :keymap helm-buffer-map
+          :truncate-lines helm-buffers-truncate-lines))
   :bind (("M-g" . helm-projectile-ag)
          ("M-G" . helm-projectile-grep)
-         ("C-c C-f" . helm-projectile-find-file)))
+         ("C-c C-f" . helm-projectile-find-file)
+         ("C-x b" . my-helm-projectile-buffers-list)))
 
 (use-package eshell
   :defer t
