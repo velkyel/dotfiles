@@ -145,9 +145,11 @@
 (use-package helm-descbinds
   :config (helm-descbinds-mode))
 
-;; (use-package swiper-helm
-;;   :bind (("C-s" . swiper-helm)
-;;          ("C-r" . swiper-helm)))
+(use-package helm-swoop
+  :config
+  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+  :bind ("M-i" . helm-swoop))
 
 (use-package helm-projectile
   :config
