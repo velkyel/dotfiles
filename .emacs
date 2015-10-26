@@ -26,6 +26,7 @@
       column-number-mode t
       make-backup-files nil
       delete-auto-save-files t
+      imenu-auto-rescan t
       uniquify-buffer-name-style 'forward
       ediff-window-setup-function 'ediff-setup-windows-plain
       vc-diff-switches "-u")
