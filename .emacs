@@ -119,7 +119,10 @@
                                    " SpacesBeforeTrailingComments: 4,"
                                    " AllowShortFunctionsOnASingleLine: false,"
                                    " NamespaceIndentation: All,"
-                                   " BreakBeforeBraces: Stroustrup,"
+                                   " BreakBeforeBraces: Linux,"
+                                   " UseTab: Never,"
+                                   " ConstructorInitializerIndentWidth: 2,"
+                                   " ContinuationIndentWidth: 2,"
                                    " Standard: \"C++11\"}"))
   :config
   ;; without -sort-includes option:
