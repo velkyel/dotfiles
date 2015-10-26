@@ -458,10 +458,6 @@
     (mu4e))
   (global-set-key (kbd "C-c m") 'run))
 
-(use-package helm-mu
-  :if (not (kelly?))
-  :config (define-key mu4e-headers-mode-map (kbd "C-s") 'helm-mu))
-
 (use-package mu4e-alert
   :if (not (kelly?))
   :init
