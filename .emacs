@@ -448,6 +448,11 @@
       (browse-url (concat "file://" tmpfile))))
   (add-to-list 'mu4e-view-actions
                '("View in browser" . mu4e-msgv-action-view-in-browser) t)
+  (defun mu4e-move-to-spam ()
+    (interactive)
+    (mu4e-mark-set 'move "/INBOX.Spam")
+    (mu4e-headers-next))
+  (define-key mu4e-headers-mode-map (kbd "c") 'mu4e-move-to-spam)
   (defun run ()
     (interactive)
     (mu4e))
