@@ -402,7 +402,7 @@
   :bind (("M-v" . scroll-down-command-flash)
          ("M-r" . move-to-window-line-top-bottom-flash)
          ("C-l" . recenter-top-bottom-flash)
-         ("C-v" . scroll-up-command-flash))
+         ("C-v" . scroll-up-command-flash)))
 
 (use-package google-translate
   :defer t
