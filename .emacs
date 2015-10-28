@@ -342,9 +342,6 @@
 ;;   (use-package flatui-theme
 ;;     :init (load-theme 'flatui t)))
 
-;; (use-package powerline
-;;   :if (window-system))
-
 (set-background-color "gray90")
 
 ;; vystup z customize-face:
@@ -362,7 +359,50 @@
 
 (use-package nav-flash
   :commands (nav-flash-show)
-  :init (setq nav-flash-delay 0.6))
+  :init (setq nav-flash-delay 0.6)
+  (add-hook 'imenu-after-jump-hook 'nav-flash-show nil t)
+  (defun flash-defun ()
+    "flash current defun"
+    (interactive)
+    (save-restriction
+      (narrow-to-defun)
+      (nav-flash-show (point-min) (point-max))))
+  (defvar nav-flash-show-soon-timer nil)
+  (defun nav-flash-show-soon-cancel-timer ()
+    (when nav-flash-show-soon-timer
+      (cancel-timer nav-flash-show-soon-timer)
+      (setq nav-flash-show-soon nil)))
+  (defun nav-flash-show-soon (&optional later)
+    (nav-flash-show-soon-cancel-timer)
+    (setq nav-flash-show-soon-timer
+          (run-with-timer (if later 0.4 0.25) nil
+                          '(lambda ()
+                             (nav-flash-show)))))
+  (defun nav-flash-show-later ()
+    (nav-flash-show-soon t))
+  (add-hook 'focus-in-hook 'nav-flash-show-later)
+  (add-hook 'focus-out-hook 'nav-flash-show-soon-cancel-timer)
+  (defun recenter-top-bottom-flash ()
+    (interactive)
+    (call-interactively 'recenter-top-bottom)
+    (nav-flash-show))
+  (defun move-to-window-line-top-bottom-flash ()
+    (interactive)
+    (call-interactively 'move-to-window-line-top-bottom)
+    (nav-flash-show))
+  (defun scroll-up-command-flash ()
+    (interactive)
+    (call-interactively 'scroll-up-command)
+    (nav-flash-show-soon))
+  (defun scroll-down-command-flash ()
+    (interactive)
+    (call-interactively 'scroll-down-command)
+    (nav-flash-show-soon))
+
+  :bind (("M-v" . scroll-down-command-flash)
+         ("M-r" . move-to-window-line-top-bottom-flash)
+         ("C-l" . recenter-top-bottom-flash)
+         ("C-v" . scroll-up-command-flash))
 
 (use-package google-translate
   :defer t
@@ -558,7 +598,7 @@
 (define-key global-map (kbd "RET") 'newline-and-indent)
 ;; (define-key c-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 ;; (define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
-(global-set-key (kbd "M-r") 'recompile)
+;; (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
 
