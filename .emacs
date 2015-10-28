@@ -1,4 +1,3 @@
-
 (require 'package)
 (package-initialize)
 
@@ -398,7 +397,6 @@
     (interactive)
     (call-interactively 'scroll-down-command)
     (nav-flash-show-soon))
-
   :bind (("M-v" . scroll-down-command-flash)
          ("M-r" . move-to-window-line-top-bottom-flash)
          ("C-l" . recenter-top-bottom-flash)
