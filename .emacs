@@ -353,6 +353,11 @@
  ;; If there is more than one, they won't work right.
  '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color")))))
 
+(use-package smart-mode-line
+  :config
+  (setq sml/no-confirm-load-theme t)
+  (sml/setup))
+
 (use-package google-translate
   :defer t
   :init (require 'google-translate-default-ui))
