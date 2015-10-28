@@ -27,6 +27,8 @@
       make-backup-files nil
       delete-auto-save-files t
       imenu-auto-rescan t
+      echo-keystrokes 0.1
+      use-dialog-box nil
       uniquify-buffer-name-style 'forward
       ediff-window-setup-function 'ediff-setup-windows-plain
       vc-diff-switches "-u")
@@ -358,6 +360,10 @@
   (setq sml/no-confirm-load-theme t)
   (sml/setup))
 
+(use-package nav-flash
+  :commands (nav-flash-show)
+  :init (setq nav-flash-delay 0.6))
+
 (use-package google-translate
   :defer t
   :init (require 'google-translate-default-ui))
@@ -537,7 +543,7 @@
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
 
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)  ;; symbol-at-point)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
