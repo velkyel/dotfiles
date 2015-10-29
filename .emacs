@@ -99,8 +99,10 @@
 (use-package swift-mode)
 (use-package processing-mode)
 (use-package restart-emacs)
-
 (use-package diffview)
+(use-package markdown-mode
+  :mode (("\\.md$" . markdown-mode)
+         ("\\.markdown$" . markdown-mode)))
 
 (use-package exec-path-from-shell
   :init (exec-path-from-shell-initialize))
@@ -263,7 +265,7 @@
                                               ("d" "dired $1")
                                               ("ff" "find-file $1"))
                                             eshell-command-aliases-list))
-  :init
+  (setenv "PAGER" (executable-find "cat"))
   (defun visit-term-buffer ()
     "Create or visit a terminal buffer."
     (interactive)
