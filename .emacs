@@ -128,7 +128,7 @@
                                    " UseTab: Never,"
                                    " ConstructorInitializerIndentWidth: 2,"
                                    " ContinuationIndentWidth: 2,"
-                                   " Standard: \"C++11\"}"))
+                                   " Standard: C++11}"))
   :config
   ;; without -sort-includes option:
   (defun clang-format-region (char-start char-end &optional style)
