@@ -505,10 +505,7 @@
     (mu4e-mark-set 'move "/INBOX.Spam")
     (mu4e-headers-next))
   (define-key mu4e-headers-mode-map (kbd "c") 'mu4e-move-to-spam)
-  (defun run ()
-    (interactive)
-    (mu4e))
-  (global-set-key (kbd "C-c m") 'run))
+  (global-set-key (kbd "C-c m") 'mu4e))
 
 (use-package mu4e-alert
   :if (not (kelly?))
