@@ -42,6 +42,7 @@
 (defun kelly? ()
   (or (string= system-name "typhoon.autokelly.local")
       (string= system-name "idev02.autokelly.local")
+      (string= system-name "idev03")
       (string= system-name "idev03.autokelly.local")))
 
 (setq gc-cons-threshold 20000000)
