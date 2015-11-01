@@ -15,6 +15,7 @@
 (require 'bind-key)
 
 (setq compilation-ask-about-save nil
+      compilation-always-kill t
       compilation-scroll-output 'first-error
       next-line-add-newlines nil
       inhibit-startup-message t
@@ -401,7 +402,7 @@
     (call-interactively 'scroll-down-command)
     (nav-flash-show-soon))
   :bind (("M-v" . scroll-down-command-flash)
-         ("M-r" . move-to-window-line-top-bottom-flash)
+         ;; ("M-r" . move-to-window-line-top-bottom-flash)
          ("C-l" . recenter-top-bottom-flash)
          ("C-v" . scroll-up-command-flash)))
 
@@ -596,7 +597,7 @@
 (define-key global-map (kbd "RET") 'newline-and-indent)
 ;; (define-key c-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 ;; (define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
-;; (global-set-key (kbd "M-r") 'recompile)
+(global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
 
