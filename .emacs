@@ -65,7 +65,7 @@
 (setq default-input-method "czech-qwerty")
 (if (kelly?)
     (progn
-      (prefer-coding-system 'iso-latin-2-unix)
+      (prefer-coding-system 'utf-8)
       (set-terminal-coding-system 'iso-latin-2-unix)
       (set-keyboard-coding-system 'iso-latin-2-unix))
   (progn
