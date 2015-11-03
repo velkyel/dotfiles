@@ -227,13 +227,15 @@
          ("C-x C-f" . helm-find-files)
          ("C-." . helm-imenu-in-all-buffers)
          ("M-y" . helm-show-kill-ring)
-         ("M-G" . helm-do-grep-ag)
          ("C-c h" . helm-command-prefix)
          ("C-c <SPC>" . helm-all-mark-rings)))
 
 (use-package ag)
 (use-package helm-ag
+  ;; :init
+  ;; (setq helm-ag-fuzzy-match t)
   :config
+  (setq helm-ag-base-command "ack --smart-case --nocolor --nogroup") ;; ag
   (setq helm-ag-insert-at-point 'symbol)
   (add-hook 'helm-ag-mode-hook (lambda () (grep-mode))))
 
@@ -270,8 +272,10 @@
           :buffer "*helm buffers*"
           :keymap helm-buffer-map
           :truncate-lines helm-buffers-truncate-lines))
-  :bind (("M-g" . helm-projectile-ag)
-         ("M-G" . helm-projectile-grep)
+  (defun my-helm-projectile-ag ()
+    (interactive)
+    (helm-do-ag (projectile-project-root)))
+  :bind (("M-g" . my-helm-projectile-ag)
          ("C-c C-f" . helm-projectile-find-file)
          ("C-x b" . my-helm-projectile-buffers-list)))
 
