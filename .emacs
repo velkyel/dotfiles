@@ -235,7 +235,7 @@
   ;; :init
   ;; (setq helm-ag-fuzzy-match t)
   :config
-  (setq helm-ag-base-command "ack --smart-case --nocolor --nogroup") ;; ag
+  (setq helm-ag-base-command "ag --smart-case --nocolor --nogroup")
   (setq helm-ag-insert-at-point 'symbol)
   (add-hook 'helm-ag-mode-hook (lambda () (grep-mode))))
 
