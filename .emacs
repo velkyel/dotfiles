@@ -275,7 +275,11 @@
   (defun my-helm-projectile-ag ()
     (interactive)
     (helm-do-ag (projectile-project-root)))
+  (defun my-helm-projectile-curdir-ag ()
+    (interactive)
+    (helm-do-ag (helm-current-directory)))
   :bind (("M-g" . my-helm-projectile-ag)
+         ("M-G" . my-helm-projectile-curdir-ag)
          ("C-c C-f" . helm-projectile-find-file)
          ("C-x b" . my-helm-projectile-buffers-list)))
 
