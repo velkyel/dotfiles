@@ -300,7 +300,7 @@
           (other-window 1)
           (eshell))
       (switch-to-buffer-other-window "*eshell*")))
-  (bind-key "C-c t" 'visit-term-buffer))
+  :bind ("C-c t" . visit-term-buffer))
 
 (use-package avy
   :defer t
