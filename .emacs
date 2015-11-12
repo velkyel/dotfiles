@@ -50,6 +50,7 @@
 ;; (setq compilation-skip-threshold 2)
 
 (defalias 'after 'with-eval-after-load)
+(add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 (delete-selection-mode t)
 (show-paren-mode 1)
 ;; (setq show-paren-style 'expression)
