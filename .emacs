@@ -415,48 +415,49 @@
         smtpmail-smtp-server "mail.messagingengine.com"
         smtpmail-smtp-service 587))
 
-(require 'nnir)
-(require 'gnus)
+(when (not (kelly?))
+  (progn
+    (require 'nnir)
+    (require 'gnus)
+    (setq user-mail-address "capak@inputwish.com"
+          user-full-name  "Libor Čapák"
+        gnus-select-method
+        '(nnimap "fastmail"
+                 (nnimap-address "mail.messagingengine.com")
+                 (nnimap-server-port 993)
+                 (nnimap-stream ssl)
+                 (nnir-search-engine imap)
+                 ;; press 'E' to expire mail
+                 (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash")
+                 (nnmail-expiry-wait 30))
+        gnus-use-correct-string-widths nil
+        gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
+        gnus-thread-sort-functions
+        '((not gnus-thread-sort-by-date)
+          (not gnus-thread-sort-by-number))
+        gnus-use-cache t
+        gnus-use-adaptive-scoring nil
+        gnus-save-score nil
+        gnus-use-scoring nil
+        gnus-summary-default-score 0
+        epa-file-cache-passphrase-for-symmetric-encryption t
+        gnus-read-active-file 'some
+        gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
 
-(setq user-mail-address "capak@inputwish.com"
-      user-full-name  "Libor Čapák"
-      gnus-select-method
-      '(nnimap "fastmail"
-               (nnimap-address "mail.messagingengine.com")
-               (nnimap-server-port 993)
-               (nnimap-stream ssl)
-               (nnir-search-engine imap)
-               ;; press 'E' to expire mail
-               (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash")
-               (nnmail-expiry-wait 30))
-      gnus-use-correct-string-widths nil
-      gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
-      gnus-thread-sort-functions
-      '((not gnus-thread-sort-by-date)
-        (not gnus-thread-sort-by-number))
-      gnus-use-cache t
-      gnus-use-adaptive-scoring nil
-      gnus-save-score nil
-      gnus-use-scoring nil
-      gnus-summary-default-score 0
-      epa-file-cache-passphrase-for-symmetric-encryption t
-      gnus-read-active-file 'some
-      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
+    (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+    (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
 
-(add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-(add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
+    (defun my-gnus-summary-keys ()
+      (local-set-key "y" 'fastmail-archive)
+      (local-set-key "$" 'fastmail-report-spam))
 
-(defun my-gnus-summary-keys ()
-  (local-set-key "y" 'fastmail-archive)
-  (local-set-key "$" 'fastmail-report-spam))
+    (defun fastmail-archive ()
+      (interactive)
+      (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
 
-(defun fastmail-archive ()
-  (interactive)
-  (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
-
-(defun fastmail-report-spam ()
-  (interactive)
-  (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Spam"))
+    (defun fastmail-report-spam ()
+      (interactive)
+      (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Spam"))))
 
 
 ;; (when (not (kelly?))
