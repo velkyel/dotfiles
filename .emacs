@@ -624,7 +624,6 @@
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
-(global-set-key (kbd "C-c m") 'gnus)
 
 ;; (add-hook 'c++-mode-hook 'irony-mode)
 ;; (add-hook 'c-mode-hook 'irony-mode)
