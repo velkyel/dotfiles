@@ -415,135 +415,135 @@
         smtpmail-smtp-server "mail.messagingengine.com"
         smtpmail-smtp-service 587))
 
-(when (not (kelly?))
-  (progn
-    (require 'nnir)
-    (require 'gnus)
-    (setq user-mail-address "capak@inputwish.com"
-          user-full-name  "Libor Čapák"
-        gnus-select-method
-        '(nnimap "fastmail"
-                 (nnimap-address "mail.messagingengine.com")
-                 (nnimap-server-port 993)
-                 (nnimap-stream ssl)
-                 (nnir-search-engine imap)
-                 ;; press 'E' to expire mail
-                 (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash")
-                 (nnmail-expiry-wait 30))
-        gnus-use-correct-string-widths nil
-        gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
-        gnus-thread-sort-functions
-        '((not gnus-thread-sort-by-date)
-          (not gnus-thread-sort-by-number))
-        gnus-use-cache t
-        gnus-use-adaptive-scoring nil
-        gnus-save-score nil
-        gnus-use-scoring nil
-        gnus-summary-default-score 0
-        epa-file-cache-passphrase-for-symmetric-encryption t
-        gnus-read-active-file 'some
-        gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
-
-    (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-    (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
-
-    (defun my-gnus-summary-keys ()
-      (local-set-key "y" 'fastmail-archive)
-      (local-set-key "$" 'fastmail-report-spam))
-
-    (defun fastmail-archive ()
-      (interactive)
-      (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
-
-    (defun fastmail-report-spam ()
-      (interactive)
-      (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Spam"))))
-
-
 ;; (when (not (kelly?))
-;;   (when (equal system-type 'gnu/linux)
-;;     (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
-;;   (when (equal system-type 'darwin)
-;;     (setq mu4e-mu-binary "/usr/local/bin/mu")
-;;     (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
-;;   (when (equal system-type 'gnu/linux)
-;;     (setq mu4e-mu-binary "/usr/bin/mu"))
-;;   (require 'mu4e)
-;;   (when (fboundp 'imagemagick-register-types)
-;;     (imagemagick-register-types))
-;;   (setq epa-file-cache-passphrase-for-symmetric-encryption t
-;;         mu4e-maildir "~/Maildir"
-;;         mu4e-drafts-folder "/INBOX.Drafts"
-;;         mu4e-sent-folder   "/INBOX.Sent"
-;;         mu4e-trash-folder  "/INBOX.Trash"
-;;         mu4e-maildir-shortcuts
-;;         '( ("/INBOX"         . ?i)
-;;            ("/INBOX.Sent"    . ?s)
-;;            ("/INBOX.Trash"   . ?t)
-;;            ("/INBOX.Archive" . ?a))
-;;         mu4e-bookmarks '(((concat "flag:unread"
-;;                                   " AND NOT flag:trashed"
-;;                                   " AND NOT maildir:/INBOX.Trash"
-;;                                   " AND NOT maildir:/INBOX.Spam")
-;;                           "Unread messages"      ?u)
-;;                          ("date:today..now"                  "Today's messages"     ?t)
-;;                          ("date:7d..now"                     "Last 7 days"          ?w)
-;;                          ("mime:image/*"                     "Messages with images" ?p)
-;;                          ("size:2M..500M"                    "Big messages"         ?b))
-;;         mu4e-get-mail-command "offlineimap -q"
-;;         mu4e-update-interval 300
-;;         mu4e-view-show-images t
-;;         mu4e-html2text-command "w3m -T text/html"
-;;         mu4e-headers-skip-duplicates t
-;;         user-mail-address "capak@inputwish.com"
-;;         user-full-name  "Libor Čapák"
-;;         mail-signature nil
-;;         mail-signature-file nil
-;;         message-signature nil
-;;         mu4e-compose-signature nil
-;;         mu4e-compose-signature-auto-include nil
-;;         mu4e-sent-message-behaviour 'delete
-;;         mu4e-hide-index-messages t
-;;         mu4e-view-show-addresses t
-;;         mu4e-date-format-long "%d.%m.%Y"
-;;         mu4e-headers-date-format "%d.%m.%y"
-;;         mu4e-confirm-quit nil
-;;         message-kill-buffer-on-exit t)
-;;   ;; (setq mu4e-use-fancy-chars t)
-;;   ;; (set-face-attribute 'mu4e-unread-face nil
-;;   ;;                     :inherit font-lock-preprocessor-face
-;;   ;;                     :bold t)
-;;   (defun mu4e-msgv-action-view-in-browser (msg)
-;;     "View the body of the message in a web browser."
-;;     (interactive)
-;;     (let ((html (mu4e-msg-field (mu4e-message-at-point t) :body-html))
-;;           (tmpfile (format "%s/%d.html" temporary-file-directory (random))))
-;;       (unless html (error "No html part for this message"))
-;;       (with-temp-file tmpfile
-;;         (insert
-;;          "<html>"
-;;          "<head><meta http-equiv=\"content-type\""
-;;          "content=\"text/html;charset=UTF-8\">"
-;;          html))
-;;       (browse-url (concat "file://" tmpfile))))
-;;   (add-to-list 'mu4e-view-actions
-;;                '("View in browser" . mu4e-msgv-action-view-in-browser) t)
-;;   (defun mu4e-move-to-spam ()
-;;     (interactive)
-;;     (mu4e-mark-set 'move "/INBOX.Spam")
-;;     (mu4e-headers-next))
-;;   (define-key mu4e-headers-mode-map (kbd "c") 'mu4e-move-to-spam)
-;;   (global-set-key (kbd "C-c m") 'mu4e))
+;;   (progn
+;;     (require 'nnir)
+;;     (require 'gnus)
+;;     (setq user-mail-address "capak@inputwish.com"
+;;           user-full-name  "Libor Čapák"
+;;         gnus-select-method
+;;         '(nnimap "fastmail"
+;;                  (nnimap-address "mail.messagingengine.com")
+;;                  (nnimap-server-port 993)
+;;                  (nnimap-stream ssl)
+;;                  (nnir-search-engine imap)
+;;                  ;; press 'E' to expire mail
+;;                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash")
+;;                  (nnmail-expiry-wait 30))
+;;         gnus-use-correct-string-widths nil
+;;         gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
+;;         gnus-thread-sort-functions
+;;         '((not gnus-thread-sort-by-date)
+;;           (not gnus-thread-sort-by-number))
+;;         gnus-use-cache t
+;;         gnus-use-adaptive-scoring nil
+;;         gnus-save-score nil
+;;         gnus-use-scoring nil
+;;         gnus-summary-default-score 0
+;;         epa-file-cache-passphrase-for-symmetric-encryption t
+;;         gnus-read-active-file 'some
+;;         gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
 
-;; (use-package mu4e-alert
-;;   :if (not (kelly?))
-;;   :init
-;;   (setq mu4e-alert-interesting-mail-query
-;;         (concat "flag:unread"
-;;                 " AND NOT flag:trashed"
-;;                 " AND NOT maildir:/INBOX.Trash"
-;;                 " AND NOT maildir:/INBOX.Spam"))
-;;   (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
+;;     (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+;;     (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
+
+;;     (defun my-gnus-summary-keys ()
+;;       (local-set-key "y" 'fastmail-archive)
+;;       (local-set-key "$" 'fastmail-report-spam))
+
+;;     (defun fastmail-archive ()
+;;       (interactive)
+;;       (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
+
+;;     (defun fastmail-report-spam ()
+;;       (interactive)
+;;       (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Spam"))))
+
+
+(when (not (kelly?))
+  (when (equal system-type 'gnu/linux)
+    (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
+  (when (equal system-type 'darwin)
+    (setq mu4e-mu-binary "/usr/local/bin/mu")
+    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
+  (when (equal system-type 'gnu/linux)
+    (setq mu4e-mu-binary "/usr/bin/mu"))
+  (require 'mu4e)
+  (when (fboundp 'imagemagick-register-types)
+    (imagemagick-register-types))
+  (setq epa-file-cache-passphrase-for-symmetric-encryption t
+        mu4e-maildir "~/Maildir"
+        mu4e-drafts-folder "/INBOX.Drafts"
+        mu4e-sent-folder   "/INBOX.Sent"
+        mu4e-trash-folder  "/INBOX.Trash"
+        mu4e-maildir-shortcuts
+        '( ("/INBOX"         . ?i)
+           ("/INBOX.Sent"    . ?s)
+           ("/INBOX.Trash"   . ?t)
+           ("/INBOX.Archive" . ?a))
+        mu4e-bookmarks '(((concat "flag:unread"
+                                  " AND NOT flag:trashed"
+                                  " AND NOT maildir:/INBOX.Trash"
+                                  " AND NOT maildir:/INBOX.Spam")
+                          "Unread messages"      ?u)
+                         ("date:today..now"                  "Today's messages"     ?t)
+                         ("date:7d..now"                     "Last 7 days"          ?w)
+                         ("mime:image/*"                     "Messages with images" ?p)
+                         ("size:2M..500M"                    "Big messages"         ?b))
+        mu4e-get-mail-command "offlineimap -q"
+        mu4e-update-interval 300
+        mu4e-view-show-images t
+        mu4e-html2text-command "w3m -T text/html"
+        mu4e-headers-skip-duplicates t
+        user-mail-address "capak@inputwish.com"
+        user-full-name  "Libor Čapák"
+        mail-signature nil
+        mail-signature-file nil
+        message-signature nil
+        mu4e-compose-signature nil
+        mu4e-compose-signature-auto-include nil
+        mu4e-sent-message-behaviour 'delete
+        mu4e-hide-index-messages t
+        mu4e-view-show-addresses t
+        mu4e-date-format-long "%d.%m.%Y"
+        mu4e-headers-date-format "%d.%m.%y"
+        mu4e-confirm-quit nil
+        message-kill-buffer-on-exit t)
+  ;; (setq mu4e-use-fancy-chars t)
+  ;; (set-face-attribute 'mu4e-unread-face nil
+  ;;                     :inherit font-lock-preprocessor-face
+  ;;                     :bold t)
+  (defun mu4e-msgv-action-view-in-browser (msg)
+    "View the body of the message in a web browser."
+    (interactive)
+    (let ((html (mu4e-msg-field (mu4e-message-at-point t) :body-html))
+          (tmpfile (format "%s/%d.html" temporary-file-directory (random))))
+      (unless html (error "No html part for this message"))
+      (with-temp-file tmpfile
+        (insert
+         "<html>"
+         "<head><meta http-equiv=\"content-type\""
+         "content=\"text/html;charset=UTF-8\">"
+         html))
+      (browse-url (concat "file://" tmpfile))))
+  (add-to-list 'mu4e-view-actions
+               '("View in browser" . mu4e-msgv-action-view-in-browser) t)
+  (defun mu4e-move-to-spam ()
+    (interactive)
+    (mu4e-mark-set 'move "/INBOX.Spam")
+    (mu4e-headers-next))
+  (define-key mu4e-headers-mode-map (kbd "c") 'mu4e-move-to-spam)
+  (global-set-key (kbd "C-c m") 'mu4e))
+
+(use-package mu4e-alert
+  :if (not (kelly?))
+  :init
+  (setq mu4e-alert-interesting-mail-query
+        (concat "flag:unread"
+                " AND NOT flag:trashed"
+                " AND NOT maildir:/INBOX.Trash"
+                " AND NOT maildir:/INBOX.Spam"))
+  (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
 
 (defun my-c-mode-font-lock-if0 (limit)
   (save-restriction
