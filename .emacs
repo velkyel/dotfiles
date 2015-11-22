@@ -491,7 +491,7 @@
                          ("mime:image/*"                     "Messages with images" ?p)
                          ("size:2M..500M"                    "Big messages"         ?b))
         mu4e-get-mail-command "offlineimap -q"
-        mu4e-update-interval 300
+        mu4e-update-interval 600
         mu4e-view-show-images t
         mu4e-html2text-command "w3m -T text/html"
         mu4e-headers-skip-duplicates t
