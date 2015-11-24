@@ -307,9 +307,8 @@
   :bind ("C-c t" . visit-term-buffer))
 
 (use-package avy
-  :defer t
   :bind (("C-;" . avy-goto-word-or-subword-1))
-         ;;("M-g l" . avy-goto-line))
+  :config (setq avy-background t)
   :init (after 'isearch (define-key isearch-mode-map (kbd "C-;") 'avy-isearch)))
 
 (use-package saveplace
@@ -380,7 +379,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color")))))
+ '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color"))))
+ '(avy-background-face ((t (:background "gray90" :foreground "gray60")))))
 
 (use-package smart-mode-line
   :config
@@ -459,6 +459,9 @@
 ;;       (interactive)
 ;;       (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Spam"))))
 
+;; (setq rmail-primary-inbox-list '("imap://capak%40inputwish.com@mail.messagingengine.com"))
+;; (setq rmail-movemail-variant-in-use 'mailutils)
+;; (setq rmail-remote-password-required t)
 
 (when (not (kelly?))
   (when (equal system-type 'gnu/linux)
