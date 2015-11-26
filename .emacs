@@ -307,9 +307,13 @@
   :bind ("C-c t" . visit-term-buffer))
 
 (use-package avy
-  :bind (("C-;" . avy-goto-word-or-subword-1))
+  :bind ("C-;" . avy-goto-word-or-subword-1)
   :config (setq avy-background t)
   :init (after 'isearch (define-key isearch-mode-map (kbd "C-;") 'avy-isearch)))
+
+(use-package ace-jump-helm-line    ;; avy
+  :defer t
+  :bind ("C-'" . ace-jump-helm-line-execute-action))
 
 (use-package saveplace
   :init (setq-default save-place t))
