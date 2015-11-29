@@ -287,6 +287,17 @@
          ("C-c C-f" . helm-projectile-find-file)
          ("C-x b" . my-helm-projectile-buffers-list)))
 
+(use-package helm-gtags
+  :defer t
+  :bind (("M-." . helm-gtags-find-tag)
+         ;;("M-r" . helm-gtags-find-rtag)
+         ("M-," . helm-gtags-pop-stack))
+  :init
+  (add-hook 'c-mode-common-hook 'helm-gtags-mode)
+  :config
+  (setq helm-gtags-auto-update t)
+  (setq helm-gtags-use-input-at-cursor t))
+
 (use-package eshell
   :defer t
   :config
@@ -307,9 +318,10 @@
   :bind ("C-c t" . visit-term-buffer))
 
 (use-package avy
-  :bind ("C-;" . avy-goto-word-or-subword-1)
   :config (setq avy-background t)
-  :init (after 'isearch (define-key isearch-mode-map (kbd "C-;") 'avy-isearch)))
+  :bind ("C-;" . avy-goto-word-or-subword-1)
+  :init
+  (bind-key "C-;" #'avy-isearch isearch-mode-map))
 
 (use-package ace-jump-helm-line    ;; avy
   :defer t
@@ -383,8 +395,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color"))))
- '(avy-background-face ((t (:background "gray90" :foreground "gray60")))))
+ '(avy-background-face ((t (:background "gray90" :foreground "gray60"))))
+ '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color")))))
 
 (use-package smart-mode-line
   :config
