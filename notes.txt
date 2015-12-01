@@ -1,3 +1,5 @@
+from: https://help.ubuntu.com/community/AppleKeyboard
+
 apple keyboard swap cmd & alt (no .Xmodmap config needed):
 
 $ echo options hid_apple swap_opt_cmd=1 | sudo tee -a /etc/modprobe.d/hid_apple.conf
