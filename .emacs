@@ -241,13 +241,6 @@
   (setq helm-ag-insert-at-point 'symbol)
   (add-hook 'helm-ag-mode-hook (lambda () (grep-mode))))
 
-;; TODO: semantic + projectile, ggtags + projectile
-
-(use-package projectile
-  :diminish projectile-mode
-  :init (setq projectile-enable-caching t)
-  :config (projectile-global-mode))
-
 (use-package helm-descbinds
   :config (helm-descbinds-mode))
 
@@ -256,6 +249,39 @@
   (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
   (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
   :bind ("M-i" . helm-swoop))
+
+;; TODO: semantic + projectile, ggtags + projectile
+
+;; (use-package ggtags
+;;   :defer t
+;;   :init
+;;   (add-hook 'c-mode-common-hook #'ggtags-mode)
+;;   :config
+;;   (setq ggtags-global-ignore-case t
+;;         ggtags-completing-read-function nil)
+;;   (use-package helm-gtags
+;;     :config
+;;     (setq helm-gtags-ignore-case t
+;;           helm-gtags-auto-update t
+;;           helm-gtags-use-input-at-cursor t
+;;           helm-gtags-pulse-at-cursor t
+;;           helm-gtags-cache-select-result t
+;;           helm-gtags-display-style 'detail)
+;;     (add-hook 'c-mode-common-hook
+;;               (lambda ()
+;;                 (when (derived-mode-p 'c-mode 'c++-mode)
+;;                   (helm-gtags-mode 1))))
+;;     (bind-key "M-." 'helm-gtags-dwim helm-gtags-mode-map)
+;;     (bind-key "M-," 'helm-gtags-pop-stack helm-gtags-mode-map)))
+;;   ;; (setq-local imenu-create-index-function #'ggtags-build-imenu-index))
+
+(use-package projectile
+  :diminish projectile-mode
+  :init (setq projectile-enable-caching t)
+  :config
+  (projectile-global-mode))
+  ;; (setq projectile-tags-command "ctags-exuberant -eR -f \"%s\" %s")
+  ;; :bind ("M-." . projectile-find-tag))
 
 (use-package helm-projectile
   :init
@@ -287,16 +313,8 @@
          ("C-c C-f" . helm-projectile-find-file)
          ("C-x b" . my-helm-projectile-buffers-list)))
 
-(use-package helm-gtags
-  :defer t
-  :bind (("M-." . helm-gtags-find-tag)
-         ;;("M-r" . helm-gtags-find-rtag)
-         ("M-," . helm-gtags-pop-stack))
-  :init
-  (add-hook 'c-mode-common-hook 'helm-gtags-mode)
-  :config
-  (setq helm-gtags-auto-update t)
-  (setq helm-gtags-use-input-at-cursor t))
+(use-package smartscan
+  :init (add-hook 'prog-mode-hook 'smartscan-mode))
 
 (use-package eshell
   :defer t
@@ -638,8 +656,6 @@
 (define-key function-key-map "\e[." (kbd "C-."))
 
 (define-key global-map (kbd "RET") 'newline-and-indent)
-;; (define-key c-mode-map (kbd "TAB") 'company-indent-or-complete-common)
-;; (define-key c++-mode-map (kbd "TAB") 'company-indent-or-complete-common)
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
