@@ -314,7 +314,7 @@
          ("C-x b" . my-helm-projectile-buffers-list)))
 
 (use-package smartscan
-  :init (add-hook 'prog-mode-hook 'smartscan-mode))
+  :init (add-hook 'prog-mode-hook 'smartscan-mode))   ;; M-n, M-p
 
 (use-package eshell
   :defer t
