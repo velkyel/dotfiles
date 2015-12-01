@@ -5,6 +5,7 @@ import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
                 
 main = xmonad $ defaultConfig {
+    modMask = mod4Mask,               -- use Super instead of Alt
     layoutHook = smartBorders $ layoutHook defaultConfig,
     terminal = "urxvtc",
     borderWidth = 4,
@@ -25,4 +26,3 @@ main = xmonad $ defaultConfig {
           "M-/",
           "M-,", "M-."   -- increment/decrement the number of windows in master area
         ]
-

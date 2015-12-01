@@ -5,3 +5,4 @@ xset m 1/5
 xset b off
 urxvtd --quiet --opendisplay --fork
 exec ck-launch-session xmonad
+
