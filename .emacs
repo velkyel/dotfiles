@@ -116,6 +116,7 @@
 (use-package lua-mode)
 (use-package rust-mode)
 (use-package swift-mode)
+(use-package haskell-mode)
 (use-package processing-mode)
 (use-package restart-emacs)
 (use-package diffview)
