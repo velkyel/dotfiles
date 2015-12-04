@@ -114,8 +114,6 @@
 
 (use-package json-mode)
 (use-package lua-mode)
-(use-package rust-mode)
-(use-package swift-mode)
 (use-package haskell-mode)
 (use-package processing-mode)
 (use-package restart-emacs)
@@ -283,6 +281,35 @@
   (projectile-global-mode))
   ;; (setq projectile-tags-command "ctags-exuberant -eR -f \"%s\" %s")
   ;; :bind ("M-." . projectile-find-tag))
+
+(use-package flycheck)
+(use-package company)
+
+(use-package rust-mode
+  :defer t
+  :mode (("\\.rs$'" . rust-mode))
+  :config
+  (use-package toml-mode :defer t)
+  (use-package rustfmt :defer t)
+  (use-package flycheck-rust :defer t)
+  (use-package company-racer :defer t)
+  (use-package racer :defer t)
+  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+  (add-hook 'racer-mode-hook
+            (lambda ()
+              (eldoc-mode t)
+              (company-mode t)))
+  (add-hook 'rust-mode-hook
+            (lambda ()
+              (setq racer-rust-src-path "~/rustc-nightly/src/")
+              (setq company-tooltip-align-annotations t)
+              (setq company-minimum-prefix-length 2)
+              (setq company-idle-delay 0.2)
+              (racer-mode t)
+              (flycheck-mode t)
+              (setq rust-indent-offset 4)))
+  :bind (("TAB" . company-indent-or-complete-common)
+         ("M-." . racer-find-definition)))
 
 (use-package helm-projectile
   :init
