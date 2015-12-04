@@ -251,28 +251,18 @@
 
 ;; TODO: semantic + projectile, ggtags + projectile
 
-;; (use-package ggtags
-;;   :defer t
-;;   :init
-;;   (add-hook 'c-mode-common-hook #'ggtags-mode)
-;;   :config
-;;   (setq ggtags-global-ignore-case t
-;;         ggtags-completing-read-function nil)
-;;   (use-package helm-gtags
-;;     :config
-;;     (setq helm-gtags-ignore-case t
-;;           helm-gtags-auto-update t
-;;           helm-gtags-use-input-at-cursor t
-;;           helm-gtags-pulse-at-cursor t
-;;           helm-gtags-cache-select-result t
-;;           helm-gtags-display-style 'detail)
-;;     (add-hook 'c-mode-common-hook
-;;               (lambda ()
-;;                 (when (derived-mode-p 'c-mode 'c++-mode)
-;;                   (helm-gtags-mode 1))))
-;;     (bind-key "M-." 'helm-gtags-dwim helm-gtags-mode-map)
-;;     (bind-key "M-," 'helm-gtags-pop-stack helm-gtags-mode-map)))
-;;   ;; (setq-local imenu-create-index-function #'ggtags-build-imenu-index))
+(use-package ggtags
+  :defer t
+  :config
+  (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
+  (setq ggtags-coompleting-read-function)
+  :init
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode 'objc-mode)
+                (ggtags-mode 1))))
+  (bind-key "M-." 'ggtags-find-tag-dwim)
+  (bind-key "M-," 'pop-tag-mark))
 
 (use-package projectile
   :diminish projectile-mode
@@ -285,31 +275,31 @@
 (use-package flycheck)
 (use-package company)
 
-(use-package rust-mode
-  :defer t
-  :mode (("\\.rs$'" . rust-mode))
-  :config
-  (use-package toml-mode :defer t)
-  (use-package rustfmt :defer t)
-  (use-package flycheck-rust :defer t)
-  (use-package company-racer :defer t)
-  (use-package racer :defer t)
-  (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-  (add-hook 'racer-mode-hook
-            (lambda ()
-              (eldoc-mode t)
-              (company-mode t)))
-  (add-hook 'rust-mode-hook
-            (lambda ()
-              (setq racer-rust-src-path "~/rustc-nightly/src/")
-              (setq company-tooltip-align-annotations t)
-              (setq company-minimum-prefix-length 2)
-              (setq company-idle-delay 0.2)
-              (racer-mode t)
-              (flycheck-mode t)
-              (setq rust-indent-offset 4)))
-  :bind (("TAB" . company-indent-or-complete-common)
-         ("M-." . racer-find-definition)))
+;; (use-package rust-mode
+;;   :defer t
+;;   :mode (("\\.rs$'" . rust-mode))
+;;   :config
+;;   (use-package toml-mode :defer t)
+;;   (use-package rustfmt :defer t)
+;;   (use-package flycheck-rust :defer t)
+;;   (use-package company-racer :defer t)
+;;   (use-package racer :defer t)
+;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+;;   (add-hook 'racer-mode-hook
+;;             (lambda ()
+;;               (eldoc-mode t)
+;;               (company-mode t)))
+;;   (add-hook 'rust-mode-hook
+;;             (lambda ()
+;;               (setq racer-rust-src-path "~/rustc-nightly/src/")
+;;               (setq company-tooltip-align-annotations t)
+;;               (setq company-minimum-prefix-length 2)
+;;               (setq company-idle-delay 0.2)
+;;               (racer-mode t)
+;;               (flycheck-mode t)
+;;               (setq rust-indent-offset 4)))
+;;   :bind (("TAB" . company-indent-or-complete-common)
+;;          ("M-." . racer-find-definition)))
 
 (use-package helm-projectile
   :init
