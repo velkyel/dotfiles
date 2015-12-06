@@ -115,6 +115,7 @@
 (use-package json-mode)
 (use-package lua-mode)
 (use-package haskell-mode)
+(use-package nim-mode)
 (use-package processing-mode)
 (use-package restart-emacs)
 (use-package diffview)
@@ -249,31 +250,25 @@
   (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
   :bind ("M-i" . helm-swoop))
 
-;; TODO: semantic + projectile, ggtags + projectile
-
-(use-package ggtags
-  :defer t
-  :config
-  (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
-  (setq ggtags-coompleting-read-function)
-  :init
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (when (derived-mode-p 'c-mode 'c++-mode 'objc-mode)
-                (ggtags-mode 1))))
-  (bind-key "M-." 'ggtags-find-tag-dwim)
-  (bind-key "M-," 'pop-tag-mark))
+;; TODO: semantic + projectile, projectile
 
 (use-package projectile
   :diminish projectile-mode
   :init (setq projectile-enable-caching t)
   :config
   (projectile-global-mode))
-  ;; (setq projectile-tags-command "ctags-exuberant -eR -f \"%s\" %s")
-  ;; :bind ("M-." . projectile-find-tag))
 
 (use-package flycheck)
 (use-package company)
+
+(use-package rtags
+  ;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
+  ;; to create compile_commands.json: bear scons
+  :init
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
+              (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back))))
 
 ;; (use-package rust-mode
 ;;   :defer t
