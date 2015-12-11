@@ -421,7 +421,8 @@
 ;; (setq rmail-movemail-variant-in-use 'mailutils)
 ;; (setq rmail-remote-password-required t)
 
-(when (not (kelly?))
+(defun my-email ()
+  (interactive)
   (when (equal system-type 'gnu/linux)
     (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
   (when (equal system-type 'darwin)
@@ -494,17 +495,17 @@
     (mu4e-mark-set 'move "/INBOX.Spam")
     (mu4e-headers-next))
   (define-key mu4e-headers-mode-map (kbd "c") 'mu4e-move-to-spam)
-  (global-set-key (kbd "C-c m") 'mu4e))
+  (global-set-key (kbd "C-c m") 'mu4e)
 
-;; (use-package mu4e-alert
-;;   :if (not (kelly?))
-;;   :init
-;;   (setq mu4e-alert-interesting-mail-query
-;;         (concat "flag:unread"
-;;                 " AND NOT flag:trashed"
-;;                 " AND NOT maildir:/INBOX.Trash"
-;;                 " AND NOT maildir:/INBOX.Spam"))
-;;   (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
+  (use-package mu4e-alert
+    :init
+    (setq mu4e-alert-interesting-mail-query
+          (concat "flag:unread"
+                  " AND NOT flag:trashed"
+                  " AND NOT maildir:/INBOX.Trash"
+                  " AND NOT maildir:/INBOX.Spam"))
+    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
+  (mu4e))
 
 (defun my-c-mode-font-lock-if0 (limit)
   (save-restriction
@@ -672,6 +673,9 @@
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
+
+(when (not (kelly?))
+  (global-set-key (kbd "C-c m") 'my-email))
 
 ;; (add-hook 'c++-mode-hook 'irony-mode)
 ;; (add-hook 'c-mode-hook 'irony-mode)
