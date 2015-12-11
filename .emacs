@@ -329,23 +329,19 @@
 (use-package smartscan
   :init (add-hook 'prog-mode-hook 'smartscan-mode))   ;; M-n, M-p
 
-(use-package eshell
+(use-package shell
   :defer t
   :config
-  (setq eshell-command-aliases-list (append '(("l" "ls -lcrt")
-                                              ("d" "dired $1")
-                                              ("ff" "find-file $1"))
-                                            eshell-command-aliases-list))
   (setenv "PAGER" (executable-find "cat"))
   (defun visit-term-buffer ()
     "Create or visit a terminal buffer."
     (interactive)
-    (if (not (get-buffer "*eshell*"))
+    (if (not (get-buffer "*shell*"))
         (progn
           (split-window-sensibly (selected-window))
           (other-window 1)
-          (eshell))
-      (switch-to-buffer-other-window "*eshell*")))
+          (shell))
+      (switch-to-buffer-other-window "*shell*")))
   :bind ("C-c t" . visit-term-buffer))
 
 (use-package avy
