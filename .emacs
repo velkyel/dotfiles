@@ -11,6 +11,8 @@
 
 (eval-when-compile (require 'use-package))
 (setq use-package-always-ensure t)
+;; (setq use-package-verbose t)
+;; (setq use-package-minimum-reported-time 0.02)
 (require 'diminish)
 (require 'bind-key)
 
@@ -32,7 +34,9 @@
       uniquify-buffer-name-style 'forward
       ediff-window-setup-function 'ediff-setup-windows-plain
       font-lock-maximum-decoration '((racket-mode . t) (t . 1))
-      vc-diff-switches "-u")
+      vc-diff-switches "-u"
+      search-highlight t
+      isearch-allow-scroll t)
 
 (if window-system
     (progn
@@ -112,109 +116,22 @@
   (set-default-font "DejaVu Sans Mono 11"))
 ;; (setq x-alt-keysym 'meta)
 
-(use-package json-mode)
-(use-package lua-mode)
-(use-package haskell-mode)
-(use-package nim-mode)
-(use-package processing-mode)
-(use-package restart-emacs)
-(use-package diffview)
+(use-package json-mode :defer t)
+(use-package lua-mode :defer t)
+(use-package haskell-mode :defer t)
+(use-package nim-mode :defer t)
+(use-package processing-mode :defer t)
+(use-package restart-emacs :defer t)
+(use-package diffview :defer t)
 (use-package markdown-mode
+  :defer t
   :mode (("\\.md$" . markdown-mode)
          ("\\.markdown$" . markdown-mode)))
 
-(use-package exec-path-from-shell
-  :init (exec-path-from-shell-initialize))
-
-(use-package clang-format
-  :init
-  (setq clang-format-executable
-        (if (executable-find "clang-format") "clang-format"
-          (if (executable-find "clang-format-3.8") "clang-format-3.8"
-            (if (executable-find "clang-format-3.7") "clang-format-3.7"
-              (if (executable-find "clang-format-3.6") "clang-format-3.6"
-                (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
-  (setq clang-format-style (concat "{BasedOnStyle: Google,"
-                                   " BinPackParameters: true,"
-                                   " IndentWidth: 2,"
-                                   " ColumnLimit: 90,"
-                                   " AlwaysBreakBeforeMultilineStrings: false,"
-                                   " SpacesBeforeTrailingComments: 4,"
-                                   " AllowShortFunctionsOnASingleLine: false,"
-                                   " NamespaceIndentation: All,"
-                                   " BreakBeforeBraces: Linux,"
-                                   " UseTab: Never,"
-                                   " ConstructorInitializerIndentWidth: 2,"
-                                   " ContinuationIndentWidth: 2,"
-                                   " Standard: C++11}"))
-  :config
-  ;; without -sort-includes option:
-  (defun clang-format-region (char-start char-end &optional style)
-    "Use clang-format to format the code between START and END according to STYLE.
-     If called interactively uses the region or the current statement if there
-     is no active region.  If no style is given uses `clang-format-style'."
-    (interactive
-     (if (use-region-p)
-         (list (region-beginning) (region-end))
-       (list (point) (point))))
-
-    (unless style
-      (setq style clang-format-style))
-
-    (let ((start (1- (position-bytes char-start)))
-          (end (1- (position-bytes char-end)))
-          (cursor (1- (position-bytes (point))))
-          (temp-buffer (generate-new-buffer " *clang-format-temp*"))
-          (temp-file (make-temp-file "clang-format")))
-      (unwind-protect
-          (let (status stderr operations)
-            (setq status
-                  (call-process-region
-                   (point-min) (point-max) clang-format-executable
-                   nil `(,temp-buffer ,temp-file) nil
-                   "-output-replacements-xml"
-                   "-assume-filename" (or (buffer-file-name) "")
-                   "-style" style
-                   "-offset" (number-to-string start)
-                   "-length" (number-to-string (- end start))
-                   "-cursor" (number-to-string cursor)))
-            (setq stderr
-                  (with-temp-buffer
-                    (insert-file-contents temp-file)
-                    (when (> (point-max) (point-min))
-                      (insert ": "))
-                    (buffer-substring-no-properties
-                     (point-min) (line-end-position))))
-
-            (cond
-             ((stringp status)
-              (error "(clang-format killed by signal %s%s)" status stderr))
-             ((not (equal 0 status))
-              (error "(clang-format failed with code %d%s)" status stderr)))
-
-            (with-current-buffer temp-buffer
-              (setq operations (clang-format--extract (car (xml-parse-region)))))
-
-            (let ((replacements (nth 0 operations))
-                  (cursor (nth 1 operations))
-                  (incomplete-format (nth 2 operations)))
-              (save-excursion
-                (mapc (lambda (rpl)
-                        (apply #'clang-format--replace rpl))
-                      replacements))
-              (when cursor
-                (goto-char (byte-to-position (1+ cursor))))
-              (message "%s" incomplete-format)
-              (if incomplete-format
-                  (message "(clang-format: incomplete (syntax errors)%s)" stderr)
-                (message "(clang-format: success%s)" stderr))))
-        (delete-file temp-file)
-        (when (buffer-name temp-buffer) (kill-buffer temp-buffer)))))
-  (bind-key "C-M-\\" 'clang-format-region c++-mode-map)
-  (bind-key "C-i" 'clang-format c++-mode-map))
+;; (use-package exec-path-from-shell
+;;   :init (exec-path-from-shell-initialize))
 
 (use-package helm
-  :defer t
   :config
   (require 'helm-config)
   (setq helm-quick-update nil             ;; blink
@@ -232,19 +149,21 @@
          ("C-c h" . helm-command-prefix)
          ("C-c <SPC>" . helm-all-mark-rings)))
 
-(use-package ag)
+
 (use-package helm-ag
-  ;; :init
-  ;; (setq helm-ag-fuzzy-match t)
+  :defer t
   :config
+  (use-package ag)
   (setq helm-ag-base-command "ag --smart-case --nocolor --nogroup")
   (setq helm-ag-insert-at-point 'symbol)
   (add-hook 'helm-ag-mode-hook (lambda () (grep-mode))))
 
 (use-package helm-descbinds
+  :defer t
   :config (helm-descbinds-mode))
 
 (use-package helm-swoop
+  :defer t
   :config
   (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
   (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
@@ -252,24 +171,8 @@
 
 ;; TODO: semantic + projectile, projectile
 
-(use-package projectile
-  :diminish projectile-mode
-  :init (setq projectile-enable-caching t)
-  :config
-  (projectile-global-mode))
-
-(use-package flycheck)
-(use-package company)
-
-(use-package rtags
-  ;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
-  ;; to create compile_commands.json: bear scons
-  :init
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
-              (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back))))
-
+;; (use-package flycheck)
+;; (use-package company)
 ;; (use-package rust-mode
 ;;   :defer t
 ;;   :mode (("\\.rs$'" . rust-mode))
@@ -295,6 +198,13 @@
 ;;               (setq rust-indent-offset 4)))
 ;;   :bind (("TAB" . company-indent-or-complete-common)
 ;;          ("M-." . racer-find-definition)))
+
+(use-package projectile
+  :diminish projectile-mode
+  :defer t
+  :config
+  (setq projectile-enable-caching t)
+  (projectile-global-mode))
 
 (use-package helm-projectile
   :init
@@ -326,7 +236,9 @@
          ("C-c C-f" . helm-projectile-find-file)
          ("C-x b" . my-helm-projectile-buffers-list)))
 
+
 (use-package smartscan
+  :defer t
   :init (add-hook 'prog-mode-hook 'smartscan-mode))   ;; M-n, M-p
 
 (use-package shell
@@ -364,12 +276,29 @@
   (autoload 'vc-darcs-find-file-hook "vc-darcs")
   (add-hook 'find-file-hooks 'vc-darcs-find-file-hook))
 
-(use-package ninja-mode)
+(use-package ninja-mode :defer t)
 
 (use-package clojure-mode
+  :defer t
+  :if (not (kelly?))
   :pin melpa-stable)
 
+(use-package cider
+  :defer t
+  :if (not (kelly?))
+  :pin melpa-stable
+  :config
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  ;; (setq cider-auto-mode nil)
+  ;; (setq nrepl-log-messages nil)
+  ;; (setq nrepl-hide-special-buffers t)
+  (setq cider-repl-use-pretty-printing t)
+  (setq cider-prompt-save-file-on-load nil)
+  (add-hook 'cider-mode-hook 'eldoc-mode)
+  :init (add-hook 'clojure-mode-hook 'cider-mode))
+
 (use-package pixie-mode
+  :defer t
   :config (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode))
 
 (use-package browse-kill-ring
@@ -387,15 +316,6 @@
 (use-package shrink-whitespace
   :bind ("M-\\" . shrink-whitespace))
 
-(use-package elpy
-  :defer t
-  :config
-  (remove-hook 'elpy-modules 'elpy-module-yasnippet)
-  (when (or (equal system-type 'darwin) (kelly?))
-    (remove-hook 'elpy-modules 'elpy-module-flymake)))
-  :init
-  (elpy-enable)
-
 (use-package expand-region
   :defer t
   :bind ("C-=" . er/expand-region))
@@ -404,11 +324,6 @@
   :defer t
   :diminish rainbow-mode
   :init (add-hook 'emacs-lisp-mode-hook 'rainbow-mode))
-
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (font-lock-add-keywords nil
-                                    '(("\\<\\(FIXME\\|TODO\\):" 1 font-lock-preprocessor-face prepend)))))
 
 ;; (if (kelly?)
 ;;   (use-package flatui-theme
@@ -431,8 +346,8 @@
   (sml/setup))
 
 (use-package google-translate
-  :defer t
-  :init (require 'google-translate-default-ui))
+  :commands (google-translate-query-translate)
+  :defer t)
 
 (use-package mwim
   :bind ("C-a" . mwim-beginning-of-code-or-line))
@@ -581,15 +496,15 @@
   (define-key mu4e-headers-mode-map (kbd "c") 'mu4e-move-to-spam)
   (global-set-key (kbd "C-c m") 'mu4e))
 
-(use-package mu4e-alert
-  :if (not (kelly?))
-  :init
-  (setq mu4e-alert-interesting-mail-query
-        (concat "flag:unread"
-                " AND NOT flag:trashed"
-                " AND NOT maildir:/INBOX.Trash"
-                " AND NOT maildir:/INBOX.Spam"))
-  (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
+;; (use-package mu4e-alert
+;;   :if (not (kelly?))
+;;   :init
+;;   (setq mu4e-alert-interesting-mail-query
+;;         (concat "flag:unread"
+;;                 " AND NOT flag:trashed"
+;;                 " AND NOT maildir:/INBOX.Trash"
+;;                 " AND NOT maildir:/INBOX.Spam"))
+;;   (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
 
 (defun my-c-mode-font-lock-if0 (limit)
   (save-restriction
@@ -616,6 +531,100 @@
 
 (defun my-c-mode-common-hook ()
   (progn
+    (use-package rtags
+      ;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
+      ;; to create compile_commands.json: bear scons
+      :init
+      (add-hook 'c-mode-common-hook
+                (lambda ()
+                  (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
+                  (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back))))
+    (use-package clang-format
+      :init
+      (setq clang-format-executable
+            (if (executable-find "clang-format") "clang-format"
+              (if (executable-find "clang-format-3.8") "clang-format-3.8"
+                (if (executable-find "clang-format-3.7") "clang-format-3.7"
+                  (if (executable-find "clang-format-3.6") "clang-format-3.6"
+                    (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
+      (setq clang-format-style (concat "{BasedOnStyle: Google,"
+                                       " BinPackParameters: true,"
+                                       " IndentWidth: 2,"
+                                       " ColumnLimit: 90,"
+                                       " AlwaysBreakBeforeMultilineStrings: false,"
+                                       " SpacesBeforeTrailingComments: 4,"
+                                       " AllowShortFunctionsOnASingleLine: false,"
+                                       " NamespaceIndentation: All,"
+                                       " BreakBeforeBraces: Linux,"
+                                       " UseTab: Never,"
+                                       " ConstructorInitializerIndentWidth: 2,"
+                                       " ContinuationIndentWidth: 2,"
+                                       " Standard: C++11}"))
+      :config
+      ;; without -sort-includes option:
+      (defun clang-format-region (char-start char-end &optional style)
+        "Use clang-format to format the code between START and END according to STYLE.
+     If called interactively uses the region or the current statement if there
+     is no active region.  If no style is given uses `clang-format-style'."
+        (interactive
+         (if (use-region-p)
+             (list (region-beginning) (region-end))
+           (list (point) (point))))
+
+        (unless style
+          (setq style clang-format-style))
+
+        (let ((start (1- (position-bytes char-start)))
+              (end (1- (position-bytes char-end)))
+              (cursor (1- (position-bytes (point))))
+              (temp-buffer (generate-new-buffer " *clang-format-temp*"))
+              (temp-file (make-temp-file "clang-format")))
+          (unwind-protect
+              (let (status stderr operations)
+                (setq status
+                      (call-process-region
+                       (point-min) (point-max) clang-format-executable
+                       nil `(,temp-buffer ,temp-file) nil
+                       "-output-replacements-xml"
+                       "-assume-filename" (or (buffer-file-name) "")
+                       "-style" style
+                       "-offset" (number-to-string start)
+                       "-length" (number-to-string (- end start))
+                       "-cursor" (number-to-string cursor)))
+                (setq stderr
+                      (with-temp-buffer
+                        (insert-file-contents temp-file)
+                        (when (> (point-max) (point-min))
+                          (insert ": "))
+                        (buffer-substring-no-properties
+                         (point-min) (line-end-position))))
+
+                (cond
+                 ((stringp status)
+                  (error "(clang-format killed by signal %s%s)" status stderr))
+                 ((not (equal 0 status))
+                  (error "(clang-format failed with code %d%s)" status stderr)))
+
+                (with-current-buffer temp-buffer
+                  (setq operations (clang-format--extract (car (xml-parse-region)))))
+
+                (let ((replacements (nth 0 operations))
+                      (cursor (nth 1 operations))
+                      (incomplete-format (nth 2 operations)))
+                  (save-excursion
+                    (mapc (lambda (rpl)
+                            (apply #'clang-format--replace rpl))
+                          replacements))
+                  (when cursor
+                    (goto-char (byte-to-position (1+ cursor))))
+                  (message "%s" incomplete-format)
+                  (if incomplete-format
+                      (message "(clang-format: incomplete (syntax errors)%s)" stderr)
+                    (message "(clang-format: success%s)" stderr))))
+            (delete-file temp-file)
+            (when (buffer-name temp-buffer) (kill-buffer temp-buffer)))))
+      (bind-key "C-M-\\" 'clang-format-region c++-mode-map)
+      (bind-key "C-i" 'clang-format c++-mode-map))
     (font-lock-add-keywords
      nil
      '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
@@ -623,17 +632,13 @@
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-(use-package cider
-  :if (not (kelly?))
-  :pin melpa-stable
-  :defer t
+(use-package elpy
+  :commands (eply-enable)
+  :init (with-eval-after-load 'python (elpy-enable))
   :config
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  ;; (setq cider-auto-mode nil)
-  ;; (setq nrepl-log-messages nil)
-  ;; (setq nrepl-hide-special-buffers t)
-  (setq cider-repl-use-pretty-printing t)
-  (setq cider-prompt-save-file-on-load nil))
+  (remove-hook 'elpy-modules 'elpy-module-yasnippet)
+  (when (or (equal system-type 'darwin) (kelly?))
+    (remove-hook 'elpy-modules 'elpy-module-flymake)))
 
 (use-package racket-mode
   :if (not (kelly?))
@@ -645,9 +650,6 @@
 
 (when (not (kelly?))
   (setq compile-command "scons"))
-
-(setq search-highlight t
-      isearch-allow-scroll t)
 
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
