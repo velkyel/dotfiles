@@ -128,8 +128,9 @@
   :mode (("\\.md$" . markdown-mode)
          ("\\.markdown$" . markdown-mode)))
 
-;; (use-package exec-path-from-shell
-;;   :init (exec-path-from-shell-initialize))
+(when (equal system-type 'darwin)
+  (use-package exec-path-from-shell
+    :init (exec-path-from-shell-initialize)))
 
 (use-package helm
   :config
@@ -201,7 +202,6 @@
 
 (use-package projectile
   :diminish projectile-mode
-  :defer t
   :config
   (setq projectile-enable-caching t)
   (projectile-global-mode))
@@ -235,7 +235,6 @@
          ("M-G" . my-helm-projectile-curdir-ag)
          ("C-c C-f" . helm-projectile-find-file)
          ("C-x b" . my-helm-projectile-buffers-list)))
-
 
 (use-package smartscan
   :defer t
@@ -530,102 +529,106 @@
           (c-put-font-lock-face start (point) 'font-lock-comment-face)))))
   nil)
 
-(defun my-c-mode-common-hook ()
-  (progn
-    (use-package rtags
-      ;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
-      ;; to create compile_commands.json: bear scons
-      :init
-      (add-hook 'c-mode-common-hook
-                (lambda ()
-                  (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
-                  (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back))))
-    (use-package clang-format
-      :init
-      (setq clang-format-executable
-            (if (executable-find "clang-format") "clang-format"
-              (if (executable-find "clang-format-3.8") "clang-format-3.8"
-                (if (executable-find "clang-format-3.7") "clang-format-3.7"
-                  (if (executable-find "clang-format-3.6") "clang-format-3.6"
-                    (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
-      (setq clang-format-style (concat "{BasedOnStyle: Google,"
-                                       " BinPackParameters: true,"
-                                       " IndentWidth: 2,"
-                                       " ColumnLimit: 90,"
-                                       " AlwaysBreakBeforeMultilineStrings: false,"
-                                       " SpacesBeforeTrailingComments: 4,"
-                                       " AllowShortFunctionsOnASingleLine: false,"
-                                       " NamespaceIndentation: All,"
-                                       " BreakBeforeBraces: Linux,"
-                                       " UseTab: Never,"
-                                       " ConstructorInitializerIndentWidth: 2,"
-                                       " ContinuationIndentWidth: 2,"
-                                       " Standard: C++11}"))
-      :config
-      ;; without -sort-includes option:
-      (defun clang-format-region (char-start char-end &optional style)
-        "Use clang-format to format the code between START and END according to STYLE.
+(use-package clang-format
+  :defer t
+  :init
+  (setq clang-format-executable
+        (if (executable-find "clang-format") "clang-format"
+          (if (executable-find "clang-format-3.8") "clang-format-3.8"
+            (if (executable-find "clang-format-3.7") "clang-format-3.7"
+              (if (executable-find "clang-format-3.6") "clang-format-3.6"
+                (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
+  (setq clang-format-style (concat "{BasedOnStyle: Google,"
+                                   " BinPackParameters: true,"
+                                   " IndentWidth: 2,"
+                                   " ColumnLimit: 90,"
+                                   " AlwaysBreakBeforeMultilineStrings: false,"
+                                   " SpacesBeforeTrailingComments: 4,"
+                                   " AllowShortFunctionsOnASingleLine: false,"
+                                   " NamespaceIndentation: All,"
+                                   " BreakBeforeBraces: Linux,"
+                                   " UseTab: Never,"
+                                   " ConstructorInitializerIndentWidth: 2,"
+                                   " ContinuationIndentWidth: 2,"
+                                   " Standard: C++11}"))
+  :config
+  ;; without -sort-includes option:
+  (defun clang-format-region (char-start char-end &optional style)
+    "Use clang-format to format the code between START and END according to STYLE.
      If called interactively uses the region or the current statement if there
      is no active region.  If no style is given uses `clang-format-style'."
-        (interactive
-         (if (use-region-p)
-             (list (region-beginning) (region-end))
-           (list (point) (point))))
+    (interactive
+     (if (use-region-p)
+         (list (region-beginning) (region-end))
+       (list (point) (point))))
 
-        (unless style
-          (setq style clang-format-style))
+    (unless style
+      (setq style clang-format-style))
 
-        (let ((start (1- (position-bytes char-start)))
-              (end (1- (position-bytes char-end)))
-              (cursor (1- (position-bytes (point))))
-              (temp-buffer (generate-new-buffer " *clang-format-temp*"))
-              (temp-file (make-temp-file "clang-format")))
-          (unwind-protect
-              (let (status stderr operations)
-                (setq status
-                      (call-process-region
-                       (point-min) (point-max) clang-format-executable
-                       nil `(,temp-buffer ,temp-file) nil
-                       "-output-replacements-xml"
-                       "-assume-filename" (or (buffer-file-name) "")
-                       "-style" style
-                       "-offset" (number-to-string start)
-                       "-length" (number-to-string (- end start))
-                       "-cursor" (number-to-string cursor)))
-                (setq stderr
-                      (with-temp-buffer
-                        (insert-file-contents temp-file)
-                        (when (> (point-max) (point-min))
-                          (insert ": "))
-                        (buffer-substring-no-properties
-                         (point-min) (line-end-position))))
+    (let ((start (1- (position-bytes char-start)))
+          (end (1- (position-bytes char-end)))
+          (cursor (1- (position-bytes (point))))
+          (temp-buffer (generate-new-buffer " *clang-format-temp*"))
+          (temp-file (make-temp-file "clang-format")))
+      (unwind-protect
+          (let (status stderr operations)
+            (setq status
+                  (call-process-region
+                   (point-min) (point-max) clang-format-executable
+                   nil `(,temp-buffer ,temp-file) nil
+                   "-output-replacements-xml"
+                   "-assume-filename" (or (buffer-file-name) "")
+                   "-style" style
+                   "-offset" (number-to-string start)
+                   "-length" (number-to-string (- end start))
+                   "-cursor" (number-to-string cursor)))
+            (setq stderr
+                  (with-temp-buffer
+                    (insert-file-contents temp-file)
+                    (when (> (point-max) (point-min))
+                      (insert ": "))
+                    (buffer-substring-no-properties
+                     (point-min) (line-end-position))))
 
-                (cond
-                 ((stringp status)
-                  (error "(clang-format killed by signal %s%s)" status stderr))
-                 ((not (equal 0 status))
-                  (error "(clang-format failed with code %d%s)" status stderr)))
+            (cond
+             ((stringp status)
+              (error "(clang-format killed by signal %s%s)" status stderr))
+             ((not (equal 0 status))
+              (error "(clang-format failed with code %d%s)" status stderr)))
 
-                (with-current-buffer temp-buffer
-                  (setq operations (clang-format--extract (car (xml-parse-region)))))
+            (with-current-buffer temp-buffer
+              (setq operations (clang-format--extract (car (xml-parse-region)))))
 
-                (let ((replacements (nth 0 operations))
-                      (cursor (nth 1 operations))
-                      (incomplete-format (nth 2 operations)))
-                  (save-excursion
-                    (mapc (lambda (rpl)
-                            (apply #'clang-format--replace rpl))
-                          replacements))
-                  (when cursor
-                    (goto-char (byte-to-position (1+ cursor))))
-                  (message "%s" incomplete-format)
-                  (if incomplete-format
-                      (message "(clang-format: incomplete (syntax errors)%s)" stderr)
-                    (message "(clang-format: success%s)" stderr))))
-            (delete-file temp-file)
-            (when (buffer-name temp-buffer) (kill-buffer temp-buffer)))))
-      (bind-key "C-M-\\" 'clang-format-region c++-mode-map)
-      (bind-key "C-i" 'clang-format c++-mode-map))
+            (let ((replacements (nth 0 operations))
+                  (cursor (nth 1 operations))
+                  (incomplete-format (nth 2 operations)))
+              (save-excursion
+                (mapc (lambda (rpl)
+                        (apply #'clang-format--replace rpl))
+                      replacements))
+              (when cursor
+                (goto-char (byte-to-position (1+ cursor))))
+              (message "%s" incomplete-format)
+              (if incomplete-format
+                  (message "(clang-format: incomplete (syntax errors)%s)" stderr)
+                (message "(clang-format: success%s)" stderr))))
+        (delete-file temp-file)
+        (when (buffer-name temp-buffer) (kill-buffer temp-buffer)))))
+  (bind-key "C-M-\\" 'clang-format-region c++-mode-map)
+  (bind-key "C-i" 'clang-format c++-mode-map))
+
+(use-package rtags
+  ;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
+  ;; to create compile_commands.json: bear scons
+  :defer t
+  :init
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
+              (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back))))
+
+(defun my-c-mode-common-hook ()
+  (progn
     (font-lock-add-keywords
      nil
      '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
