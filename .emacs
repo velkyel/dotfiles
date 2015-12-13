@@ -142,14 +142,15 @@
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
   (add-hook 'helm-grep-mode-hook (lambda () (grep-mode)))
+  :init (helm-mode 1)
   :bind (("M-x" . helm-M-x)
          ("C-x b" . helm-buffers-list)
+         ("C-h a" . helm-apropos)
          ("C-x C-f" . helm-find-files)
          ("C-." . helm-imenu-in-all-buffers)
          ("M-y" . helm-show-kill-ring)
          ("C-c h" . helm-command-prefix)
          ("C-c <SPC>" . helm-all-mark-rings)))
-
 
 (use-package helm-ag
   :defer t
