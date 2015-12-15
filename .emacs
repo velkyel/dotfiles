@@ -552,6 +552,10 @@
                                    " ConstructorInitializerIndentWidth: 2,"
                                    " ContinuationIndentWidth: 2,"
                                    " Standard: C++11}"))
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
+              (define-key c-mode-base-map (kbd "C-i") 'clang-format)))
   :config
   ;; without -sort-includes option:
   (defun clang-format-region (char-start char-end &optional style)
@@ -614,9 +618,7 @@
                   (message "(clang-format: incomplete (syntax errors)%s)" stderr)
                 (message "(clang-format: success%s)" stderr))))
         (delete-file temp-file)
-        (when (buffer-name temp-buffer) (kill-buffer temp-buffer)))))
-  (bind-key "C-M-\\" 'clang-format-region c++-mode-map)
-  (bind-key "C-i" 'clang-format c++-mode-map))
+        (when (buffer-name temp-buffer) (kill-buffer temp-buffer))))))
 
 (use-package rtags
   ;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
@@ -706,3 +708,33 @@
 ;; (add-to-list 'company-backends 'company-irony)
 ;; ;; (setq company-idle-delay 0.1)
 ;; (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
+
+;; (use-package mew
+;;   :config
+;;   (autoload 'mew "mew" nil t)
+;;   (autoload 'mew-send "mew" nil t)
+;;   (setq read-mail-command 'mew)
+;;   (autoload 'mew-user-agent-compose "mew" nil t)
+;;   (if (boundp 'mail-user-agent)
+;;       (setq mail-user-agent 'mew-user-agent))
+;;   (if (fboundp 'define-mail-user-agent)
+;;       (define-mail-user-agent
+;;         'mew-user-agent
+;;         'mew-user-agent-compose
+;;         'mew-draft-send-message
+;;         'mew-draft-kill
+;;         'mew-send-hook))
+;;   (setq mew-use-cached-passwd t
+;;         epa-file-cache-passphrase-for-symmetric-encryption t
+;;         ;; mew-imap-auth-list '("LOGIN")
+;;         mew-proto "%"
+;;         mew-mailbox-type 'imap
+;;         mew-imap-user "capak@inputwish.com"
+;;         mew-imap-server "mail.messagingengine.com"
+;;         mew-imap-port 993
+;;         ;;mew-imap-ssl t
+;;         ;; mew-imap-ssl-port
+;;         mew-imap-header-only t
+;;         mew-imap-inbox-folder "%INBOX"
+;;         mew-imap-trash-folder "%INBOX.Trash"))
+
