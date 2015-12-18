@@ -36,7 +36,9 @@
       font-lock-maximum-decoration '((racket-mode . t) (t . 1))
       vc-diff-switches "-u"
       search-highlight t
-      isearch-allow-scroll t)
+      isearch-allow-scroll t
+      user-mail-address "capak@inputwish.com"
+      user-full-name  "Libor Čapák")
 
 (if window-system
     (progn
@@ -320,6 +322,12 @@
   :defer t
   :bind ("C-=" . er/expand-region))
 
+(use-package eldoc
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode))
+
 (use-package rainbow-mode
   :defer t
   :diminish rainbow-mode
@@ -358,154 +366,6 @@
 (use-package glsl-mode
   :defer t
   :mode ("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\)\\'" . glsl-mode))     ;; usf = unreal engine
-
-(use-package smtpmail
-  :if (not (kelly?))
-  :defer t
-  :config
-  (setq message-send-mail-function 'smtpmail-send-it
-        smtpmail-auth-credentials "~/.authinfo"
-        ;;smtpmail-stream-type 'ssl
-        starttls-use-gnutls t
-        smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
-        smtpmail-auth-credentials '(("mail.messagingengine.com" 587 "capak@inputwish.com" nil))
-        smtpmail-default-smtp-server "mail.messagingengine.com"
-        smtpmail-smtp-server "mail.messagingengine.com"
-        smtpmail-smtp-service 587))
-
-;; (when (not (kelly?))
-;;   (progn
-;;     (require 'nnir)
-;;     (require 'gnus)
-;;     (setq user-mail-address "capak@inputwish.com"
-;;           user-full-name  "Libor Čapák"
-;;         gnus-select-method
-;;         '(nnimap "fastmail"
-;;                  (nnimap-address "mail.messagingengine.com")
-;;                  (nnimap-server-port 993)
-;;                  (nnimap-stream ssl)
-;;                  (nnir-search-engine imap)
-;;                  ;; press 'E' to expire mail
-;;                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash")
-;;                  (nnmail-expiry-wait 30))
-;;         gnus-use-correct-string-widths nil
-;;         gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
-;;         gnus-thread-sort-functions
-;;         '((not gnus-thread-sort-by-date)
-;;           (not gnus-thread-sort-by-number))
-;;         gnus-use-cache t
-;;         gnus-use-adaptive-scoring nil
-;;         gnus-save-score nil
-;;         gnus-use-scoring nil
-;;         gnus-summary-default-score 0
-;;         epa-file-cache-passphrase-for-symmetric-encryption t
-;;         gnus-read-active-file 'some
-;;         gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
-
-;;     (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-;;     (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
-
-;;     (defun my-gnus-summary-keys ()
-;;       (local-set-key "y" 'fastmail-archive)
-;;       (local-set-key "$" 'fastmail-report-spam))
-
-;;     (defun fastmail-archive ()
-;;       (interactive)
-;;       (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
-
-;;     (defun fastmail-report-spam ()
-;;       (interactive)
-;;       (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Spam"))))
-
-;; (setq rmail-primary-inbox-list '("imap://capak%40inputwish.com@mail.messagingengine.com"))
-;; (setq rmail-movemail-variant-in-use 'mailutils)
-;; (setq rmail-remote-password-required t)
-
-(defun my-email ()
-  (interactive)
-  (when (equal system-type 'gnu/linux)
-    (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
-  (when (equal system-type 'darwin)
-    (setq mu4e-mu-binary "/usr/local/bin/mu")
-    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
-  (when (equal system-type 'gnu/linux)
-    (setq mu4e-mu-binary "/usr/bin/mu"))
-  (require 'mu4e)
-  (when (fboundp 'imagemagick-register-types)
-    (imagemagick-register-types))
-  (setq epa-file-cache-passphrase-for-symmetric-encryption t
-        mu4e-maildir "~/Maildir"
-        mu4e-drafts-folder "/INBOX.Drafts"
-        mu4e-sent-folder   "/INBOX.Sent"
-        mu4e-trash-folder  "/INBOX.Trash"
-        mu4e-maildir-shortcuts
-        '( ("/INBOX"         . ?i)
-           ("/INBOX.Sent"    . ?s)
-           ("/INBOX.Trash"   . ?t)
-           ("/INBOX.Archive" . ?a))
-        mu4e-bookmarks '(((concat "flag:unread"
-                                  " AND NOT flag:trashed"
-                                  " AND NOT maildir:/INBOX.Trash"
-                                  " AND NOT maildir:/INBOX.Spam")
-                          "Unread messages"      ?u)
-                         ("date:today..now"                  "Today's messages"     ?t)
-                         ("date:7d..now"                     "Last 7 days"          ?w)
-                         ("mime:image/*"                     "Messages with images" ?p)
-                         ("size:2M..500M"                    "Big messages"         ?b))
-        mu4e-get-mail-command "offlineimap -q"
-        mu4e-update-interval 600
-        mu4e-view-show-images t
-        mu4e-html2text-command "w3m -T text/html"
-        mu4e-headers-skip-duplicates t
-        user-mail-address "capak@inputwish.com"
-        user-full-name  "Libor Čapák"
-        mail-signature nil
-        mail-signature-file nil
-        message-signature nil
-        mu4e-compose-signature nil
-        mu4e-compose-signature-auto-include nil
-        mu4e-sent-message-behaviour 'delete
-        mu4e-hide-index-messages t
-        mu4e-view-show-addresses t
-        mu4e-date-format-long "%d.%m.%Y"
-        mu4e-headers-date-format "%d.%m.%y"
-        mu4e-confirm-quit nil
-        message-kill-buffer-on-exit t)
-  ;; (setq mu4e-use-fancy-chars t)
-  ;; (set-face-attribute 'mu4e-unread-face nil
-  ;;                     :inherit font-lock-preprocessor-face
-  ;;                     :bold t)
-  (defun mu4e-msgv-action-view-in-browser (msg)
-    "View the body of the message in a web browser."
-    (interactive)
-    (let ((html (mu4e-msg-field (mu4e-message-at-point t) :body-html))
-          (tmpfile (format "%s/%d.html" temporary-file-directory (random))))
-      (unless html (error "No html part for this message"))
-      (with-temp-file tmpfile
-        (insert
-         "<html>"
-         "<head><meta http-equiv=\"content-type\""
-         "content=\"text/html;charset=UTF-8\">"
-         html))
-      (browse-url (concat "file://" tmpfile))))
-  (add-to-list 'mu4e-view-actions
-               '("View in browser" . mu4e-msgv-action-view-in-browser) t)
-  (defun mu4e-move-to-spam ()
-    (interactive)
-    (mu4e-mark-set 'move "/INBOX.Spam")
-    (mu4e-headers-next))
-  (define-key mu4e-headers-mode-map (kbd "c") 'mu4e-move-to-spam)
-  (global-set-key (kbd "C-c m") 'mu4e)
-
-  (use-package mu4e-alert
-    :init
-    (setq mu4e-alert-interesting-mail-query
-          (concat "flag:unread"
-                  " AND NOT flag:trashed"
-                  " AND NOT maildir:/INBOX.Trash"
-                  " AND NOT maildir:/INBOX.Spam"))
-    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
-  (mu4e))
 
 (defun my-c-mode-font-lock-if0 (limit)
   (save-restriction
@@ -680,8 +540,7 @@
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
 
-(when (not (kelly?))
-  (global-set-key (kbd "C-c m") 'my-email))
+(global-set-key (kbd "C-c m") 'wl)
 
 ;; (add-hook 'c++-mode-hook 'irony-mode)
 ;; (add-hook 'c-mode-hook 'irony-mode)
@@ -709,32 +568,88 @@
 ;; ;; (setq company-idle-delay 0.1)
 ;; (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
 
-;; (use-package mew
-;;   :config
-;;   (autoload 'mew "mew" nil t)
-;;   (autoload 'mew-send "mew" nil t)
-;;   (setq read-mail-command 'mew)
-;;   (autoload 'mew-user-agent-compose "mew" nil t)
-;;   (if (boundp 'mail-user-agent)
-;;       (setq mail-user-agent 'mew-user-agent))
-;;   (if (fboundp 'define-mail-user-agent)
-;;       (define-mail-user-agent
-;;         'mew-user-agent
-;;         'mew-user-agent-compose
-;;         'mew-draft-send-message
-;;         'mew-draft-kill
-;;         'mew-send-hook))
-;;   (setq mew-use-cached-passwd t
-;;         epa-file-cache-passphrase-for-symmetric-encryption t
-;;         ;; mew-imap-auth-list '("LOGIN")
-;;         mew-proto "%"
-;;         mew-mailbox-type 'imap
-;;         mew-imap-user "capak@inputwish.com"
-;;         mew-imap-server "mail.messagingengine.com"
-;;         mew-imap-port 993
-;;         ;;mew-imap-ssl t
-;;         ;; mew-imap-ssl-port
-;;         mew-imap-header-only t
-;;         mew-imap-inbox-folder "%INBOX"
-;;         mew-imap-trash-folder "%INBOX.Trash"))
+(use-package wanderlust
+  :init
+  (autoload 'wl "wl" "wanderlust" t)
+  (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
+  (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
 
+  ;; mail-user-agent
+  (autoload 'wl-user-agent-compose "wl-draft" nil t)
+  (if (boundp 'mail-user-agent)
+      (setq mail-user-agent 'wl-user-agent))
+  (if (fboundp 'define-mail-user-agent)
+      (define-mail-user-agent
+        'wl-user-agent
+        'wl-user-agent-compose
+        'wl-draft-send
+        'wl-draft-kill
+        'mail-send-hook))
+
+  ;; fastmail imap
+  (setq elmo-imap4-default-server "mail.messagingengine.com"
+        elmo-imap4-default-user "capak@inputwish.com"
+        elmo-imap4-default-authenticate-type 'clear
+        elmo-imap4-default-port '993
+        elmo-imap4-default-stream-type 'ssl)
+
+  ;; smtp
+  (setq wl-smtp-connection-type 'starttls
+        wl-smtp-posting-port 587
+        wl-smtp-authenticate-type "plain"
+        wl-smtp-posting-user "capak@inputwish.com"
+        wl-smtp-posting-server "mail.messagingengine.com"
+        wl-local-domain "inputwish.com"
+        wl-message-id-domain "mail.messagingengine.com")
+
+  (add-hook 'wl-summary-sync-updated-hook
+            (lambda () (wl-summary-rescan "date" 1)))    ;; reverse
+
+  (setq wl-demo nil
+        wl-folder-check-async t
+        wl-summary-showto-folder-regexp ".*sent.*"
+
+        wl-message-ignored-field-list '("^.*:")    ;; ignore all fields
+        wl-message-visible-field-list
+        '("^\\(To\\|Cc\\):"
+          "^\\(From\\|Reply-To\\):"
+          "^Subject:"
+          "^Organization:"
+          "^\\(Posted\\|Date\\):")
+
+        ;; '/' -- filter folder, napr: /since:yesterday/%INBOX
+        wl-thread-indent-level 3
+        wl-thread-have-younger-brother-str "+"
+        wl-thread-youngest-child-str "+"
+        wl-thread-vertical-str "|"
+        wl-thread-horizontal-str "-"
+        wl-thread-space-str " "
+
+        wl-summary-width nil
+        wl-summary-indent-length-limit nil
+        wl-summary-always-sticky-folder-list t
+
+        ;; wl-folder-hierarchy-access-folders
+        ;; '("^.\\([^/.]+[/.]\\)*[^/.]+\\(:\\|@\\|$\\)"
+        ;;   "^-[^.]*\\(:\\|@\\|$\\)"
+        ;;   "^@$"
+        ;;   "^'$")
+
+        wl-from "Libor Čapák <capak@inputwish.com>"
+        wl-default-folder "%INBOX"
+        wl-draft-folder "%INBOX.Drafts"
+        wl-trash-folder "%INBOX.Trash"
+        wl-fcc "%INBOX.Sent"
+        wl-fcc-force-as-read t
+        wl-default-spec "%"
+
+        wl-show-plug-status-on-modeline t
+
+        ;; TODO: combine with wl-biff-notify-hook?
+        global-mode-string (cons '(wl-modeline-biff-status
+                                   wl-modeline-biff-state-on
+                                   wl-modeline-biff-state-off)
+                                 global-mode-string)
+
+        wl-interactive-exit nil
+        wl-interactive-send nil))
