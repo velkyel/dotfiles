@@ -1,0 +1,6 @@
+%INBOX "inbox"
+%INBOX.Archive "archive"
+%INBOX.Sent "sent"
+%INBOX.Drafts "drafts"
+%INBOX.Trash "trash"
+%INBOX.Spam "spam"
