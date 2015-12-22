@@ -29,7 +29,7 @@
       make-backup-files nil
       delete-auto-save-files t
       imenu-auto-rescan t
-      echo-keystrokes 0.1
+      ;; echo-keystrokes 0.1
       use-dialog-box nil
       uniquify-buffer-name-style 'forward
       ediff-window-setup-function 'ediff-setup-windows-plain
@@ -324,9 +324,9 @@
 
 (use-package eldoc
   :init
-  (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-  (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode))
+  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+  (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
+  (add-hook 'ielm-mode-hook 'eldoc-mode))
 
 (use-package rainbow-mode
   :defer t
@@ -338,8 +338,13 @@
 
 ;; vystup z customize-face:
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(avy-background-face ((t (:background "gray90" :foreground "gray50"))))
- '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color")))))
+ '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color"))))
+ '(wl-highlight-summary-important-flag-face ((t (:foreground "red"))) t))
 
 (use-package smart-mode-line
   :config
