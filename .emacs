@@ -413,70 +413,7 @@
   (add-hook 'c-mode-common-hook
             (lambda ()
               (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
-              (define-key c-mode-base-map (kbd "C-i") 'clang-format)))
-  :config
-  ;; without -sort-includes option:
-  (defun clang-format-region (char-start char-end &optional style)
-    "Use clang-format to format the code between START and END according to STYLE.
-     If called interactively uses the region or the current statement if there
-     is no active region.  If no style is given uses `clang-format-style'."
-    (interactive
-     (if (use-region-p)
-         (list (region-beginning) (region-end))
-       (list (point) (point))))
-
-    (unless style
-      (setq style clang-format-style))
-
-    (let ((start (1- (position-bytes char-start)))
-          (end (1- (position-bytes char-end)))
-          (cursor (1- (position-bytes (point))))
-          (temp-buffer (generate-new-buffer " *clang-format-temp*"))
-          (temp-file (make-temp-file "clang-format")))
-      (unwind-protect
-          (let (status stderr operations)
-            (setq status
-                  (call-process-region
-                   (point-min) (point-max) clang-format-executable
-                   nil `(,temp-buffer ,temp-file) nil
-                   "-output-replacements-xml"
-                   "-assume-filename" (or (buffer-file-name) "")
-                   "-style" style
-                   "-offset" (number-to-string start)
-                   "-length" (number-to-string (- end start))
-                   "-cursor" (number-to-string cursor)))
-            (setq stderr
-                  (with-temp-buffer
-                    (insert-file-contents temp-file)
-                    (when (> (point-max) (point-min))
-                      (insert ": "))
-                    (buffer-substring-no-properties
-                     (point-min) (line-end-position))))
-
-            (cond
-             ((stringp status)
-              (error "(clang-format killed by signal %s%s)" status stderr))
-             ((not (equal 0 status))
-              (error "(clang-format failed with code %d%s)" status stderr)))
-
-            (with-current-buffer temp-buffer
-              (setq operations (clang-format--extract (car (xml-parse-region)))))
-
-            (let ((replacements (nth 0 operations))
-                  (cursor (nth 1 operations))
-                  (incomplete-format (nth 2 operations)))
-              (save-excursion
-                (mapc (lambda (rpl)
-                        (apply #'clang-format--replace rpl))
-                      replacements))
-              (when cursor
-                (goto-char (byte-to-position (1+ cursor))))
-              (message "%s" incomplete-format)
-              (if incomplete-format
-                  (message "(clang-format: incomplete (syntax errors)%s)" stderr)
-                (message "(clang-format: success%s)" stderr))))
-        (delete-file temp-file)
-        (when (buffer-name temp-buffer) (kill-buffer temp-buffer))))))
+              (define-key c-mode-base-map (kbd "C-i") 'clang-format))))
 
 (use-package rtags
   ;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
