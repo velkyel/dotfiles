@@ -322,6 +322,9 @@
   :defer t
   :bind ("C-=" . er/expand-region))
 
+(use-package visual-regexp
+  :bind ("C-c r" . vr/replace))
+
 (use-package eldoc
   :init
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
