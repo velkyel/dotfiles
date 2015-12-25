@@ -56,7 +56,6 @@
 (setq gc-cons-threshold 20000000)
 ;; (setq compilation-skip-threshold 2)
 
-(defalias 'after 'with-eval-after-load)
 (add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 (delete-selection-mode t)
 (show-paren-mode 1)
@@ -125,16 +124,13 @@
 (use-package processing-mode :defer t)
 (use-package restart-emacs :defer t)
 (use-package diffview :defer t)
-(use-package markdown-mode
-  :defer t
-  :mode (("\\.md$" . markdown-mode)
-         ("\\.markdown$" . markdown-mode)))
 
 (when (equal system-type 'darwin)
   (use-package exec-path-from-shell
     :init (exec-path-from-shell-initialize)))
 
 (use-package helm
+  :diminish helm-mode
   :config
   (require 'helm-config)
   (setq helm-quick-update nil             ;; blink
@@ -243,6 +239,12 @@
   :defer t
   :init (add-hook 'prog-mode-hook 'smartscan-mode))   ;; M-n, M-p
 
+(use-package smartparens
+  :diminish smartparens-mode
+  :config
+  (smartparens-global-mode t)
+  (show-smartparens-global-mode t))
+
 (use-package shell
   :defer t
   :config
@@ -326,6 +328,7 @@
   :bind ("C-c r" . vr/replace))
 
 (use-package eldoc
+  :diminish eldoc-mode
   :init
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
   (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
