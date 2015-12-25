@@ -273,7 +273,16 @@
 (use-package saveplace
   :init (setq-default save-place t))
 
+(use-package quelpa
+  :init
+  (setq quelpa-update-melpa-p nil))
+
+(use-package quelpa-use-package    ;; quelpa-upgrade
+  :config
+  (quelpa-use-package-activate-advice))
+
 (use-package vc-darcs
+  :quelpa (vc-darcs :fetcher github :repo "velkyel/vc-darcs")
   :config
   (setq vc-disable-async-diff nil)                ;; hotfix
   (add-to-list 'vc-handled-backends 'DARCS t)
