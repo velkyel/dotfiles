@@ -239,12 +239,6 @@
   :defer t
   :init (add-hook 'prog-mode-hook 'smartscan-mode))   ;; M-n, M-p
 
-(use-package smartparens
-  :diminish smartparens-mode
-  :config
-  (smartparens-global-mode t)
-  (show-smartparens-global-mode t))
-
 (use-package shell
   :defer t
   :config
@@ -319,6 +313,10 @@
   (define-key (current-global-map) [remap yank-pop] 'browse-kill-ring)   ;; remap yank-pop
   (setq browse-kill-ring-replace-yank t))
 
+(use-package easy-kill
+  :bind (([remap kill-ring-save] . easy-kill)
+         ([remap mark-sexp] . easy-mark)))
+
 (use-package whitespace
   :diminish whitespace-mode
   :config
@@ -365,6 +363,9 @@
   :config
   (setq sml/no-confirm-load-theme t)
   (sml/setup))
+
+(use-package smart-mark
+  :config (smart-mark-mode))
 
 (use-package google-translate
   :commands (google-translate-query-translate)
@@ -471,53 +472,6 @@
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
 
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)  ;; symbol-at-point)
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
-(global-set-key (kbd "C-M-s") 'isearch-forward)
-(global-set-key (kbd "C-M-r") 'isearch-backward)
-(global-set-key (kbd "C-x k")
-                '(lambda () (interactive)
-                   (let (kill-buffer-query-functions) (kill-buffer))))
-(define-key function-key-map "\e[$" (kbd "C-$"))
-(define-key function-key-map "\e[%" (kbd "C-%"))
-(define-key function-key-map "\e[," (kbd "C-,"))
-(define-key function-key-map "\e[;" (kbd "C-;"))
-(define-key function-key-map "\e[=" (kbd "C-="))
-(define-key function-key-map "\e[." (kbd "C-."))
-
-(define-key global-map (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "M-r") 'recompile)
-(global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "C-c C-g") 'goto-line)
-
-(global-set-key (kbd "C-c m") 'wl)
-
-;; (add-hook 'c++-mode-hook 'irony-mode)
-;; (add-hook 'c-mode-hook 'irony-mode)
-;; (add-hook 'objc-mode-hook 'irony-mode)
-
-;; (defun my-irony-mode-hook ()
-;;   (define-key irony-mode-map [remap completion-at-point]
-;;     'irony-completion-at-point-async)
-;;   (define-key irony-mode-map [remap complete-symbol]
-;;     'irony-completion-at-point-async))
-;; (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
-;; (require 'company)
-;; (require 'company-irony)
-;; (setq company-backends (delete 'company-semantic company-backends)
-;;       company-global-modes '(not term-mode)
-;;       company-transformers '(company-sort-by-occurrence)
-;;       company-minimum-prefix-length 2
-;;       company-selection-wrap-around t
-;;       company-show-numbers t
-;;       company-require-match nil
-;;       company-dabbrev-downcase nil)
-;; (add-to-list 'company-backends 'company-irony)
-;; ;; (setq company-idle-delay 0.1)
-;; (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
-
 (use-package wanderlust
   :init
   (autoload 'wl "wl" "wanderlust" t)
@@ -603,3 +557,50 @@
 
         wl-interactive-exit nil
         wl-interactive-send nil))
+
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)  ;; symbol-at-point)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
+(global-set-key (kbd "C-x k")
+                '(lambda () (interactive)
+                   (let (kill-buffer-query-functions) (kill-buffer))))
+(define-key function-key-map "\e[$" (kbd "C-$"))
+(define-key function-key-map "\e[%" (kbd "C-%"))
+(define-key function-key-map "\e[," (kbd "C-,"))
+(define-key function-key-map "\e[;" (kbd "C-;"))
+(define-key function-key-map "\e[=" (kbd "C-="))
+(define-key function-key-map "\e[." (kbd "C-."))
+
+(define-key global-map (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "M-r") 'recompile)
+(global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "C-c C-g") 'goto-line)
+
+(global-set-key (kbd "C-c m") 'wl)
+
+;; (add-hook 'c++-mode-hook 'irony-mode)
+;; (add-hook 'c-mode-hook 'irony-mode)
+;; (add-hook 'objc-mode-hook 'irony-mode)
+
+;; (defun my-irony-mode-hook ()
+;;   (define-key irony-mode-map [remap completion-at-point]
+;;     'irony-completion-at-point-async)
+;;   (define-key irony-mode-map [remap complete-symbol]
+;;     'irony-completion-at-point-async))
+;; (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
+;; (require 'company)
+;; (require 'company-irony)
+;; (setq company-backends (delete 'company-semantic company-backends)
+;;       company-global-modes '(not term-mode)
+;;       company-transformers '(company-sort-by-occurrence)
+;;       company-minimum-prefix-length 2
+;;       company-selection-wrap-around t
+;;       company-show-numbers t
+;;       company-require-match nil
+;;       company-dabbrev-downcase nil)
+;; (add-to-list 'company-backends 'company-irony)
+;; ;; (setq company-idle-delay 0.1)
+;; (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
