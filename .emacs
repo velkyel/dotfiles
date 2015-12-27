@@ -56,7 +56,6 @@
 (setq gc-cons-threshold 20000000)
 ;; (setq compilation-skip-threshold 2)
 
-(add-hook 'focus-out-hook (lambda () (save-some-buffers t)))
 (delete-selection-mode t)
 (show-paren-mode 1)
 ;; (setq show-paren-style 'expression)
@@ -234,6 +233,9 @@
          ("M-G" . my-helm-projectile-curdir-ag)
          ("C-c C-f" . helm-projectile-find-file)
          ("C-x b" . my-helm-projectile-buffers-list)))
+
+(use-package super-save
+  :init (super-save-initialize))
 
 (use-package smartscan
   :defer t
