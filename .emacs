@@ -235,7 +235,7 @@
          ("C-x b" . my-helm-projectile-buffers-list)))
 
 (use-package super-save
-  :init (super-save-initialize))
+  :config (super-save-initialize))
 
 (use-package smartscan
   :defer t
