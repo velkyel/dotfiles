@@ -416,18 +416,19 @@
               (if (executable-find "clang-format-3.6") "clang-format-3.6"
                 (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
   (setq clang-format-style (concat "{BasedOnStyle: Google,"
+                                   " BreakBeforeBraces: Linux,"
                                    " BinPackParameters: true,"
+                                   " BreakBeforeBinaryOperators: NonAssignment,"
                                    " IndentWidth: 2,"
                                    " ColumnLimit: 90,"
                                    " AlwaysBreakBeforeMultilineStrings: false,"
                                    " SpacesBeforeTrailingComments: 4,"
                                    " AllowShortFunctionsOnASingleLine: false,"
                                    " NamespaceIndentation: All,"
-                                   " BreakBeforeBraces: Linux,"
                                    " UseTab: Never,"
                                    " ConstructorInitializerIndentWidth: 2,"
                                    " ContinuationIndentWidth: 2,"
-                                   " Standard: C++11}"))
+                                   " Standard: Cpp11}"))
   (add-hook 'c-mode-common-hook
             (lambda ()
               (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
