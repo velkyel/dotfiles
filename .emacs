@@ -250,6 +250,7 @@
   (auto-compile-on-save-mode))
 
 (use-package anzu
+  :diminish anzu-mode
   :config
   (global-anzu-mode 1))
 
