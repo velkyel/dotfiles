@@ -37,8 +37,11 @@
       vc-diff-switches "-u"
       search-highlight t
       isearch-allow-scroll t
+      eval-expression-print-level nil
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Čapák")
+
+(defun display-startup-echo-area-message nil nil)
 
 (if window-system
     (progn
@@ -56,12 +59,16 @@
 (setq gc-cons-threshold 20000000)
 ;; (setq compilation-skip-threshold 2)
 
+(setq-default major-mode 'indented-text-mode)    ;; instead fundamental-mode
+
 (delete-selection-mode t)
+(setq show-paren-delay 0)   ;; must be set before mode activating
 (show-paren-mode 1)
 ;; (setq show-paren-style 'expression)
 (transient-mark-mode t)
 (menu-bar-mode -1)
 (which-function-mode)
+(semantic-mode 1)
 ;; (iswitchb-mode t)   ;; substring buffer switch
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -236,6 +243,15 @@
 
 (use-package super-save
   :config (super-save-initialize))
+
+(use-package auto-compile     ;; automatically recompile elisp code
+  :config
+  (auto-compile-on-load-mode)
+  (auto-compile-on-save-mode))
+
+(use-package anzu
+  :config
+  (global-anzu-mode 1))
 
 (use-package smartscan
   :defer t
