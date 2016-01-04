@@ -135,6 +135,11 @@
   (use-package exec-path-from-shell
     :init (exec-path-from-shell-initialize)))
 
+
+;; Workaround for "ad-handle-definition: `tramp-read-passwd' got redefined".
+;; Message is triggered by helm, it is likely missing this require.
+(require 'tramp)
+
 (use-package helm
   :diminish helm-mode
   :config
@@ -493,11 +498,8 @@
 (diminish 'isearch-mode)
 
 (use-package wanderlust
+  :commands (wl wl-other-frame wl-draft)
   :init
-  (autoload 'wl "wl" "wanderlust" t)
-  (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
-  (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
-
   ;; mail-user-agent
   (autoload 'wl-user-agent-compose "wl-draft" nil t)
   (if (boundp 'mail-user-agent)
