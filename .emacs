@@ -156,7 +156,6 @@
          ("C-x b" . helm-buffers-list)
          ("C-h a" . helm-apropos)
          ("C-x C-f" . helm-find-files)
-         ("C-." . helm-imenu-in-all-buffers)
          ("M-y" . helm-show-kill-ring)
          ("C-c h" . helm-command-prefix)
          ("C-c <SPC>" . helm-all-mark-rings)))
@@ -598,6 +597,11 @@
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
+
+(global-set-key (kbd "C-.") '(lambda () (interactive)
+                               (if (rtags-is-indexed)
+                                   (rtags-imenu)
+                                 (helm-semantic-or-imenu nil))))
 
 (global-set-key (kbd "C-c m") 'wl)
 
