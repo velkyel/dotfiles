@@ -456,6 +456,7 @@
               (define-key c-mode-base-map (kbd "C-i") 'clang-format))))
 
 (use-package rtags
+  :commands (rtags-is-indexed)
   ;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
   ;; to create compile_commands.json: bear scons
   :defer t
