@@ -147,6 +147,10 @@
   (setq helm-quick-update nil             ;; blink
         helm-candidate-number-limit 50)
   (helm-push-mark-mode 1)
+  (advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
+              :around (lambda (fcn file)
+                        (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
+                          (funcall fcn file))))
   (define-key global-map [remap list-buffers] 'helm-buffers-list)
   (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
   (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
