@@ -431,6 +431,7 @@
 
 (setq highlight-symbol-idle-delay 0.5)
 
+(with-eval-after-load 'company (diminish 'company-mode))
 (setq company-idle-delay 0.1)
 
 (require 'rtags)
