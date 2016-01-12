@@ -370,6 +370,7 @@
  ;; If there is more than one, they won't work right.
  '(avy-background-face ((t (:background "gray90" :foreground "gray50"))))
  '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color"))))
+ '(rtags-skippedline ((t (:background "gray90" :foreground "gray50"))))
  '(wl-highlight-summary-important-flag-face ((t (:foreground "red"))) t))
 
 (setq sml/no-confirm-load-theme t)
@@ -384,29 +385,6 @@
 (add-to-list 'auto-mode-alist '("\\.mm$" . objc-mode))
 (add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\)\\'" . glsl-mode))
 ;; ...usf = unreal engine
-
-(defun my-c-mode-font-lock-if0 (limit)
-  (save-restriction
-    (widen)
-    (save-excursion
-      (goto-char (point-min))
-      (let ((depth 0) str start start-depth)
-        (while (re-search-forward "^\\s-*#\\s-*\\(if\\|else\\|endif\\)" limit 'move)
-          (setq str (match-string 1))
-          (if (string= str "if")
-              (progn
-                (setq depth (1+ depth))
-                (when (and (null start) (looking-at "\\s-+0"))
-                  (setq start (match-end 0)
-                        start-depth depth)))
-            (when (and start (= depth start-depth))
-              (c-put-font-lock-face start (match-beginning 0) 'font-lock-comment-face)
-              (setq start nil))
-            (when (string= str "endif")
-              (setq depth (1- depth)))))
-        (when (and start (> depth 0))
-          (c-put-font-lock-face start (point) 'font-lock-comment-face)))))
-  nil)
 
 (setq clang-format-executable
       (if (executable-find "clang-format") "clang-format"
@@ -459,16 +437,19 @@
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
 (defun my-c-mode-common-hook ()
-  ;; (font-lock-add-keywords
-  ;;  nil
-  ;;  '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
   (setq fill-column 90)
   (setq company-backends '(company-rtags company-files))
   (setq rtags-completions-enabled t
         rtags-display-current-error-as-tooltip t
         rtags-autostart-diagnostics t
-        rtags-show-containing-function t
-        rtags-track-container t)
+        rtags-show-containing-function t)
+        ;;rtags-track-container t)
+  ;; (add-hook 'find-file-hook
+  ;;           (lambda ()
+  ;;             (setq mode-line-misc-info '(("" rtags-cached-current-container "")))))
+  ;;                   ;; (and (rtags-is-indexed)
+  ;;                   ;;      '(:eval rtags-cached-current-container)))))
+  ;;             ;; (message header-line-format)))
   (rtags-diagnostics)
   (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
   (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
