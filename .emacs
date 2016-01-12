@@ -1,30 +1,89 @@
+(setq gc-cons-threshold 20000000)
+
 (require 'package)
 (package-initialize)
 
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 
-(if (not (package-installed-p 'use-package))
-    (progn
-      (package-refresh-contents)
-      (package-install 'use-package)))
-
-(eval-when-compile (require 'use-package))
-(setq use-package-always-ensure t)
-;; (setq use-package-verbose t)
-;; (setq use-package-minimum-reported-time 0.02)
 (require 'diminish)
-(require 'bind-key)
+
+(defun display-startup-echo-area-message nil nil)
+(menu-bar-mode -1)
+
+(if window-system
+    (progn
+      (tool-bar-mode -1)
+      (tooltip-mode -1)
+      (scroll-bar-mode -1)
+      (fringe-mode 2)))
+
+(setq inhibit-startup-message t
+      initial-scratch-message nil)
+
+(defconst package-list '(exec-path-from-shell
+                         json-mode
+                         lua-mode
+                         haskell-mode
+                         nim-mode
+                         processing-mode
+                         restart-emacs
+                         diffview
+                         ag
+                         helm
+                         helm-ag
+                         helm-descbinds
+                         helm-swoop
+                         projectile
+                         helm-projectile
+                         super-save
+                         anzu
+                         smartscan
+                         shell
+                         avy
+                         ace-jump-helm-line
+                         saveplace
+                         quelpa
+                         quelpa-use-package
+                         ninja-mode
+                         ;; clojure-mode    ;; TODO: pin melpa-stable
+                         ;; cider  ;; pin melpa-stable
+                         pixie-mode
+                         browse-kill-ring
+                         easy-kill
+                         whitespace
+                         shrink-whitespace
+                         expand-region
+                         visual-regexp
+                         eldoc
+                         rainbow-mode
+                         smart-mode-line
+                         smart-mark
+                         google-translate
+                         mwim
+                         glsl-mode
+                         clang-format
+                         highlight-symbol
+                         company
+                         popup
+                         rtags
+                         elpy
+                         racket-mode
+                         wanderlust
+                         ))
+
+(unless package-archive-contents
+  (package-refresh-contents))
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
 
 (setq compilation-ask-about-save nil
       compilation-always-kill t
       compilation-scroll-output 'first-error
       next-line-add-newlines nil
-      inhibit-startup-message t
-      initial-scratch-message nil
       load-prefer-newer t
       require-final-newline t
-      redisplay-dont-pause t
       column-number-mode t
       make-backup-files nil
       delete-auto-save-files t
@@ -41,22 +100,12 @@
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Čapák")
 
-(defun display-startup-echo-area-message nil nil)
-
-(if window-system
-    (progn
-      (tool-bar-mode -1)
-      (tooltip-mode -1)
-      (scroll-bar-mode -1)
-      (fringe-mode 2)))
-
 (defun kelly? ()
   (or (string= system-name "typhoon.autokelly.local")
       (string= system-name "idev02.autokelly.local")
       (string= system-name "idev03")
       (string= system-name "idev03.autokelly.local")))
 
-(setq gc-cons-threshold 20000000)
 ;; (setq compilation-skip-threshold 2)
 
 (setq-default major-mode 'indented-text-mode)    ;; instead fundamental-mode
@@ -66,7 +115,6 @@
 (show-paren-mode 1)
 ;; (setq show-paren-style 'expression)
 (transient-mark-mode t)
-(menu-bar-mode -1)
 (which-function-mode)
 (semantic-mode 1)
 ;; (iswitchb-mode t)   ;; substring buffer switch
@@ -116,72 +164,54 @@
   (setq mac-option-modifier 'nil)
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
-  (set-default-font "Menlo 15"))
+  (set-frame-font "Menlo 15"))
 
 (when (and window-system (equal system-type 'gnu/linux))
   ;; (set-default-font "Inconsolata 13"))
-  (set-default-font "DejaVu Sans Mono 11"))
+  (set-frame-font "DejaVu Sans Mono 11"))
 ;; (setq x-alt-keysym 'meta)
 
-(use-package json-mode :defer t)
-(use-package lua-mode :defer t)
-(use-package haskell-mode :defer t)
-(use-package nim-mode :defer t)
-(use-package processing-mode :defer t)
-(use-package restart-emacs :defer t)
-(use-package diffview :defer t)
-
 (when (equal system-type 'darwin)
-  (use-package exec-path-from-shell
-    :init (exec-path-from-shell-initialize)))
-
+  (exec-path-from-shell-initialize))
 
 ;; Workaround for "ad-handle-definition: `tramp-read-passwd' got redefined".
 ;; Message is triggered by helm, it is likely missing this require.
 (require 'tramp)
 
-(use-package helm
-  :diminish helm-mode
-  :config
-  (require 'helm-config)
-  (setq helm-quick-update nil             ;; blink
-        helm-candidate-number-limit 50)
-  (helm-push-mark-mode 1)
-  (advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
-              :around (lambda (fcn file)
-                        (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
-                          (funcall fcn file))))
-  (define-key global-map [remap list-buffers] 'helm-buffers-list)
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-  (add-hook 'helm-grep-mode-hook (lambda () (grep-mode)))
-  :init (helm-mode 1)
-  :bind (("M-x" . helm-M-x)
-         ("C-x b" . helm-buffers-list)
-         ("C-h a" . helm-apropos)
-         ("C-x C-f" . helm-find-files)
-         ("M-y" . helm-show-kill-ring)
-         ("C-c h" . helm-command-prefix)
-         ("C-c <SPC>" . helm-all-mark-rings)))
+(require 'helm-config)
+(diminish 'helm-mode)
 
-(use-package helm-ag
-  :defer t
-  :config
-  (use-package ag)
-  (setq helm-ag-base-command "ag --smart-case --nocolor --nogroup")
-  (setq helm-ag-insert-at-point 'symbol)
-  (add-hook 'helm-ag-mode-hook (lambda () (grep-mode))))
+(setq helm-quick-update nil             ;; blink
+      helm-candidate-number-limit 50)
+(helm-push-mark-mode 1)
+(advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
+            :around (lambda (fcn file)
+                      (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
+                        (funcall fcn file))))
+(add-hook 'helm-grep-mode-hook (lambda () (grep-mode)))
 
-(use-package helm-descbinds
-  :defer t
-  :config (helm-descbinds-mode))
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
 
-(use-package helm-swoop
-  :defer t
-  :config
-  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-  :bind ("M-i" . helm-swoop))
+(global-set-key [remap list-buffers] 'helm-buffers-list)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x b") 'helm-buffers-list)
+(global-set-key (kbd "C-h a") 'helm-apropos)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-set-key (kbd "C-c <SPC>") 'helm-all-mark-rings)
+
+(setq helm-ag-base-command "ag --smart-case --nocolor --nogroup")
+(setq helm-ag-insert-at-point 'symbol)
+(add-hook 'helm-ag-mode-hook (lambda () (grep-mode)))
+
+(helm-descbinds-mode)
+
+(require 'helm-swoop)
+(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+(global-set-key (kbd "M-i") 'helm-swoop)
 
 ;; TODO: semantic + projectile, projectile
 
@@ -213,95 +243,68 @@
 ;;   :bind (("TAB" . company-indent-or-complete-common)
 ;;          ("M-." . racer-find-definition)))
 
-(use-package projectile
-  :diminish projectile-mode
-  :config
-  (setq projectile-enable-caching t)
-  (projectile-global-mode))
+(setq projectile-enable-caching t)
+(projectile-global-mode)
+(diminish 'projectile-mode)
 
-(use-package helm-projectile
-  :init
-  (setq helm-projectile-fuzzy-match nil)
-  :config
-  (setq projectile-completion-system 'helm)
-  (helm-projectile-on)
-  (defun my-helm-projectile-buffers-list ()
-    (interactive)
-    (unless helm-source-buffers-list
-      (setq helm-source-buffers-list
-            (helm-make-source "Buffers" 'helm-source-buffers)))
-    (helm :sources '(helm-source-buffers-list
-                     helm-source-projectile-recentf-list
-                     helm-source-projectile-files-list
-                     helm-source-recentf
-                     helm-source-buffer-not-found)
-          :buffer "*helm buffers*"
-          :keymap helm-buffer-map
-          :truncate-lines helm-buffers-truncate-lines))
-  (defun my-helm-projectile-ag ()
-    (interactive)
-    (helm-do-ag (projectile-project-root)))
-  (defun my-helm-projectile-curdir-ag ()
-    (interactive)
-    (helm-do-ag (helm-current-directory)))
-  :bind (("M-g" . my-helm-projectile-ag)
-         ("M-G" . my-helm-projectile-curdir-ag)
-         ("C-c C-f" . helm-projectile-find-file)
-         ("C-x b" . my-helm-projectile-buffers-list)))
+(setq helm-projectile-fuzzy-match nil)
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
 
-(use-package super-save
-  :config (super-save-initialize))
+(defun my-helm-projectile-buffers-list ()
+  (interactive)
+  (unless helm-source-buffers-list
+    (setq helm-source-buffers-list
+          (helm-make-source "Buffers" 'helm-source-buffers)))
+  (helm :sources '(helm-source-buffers-list
+                   helm-source-projectile-recentf-list
+                   helm-source-projectile-files-list
+                   helm-source-recentf
+                   helm-source-buffer-not-found)
+        :buffer "*helm buffers*"
+        :keymap helm-buffer-map
+        :truncate-lines helm-buffers-truncate-lines))
 
-(use-package auto-compile     ;; automatically recompile elisp code
-  :config
-  (auto-compile-on-load-mode)
-  (auto-compile-on-save-mode))
+(global-set-key (kbd "M-g") (lambda ()
+                              (interactive)
+                              (helm-do-ag (projectile-project-root))))
 
-(use-package anzu
-  :diminish anzu-mode
-  :config
-  (global-anzu-mode 1))
+(global-set-key (kbd "M-G") (lambda ()
+                              (interactive)
+                              (helm-do-ag (helm-current-directory))))
 
-(use-package smartscan
-  :defer t
-  :init (add-hook 'prog-mode-hook 'smartscan-mode))   ;; M-n, M-p
+(global-set-key (kbd "C-c C-f") 'helm-projectile-find-file)
+(global-set-key (kbd "C-x b") 'my-helm-projectile-buffers-list)
 
-(use-package shell
-  :defer t
-  :config
-  (setenv "PAGER" (executable-find "cat"))
-  (defun visit-term-buffer ()
-    "Create or visit a terminal buffer."
-    (interactive)
-    (if (not (get-buffer "*shell*"))
-        (progn
-          (split-window-sensibly (selected-window))
-          (other-window 1)
-          (shell))
-      (switch-to-buffer-other-window "*shell*")))
-  :bind ("C-c t" . visit-term-buffer))
+(require 'super-save)
+(super-save-initialize)
 
-(use-package avy
-  :config (setq avy-background t)
-  :bind ("C-;" . avy-goto-word-or-subword-1)
-  :init
-  (bind-key "C-;" #'avy-isearch isearch-mode-map))
+(global-anzu-mode 1)
+(diminish 'anzu-mode)
 
-(use-package ace-jump-helm-line    ;; avy
-  :defer t
-  :bind ("C-'" . ace-jump-helm-line-execute-action))
+(setenv "PAGER" (executable-find "cat"))
+(defun visit-term-buffer ()
+  "Create or visit a terminal buffer."
+  (interactive)
+  (if (not (get-buffer "*shell*"))
+      (progn
+        (split-window-sensibly (selected-window))
+        (other-window 1)
+        (shell))
+    (switch-to-buffer-other-window "*shell*")))
+(global-set-key (kbd "C-c t") 'visit-term-buffer)
 
-(use-package saveplace
-  :init (setq-default save-place t))
+(setq avy-background t)
+(global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
+(define-key isearch-mode-map (kbd "C-;") 'avy-isearch)
 
-(use-package quelpa
-  :init
-  (setq quelpa-update-melpa-p nil))
+(define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
-(use-package quelpa-use-package    ;; quelpa-upgrade
-  :config
-  (quelpa-use-package-activate-advice))
+(toggle-save-place-globally)
 
+(require 'quelpa-use-package)
+(setq quelpa-update-melpa-p nil)
+(quelpa-use-package-activate-advice)   ;; quelpa-upgrade
 (use-package vc-darcs
   :quelpa (vc-darcs :fetcher github :repo "velkyel/vc-darcs")
   :config
@@ -310,68 +313,51 @@
   (autoload 'vc-darcs-find-file-hook "vc-darcs")
   (add-hook 'find-file-hooks 'vc-darcs-find-file-hook))
 
-(use-package ninja-mode :defer t)
+;; (use-package clojure-mode
+;;   :defer t
+;;   :if (not (kelly?))
+;;   :pin melpa-stable)
 
-(use-package clojure-mode
-  :defer t
-  :if (not (kelly?))
-  :pin melpa-stable)
+;; (use-package cider
+;;   :defer t
+;;   :if (not (kelly?))
+;;   :pin melpa-stable
+;;   :config
+;;   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+;;   ;; (setq cider-auto-mode nil)
+;;   ;; (setq nrepl-log-messages nil)
+;;   ;; (setq nrepl-hide-special-buffers t)
+;;   (setq cider-repl-use-pretty-printing t)
+;;   (setq cider-prompt-save-file-on-load nil)
+;;   (add-hook 'cider-mode-hook 'eldoc-mode)
+;;   :init (add-hook 'clojure-mode-hook 'cider-mode))
 
-(use-package cider
-  :defer t
-  :if (not (kelly?))
-  :pin melpa-stable
-  :config
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  ;; (setq cider-auto-mode nil)
-  ;; (setq nrepl-log-messages nil)
-  ;; (setq nrepl-hide-special-buffers t)
-  (setq cider-repl-use-pretty-printing t)
-  (setq cider-prompt-save-file-on-load nil)
-  (add-hook 'cider-mode-hook 'eldoc-mode)
-  :init (add-hook 'clojure-mode-hook 'cider-mode))
+(add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
 
-(use-package pixie-mode
-  :defer t
-  :config (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode))
+(global-set-key [remap yank-pop] 'browse-kill-ring)   ;; remap yank-pop
+(setq browse-kill-ring-replace-yank t)
 
-(use-package browse-kill-ring
-  :config
-  (define-key (current-global-map) [remap yank-pop] 'browse-kill-ring)   ;; remap yank-pop
-  (setq browse-kill-ring-replace-yank t))
+(global-set-key [remap kill-ring-save] 'easy-kill)
+(global-set-key [remap mark-sexp] 'easy-mark)
 
-(use-package easy-kill
-  :bind (([remap kill-ring-save] . easy-kill)
-         ([remap mark-sexp] . easy-mark)))
+(with-eval-after-load 'whitespace
+  (diminish 'whitespace-mode))
+(setq whitespace-line-column 90
+      whitespace-style '(face trailing newline))
 
-(use-package whitespace
-  :diminish whitespace-mode
-  :config
-  (setq whitespace-line-column 90)             ;; limit line length
-  (setq whitespace-style '(face trailing newline))
-  (add-hook 'prog-mode-hook 'whitespace-mode))
+(global-set-key (kbd "M-\\") 'shrink-whitespace)
+(global-set-key (kbd "C-=") 'er/expand-region)
 
-(use-package shrink-whitespace
-  :bind ("M-\\" . shrink-whitespace))
+(global-set-key (kbd "C-c r") 'vr/replace)
 
-(use-package expand-region
-  :defer t
-  :bind ("C-=" . er/expand-region))
+(diminish 'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
+(add-hook 'ielm-mode-hook 'eldoc-mode)
 
-(use-package visual-regexp
-  :bind ("C-c r" . vr/replace))
-
-(use-package eldoc
-  :diminish eldoc-mode
-  :init
-  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-  (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
-  (add-hook 'ielm-mode-hook 'eldoc-mode))
-
-(use-package rainbow-mode
-  :defer t
-  :diminish rainbow-mode
-  :init (add-hook 'emacs-lisp-mode-hook 'rainbow-mode))
+(with-eval-after-load 'rainbow-mode
+  (diminish 'rainbow-mode))
+(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 
 ;; ;; (load-theme 'tango t)
 (set-background-color "gray90")
@@ -386,27 +372,18 @@
  '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color"))))
  '(wl-highlight-summary-important-flag-face ((t (:foreground "red"))) t))
 
-(use-package smart-mode-line
-  :config
-  (setq sml/no-confirm-load-theme t)
-  (sml/setup))
+(setq sml/no-confirm-load-theme t)
+(sml/setup)
+;; (setq sml/theme 'respectful)
 
-(use-package smart-mark
-  :config (smart-mark-mode))
+(smart-mark-mode)
 
-(use-package google-translate
-  :commands (google-translate-query-translate)
-  :defer t)
-
-(use-package mwim
-  :bind ("C-a" . mwim-beginning-of-code-or-line))
-;; ("C-e" . mwim-end-of-code-or-line)
+(global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
+;; "C-e" . mwim-end-of-code-or-line
 
 (add-to-list 'auto-mode-alist '("\\.mm$" . objc-mode))
-
-(use-package glsl-mode
-  :defer t
-  :mode ("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\)\\'" . glsl-mode))     ;; usf = unreal engine
+(add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\)\\'" . glsl-mode))
+;; ...usf = unreal engine
 
 (defun my-c-mode-font-lock-if0 (limit)
   (save-restriction
@@ -431,69 +408,86 @@
           (c-put-font-lock-face start (point) 'font-lock-comment-face)))))
   nil)
 
-(use-package clang-format
-  :defer t
-  :init
-  (setq clang-format-executable
-        (if (executable-find "clang-format") "clang-format"
-          (if (executable-find "clang-format-3.8") "clang-format-3.8"
-            (if (executable-find "clang-format-3.7") "clang-format-3.7"
-              (if (executable-find "clang-format-3.6") "clang-format-3.6"
-                (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
-  (setq clang-format-style (concat "{BasedOnStyle: Google,"
-                                   " BreakBeforeBraces: Linux,"
-                                   " BinPackParameters: true,"
-                                   " BreakBeforeBinaryOperators: NonAssignment,"
-                                   " IndentWidth: 2,"
-                                   " ColumnLimit: 90,"
-                                   " AlwaysBreakBeforeMultilineStrings: false,"
-                                   " SpacesBeforeTrailingComments: 4,"
-                                   " AllowShortFunctionsOnASingleLine: false,"
-                                   " NamespaceIndentation: All,"
-                                   " UseTab: Never,"
-                                   " ConstructorInitializerIndentWidth: 2,"
-                                   " ContinuationIndentWidth: 2,"
-                                   " Standard: Cpp11}"))
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
-              (define-key c-mode-base-map (kbd "C-i") 'clang-format))))
+(setq clang-format-executable
+      (if (executable-find "clang-format") "clang-format"
+        (if (executable-find "clang-format-3.8") "clang-format-3.8"
+          (if (executable-find "clang-format-3.7") "clang-format-3.7"
+            (if (executable-find "clang-format-3.6") "clang-format-3.6"
+              (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
+(setq clang-format-style (concat "{BasedOnStyle: Google,"
+                                 " BreakBeforeBraces: Linux,"
+                                 " BinPackParameters: true,"
+                                 " BreakBeforeBinaryOperators: NonAssignment,"
+                                 " IndentWidth: 2,"
+                                 " ColumnLimit: 90,"
+                                 " AlwaysBreakBeforeMultilineStrings: false,"
+                                 " SpacesBeforeTrailingComments: 4,"
+                                 " AllowShortFunctionsOnASingleLine: false,"
+                                 " NamespaceIndentation: All,"
+                                 " UseTab: Never,"
+                                 " ConstructorInitializerIndentWidth: 2,"
+                                 " ContinuationIndentWidth: 2,"
+                                 " Standard: Cpp11}"))
 
-(use-package rtags
-  :commands (rtags-is-indexed)
-  ;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
-  ;; to create compile_commands.json: bear scons
-  :defer t
-  :init
-  (add-hook 'c-mode-common-hook
-            (lambda ()
-              (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
-              (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back))))
+(setq highlight-symbol-idle-delay 0.5)
+
+(setq company-idle-delay 0.1)
+
+(require 'rtags)
+(require 'popup)
+(require 'company)
+(require 'company-rtags)
+
+(defun my-imenu ()
+  (interactive)
+  (if (rtags-is-indexed)
+      (rtags-imenu)
+    (helm-semantic-or-imenu nil)))
+
+;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
+;; to create compile_commands.json: bear scons
+
+(defun my-prog-mode-hook ()
+  (highlight-symbol-mode)
+  (smartscan-mode)           ;; M-n, M-p
+  (company-mode)
+  (whitespace-mode)
+  (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
+  (define-key prog-mode-map (kbd "C-.") 'my-imenu))
+
+(add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
 (defun my-c-mode-common-hook ()
-  (progn
-    (font-lock-add-keywords
-     nil
-     '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
-    (setq fill-column 90)))
+  ;; (font-lock-add-keywords
+  ;;  nil
+  ;;  '((my-c-mode-font-lock-if0 (0 font-lock-comment-face prepend))) 'add-to-end)
+  (setq fill-column 90)
+  (setq company-backends '(company-rtags company-files))
+  (setq rtags-completions-enabled t
+        rtags-display-current-error-as-tooltip t
+        rtags-autostart-diagnostics t
+        rtags-show-containing-function t
+        rtags-track-container t)
+  (rtags-diagnostics)
+  (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
+  (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
+  (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back)
+  (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
+  (define-key c-mode-base-map (kbd "M-?") 'rtags-display-summary)
+  (define-key c-mode-base-map (kbd "C-i") 'clang-format)
+  (define-key c-mode-base-map (kbd "C-.") 'my-imenu))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-(use-package elpy
-  :commands (eply-enable)
-  :init (with-eval-after-load 'python (elpy-enable))
-  :config
-  (remove-hook 'elpy-modules 'elpy-module-yasnippet)
-  (when (or (equal system-type 'darwin) (kelly?))
-    (remove-hook 'elpy-modules 'elpy-module-flymake)))
+(with-eval-after-load 'python
+  (progn
+    (elpy-enable)
+    (remove-hook 'elpy-modules 'elpy-module-yasnippet)
+    (when (or (equal system-type 'darwin) (kelly?))
+      (remove-hook 'elpy-modules 'elpy-module-flymake))))
 
-(use-package racket-mode
-  :if (not (kelly?))
-  :defer t
-  :config
-  (add-hook 'racket-mode-hook          ;; same as C-c C-k
-            (lambda ()
-              (define-key racket-mode-map (kbd "C-c r") 'racket-run))))
+(with-eval-after-load 'racket-mode
+  (define-key racket-mode-map (kbd "C-c r") 'racket-run))
 
 (when (not (kelly?))
   (setq compile-command "scons"))
@@ -501,88 +495,86 @@
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
 
-(use-package wanderlust
-  :commands (wl wl-other-frame wl-draft)
-  :init
-  ;; mail-user-agent
-  (autoload 'wl-user-agent-compose "wl-draft" nil t)
-  (if (boundp 'mail-user-agent)
-      (setq mail-user-agent 'wl-user-agent))
-  (if (fboundp 'define-mail-user-agent)
-      (define-mail-user-agent
-        'wl-user-agent
-        'wl-user-agent-compose
-        'wl-draft-send
-        'wl-draft-kill
-        'mail-send-hook))
+(autoload 'wl "wl" "Wanderlust" t)
+;; mail-user-agent
+(autoload 'wl-user-agent-compose "wl-draft" nil t)
+(if (boundp 'mail-user-agent)
+    (setq mail-user-agent 'wl-user-agent))
+(if (fboundp 'define-mail-user-agent)
+    (define-mail-user-agent
+      'wl-user-agent
+      'wl-user-agent-compose
+      'wl-draft-send
+      'wl-draft-kill
+      'mail-send-hook))
 
-  ;; fastmail imap
-  (setq elmo-imap4-default-server "mail.messagingengine.com"
-        elmo-imap4-default-user "capak@inputwish.com"
-        elmo-imap4-default-authenticate-type 'clear
-        elmo-imap4-default-port '993
-        elmo-imap4-default-stream-type 'ssl)
+;; fastmail imap
+(setq elmo-imap4-default-server "mail.messagingengine.com"
+      elmo-imap4-default-user "capak@inputwish.com"
+      elmo-imap4-default-authenticate-type 'clear
+      elmo-imap4-default-port '993
+      elmo-imap4-default-stream-type 'ssl)
 
-  ;; smtp
-  (setq wl-smtp-connection-type 'starttls
-        wl-smtp-posting-port 587
-        wl-smtp-authenticate-type "plain"
-        wl-smtp-posting-user "capak@inputwish.com"
-        wl-smtp-posting-server "mail.messagingengine.com"
-        wl-local-domain "inputwish.com"
-        wl-message-id-domain "mail.messagingengine.com")
+;; smtp
+(setq wl-smtp-connection-type 'starttls
+      wl-smtp-posting-port 587
+      wl-smtp-authenticate-type "plain"
+      wl-smtp-posting-user "capak@inputwish.com"
+      wl-smtp-posting-server "mail.messagingengine.com"
+      wl-local-domain "inputwish.com"
+      wl-message-id-domain "mail.messagingengine.com")
 
-  (add-hook 'wl-summary-sync-updated-hook
-            (lambda () (wl-summary-rescan "date" 1)))    ;; reverse
+(add-hook 'wl-summary-sync-updated-hook
+          (lambda () (wl-summary-rescan "date" 1)))    ;; reverse
 
-  (setq wl-demo nil
-        wl-folder-check-async t
-        wl-summary-showto-folder-regexp ".*sent.*"
+(setq wl-demo nil
+      wl-folder-check-async t
+      wl-summary-showto-folder-regexp ".*sent.*"
 
-        wl-message-ignored-field-list '("^.*:")    ;; ignore all fields
-        wl-message-visible-field-list
-        '("^\\(To\\|Cc\\):"
-          "^\\(From\\|Reply-To\\):"
-          "^Subject:"
-          "^Organization:"
-          "^\\(Posted\\|Date\\):")
+      wl-message-ignored-field-list '("^.*:")    ;; ignore all fields
+      wl-message-visible-field-list
+      '("^\\(To\\|Cc\\):"
+        "^\\(From\\|Reply-To\\):"
+        "^Subject:"
+        "^Organization:"
+        "^\\(Posted\\|Date\\):")
 
-        ;; '/' -- filter folder, napr: /since:yesterday/%INBOX
-        wl-thread-indent-level 3
-        wl-thread-have-younger-brother-str "+"
-        wl-thread-youngest-child-str "+"
-        wl-thread-vertical-str "|"
-        wl-thread-horizontal-str "-"
-        wl-thread-space-str " "
+      ;; '/' -- filter folder, napr: /since:yesterday/%INBOX
+      wl-thread-indent-level 3
+      wl-thread-have-younger-brother-str "+"
+      wl-thread-youngest-child-str "+"
+      wl-thread-vertical-str "|"
+      wl-thread-horizontal-str "-"
+      wl-thread-space-str " "
 
-        wl-summary-width nil
-        wl-summary-indent-length-limit nil
-        wl-summary-always-sticky-folder-list t
+      wl-summary-width nil
+      wl-summary-indent-length-limit nil
+      wl-summary-always-sticky-folder-list t
 
-        ;; wl-folder-hierarchy-access-folders
-        ;; '("^.\\([^/.]+[/.]\\)*[^/.]+\\(:\\|@\\|$\\)"
-        ;;   "^-[^.]*\\(:\\|@\\|$\\)"
-        ;;   "^@$"
-        ;;   "^'$")
+      ;; wl-folder-hierarchy-access-folders
+      ;; '("^.\\([^/.]+[/.]\\)*[^/.]+\\(:\\|@\\|$\\)"
+      ;;   "^-[^.]*\\(:\\|@\\|$\\)"
+      ;;   "^@$"
+      ;;   "^'$")
 
-        wl-from "Libor Čapák <capak@inputwish.com>"
-        wl-default-folder "%INBOX"
-        wl-draft-folder "%INBOX.Drafts"
-        wl-trash-folder "%INBOX.Trash"
-        wl-fcc "%INBOX.Sent"
-        wl-fcc-force-as-read t
-        wl-default-spec "%"
+      wl-from "Libor Čapák <capak@inputwish.com>"
+      wl-default-folder "%INBOX"
+      wl-draft-folder "%INBOX.Drafts"
+      wl-trash-folder "%INBOX.Trash"
+      wl-fcc "%INBOX.Sent"
+      wl-fcc-force-as-read t
+      wl-default-spec "%"
 
-        wl-show-plug-status-on-modeline t
+      wl-show-plug-status-on-modeline t
 
-        ;; TODO: combine with wl-biff-notify-hook?
-        global-mode-string (cons '(wl-modeline-biff-status
-                                   wl-modeline-biff-state-on
-                                   wl-modeline-biff-state-off)
-                                 global-mode-string)
+      ;; TODO: combine with wl-biff-notify-hook?
+      global-mode-string (cons '(wl-modeline-biff-status
+                                 wl-modeline-biff-state-on
+                                 wl-modeline-biff-state-off)
+                               global-mode-string)
 
-        wl-interactive-exit nil
-        wl-interactive-send nil))
+      wl-interactive-exit nil
+      wl-interactive-send nil)
 
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)  ;; symbol-at-point)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
@@ -591,6 +583,7 @@
 (global-set-key (kbd "C-x k")
                 '(lambda () (interactive)
                    (let (kill-buffer-query-functions) (kill-buffer))))
+
 (define-key function-key-map "\e[$" (kbd "C-$"))
 (define-key function-key-map "\e[%" (kbd "C-%"))
 (define-key function-key-map "\e[," (kbd "C-,"))
@@ -598,15 +591,10 @@
 (define-key function-key-map "\e[=" (kbd "C-="))
 (define-key function-key-map "\e[." (kbd "C-."))
 
-(define-key global-map (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
-
-(global-set-key (kbd "C-.") '(lambda () (interactive)
-                               (if (rtags-is-indexed)
-                                   (rtags-imenu)
-                                 (helm-semantic-or-imenu nil))))
 
 (global-set-key (kbd "C-c m") 'wl)
 
