@@ -179,6 +179,7 @@
 (require 'tramp)
 
 (require 'helm-config)
+(helm-mode 1)
 (diminish 'helm-mode)
 
 (setq helm-quick-update nil             ;; blink
@@ -442,6 +443,7 @@
   (setq rtags-completions-enabled t
         rtags-display-current-error-as-tooltip t
         rtags-autostart-diagnostics t
+        rtags-use-helm t
         rtags-show-containing-function t)
         ;;rtags-track-container t)
   ;; (add-hook 'find-file-hook
