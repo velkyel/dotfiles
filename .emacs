@@ -70,6 +70,7 @@
                          elpy
                          racket-mode
                          wanderlust
+                         hydra
                          ))
 
 (unless package-archive-contents
@@ -607,3 +608,111 @@
 ;; (add-to-list 'company-backends 'company-irony)
 ;; ;; (setq company-idle-delay 0.1)
 ;; (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
+
+(setq message-send-mail-function 'smtpmail-send-it
+      smtpmail-auth-credentials "~/.authinfo"
+      ;;smtpmail-stream-type 'ssl
+      starttls-use-gnutls t
+      smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
+      smtpmail-auth-credentials '(("mail.messagingengine.com" 587 "capak@inputwish.com" nil))
+      smtpmail-default-smtp-server "mail.messagingengine.com"
+      smtpmail-smtp-server "mail.messagingengine.com"
+      smtpmail-smtp-service 587)
+
+(require 'nnir)
+(require 'gnus)
+(setq gnus-select-method '(nnimap "fastmail"
+                                  (nnimap-address "mail.messagingengine.com")
+                                  (nnimap-server-port 993)
+                                  (nnimap-stream ssl)
+                                  (nnir-search-engine imap)
+                                  ;; press E to expire mail
+                                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash")
+                                  (nnmail-expiry-wait 90))
+      gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
+      gnus-thread-sort-functions
+      '((not gnus-thread-sort-by-date)
+        (not gnus-thread-sort-by-number))
+      gnus-use-cache t
+      ;; gnus-use-adaptive-scoring nil
+      ;; gnus-save-score nil
+      ;; gnus-use-scoring nil
+      ;; gnus-summary-default-score 0
+      epa-file-cache-passphrase-for-symmetric-encryption t
+      gnus-read-active-file 'some
+      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
+
+;; (defun fastmail-archive ()
+;;   (interactive)
+;;   (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
+
+(defun fastmail-report-spam ()
+  (interactive)
+  (guns-summary-move-article nil "nnimap+fastmail:INBOX.Spam"))
+
+(defun my-gnus-summary-keys ()
+  ;; (local-set-key "y" 'fastmail-archive)
+  (local-set-key "$" 'fastmail-report-spam))
+
+;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
+
+(eval-after-load 'gnus-group
+  '(progn
+     (defhydra hydra-gnus-group (:color blue)
+       "Do?"
+       ("a" gnus-group-list-active "REMOTE groups A A")
+       ("l" gnus-group-list-all-groups "LOCAL groups L")
+       ("c" gnus-topic-catchup-articles "Read all c")
+       ("G" gnus-group-make-nnir-group "Search server G G")
+       ("g" gnus-group-get-new-news "Refresh g")
+       ("s" gnus-group-enter-server-mode "Servers")
+       ("m" gnus-group-new-mail "Compose m OR C-x m")
+       ("#" gnus-topic-mark-topic "mark #")
+       ("q" nil "cancel"))
+     ;; y is not used by default
+     (define-key gnus-group-mode-map "y" 'hydra-gnus-group/body)))
+
+;; gnus-summary-mode
+(eval-after-load 'gnus-sum
+  '(progn
+     (defhydra hydra-gnus-summary (:color blue)
+       "Do?"
+       ("n" gnus-summary-insert-new-articles "Refresh / N")
+       ("f" gnus-summary-mail-forward "Forward C-c C-f")
+       ("!" gnus-summary-tick-article-forward "Mail -> disk !")
+       ("p" gnus-summary-put-mark-as-read "Mail <- disk")
+       ("c" gnus-summary-catchup-and-exit "Read all c")
+       ("e" gnus-summary-resend-message-edit "Resend S D e")
+       ("R" gnus-summary-reply-with-original "Reply with original R")
+       ("r" gnus-summary-reply "Reply r")
+       ("W" gnus-summary-wide-reply-with-original "Reply all with original S W")
+       ("w" gnus-summary-wide-reply "Reply all S w")
+       ("#" gnus-topic-mark-topic "mark #")
+       ("q" nil "cancel"))
+     ;; y is not used by default
+     (define-key gnus-summary-mode-map "y" 'hydra-gnus-summary/body)))
+
+;; gnus-article-mode
+(eval-after-load 'gnus-art
+  '(progn
+     (defhydra hydra-gnus-article (:color blue)
+       "Do?"
+       ("f" gnus-summary-mail-forward "Forward")
+       ("R" gnus-article-reply-with-original "Reply with original R")
+       ("r" gnus-article-reply "Reply r")
+       ("W" gnus-article-wide-reply-with-original "Reply all with original S W")
+       ("o" gnus-mime-save-part "Save attachment o")
+       ("w" gnus-article-wide-reply "Reply all S w")
+       ("q" nil "cancel"))
+     ;; y is not used by default
+     (define-key gnus-article-mode-map "y" 'hydra-gnus-article/body)))
+
+(eval-after-load 'message
+  '(progn
+     (defhydra hydra-message (:color blue)
+       "Do?"
+       ("ca" mml-attach-file "Attach C-c C-a")
+       ("cc" message-send-and-exit "Send C-c C-c")
+       ("q" nil "cancel"))
+     (global-set-key (kbd "C-c y") 'hydra-message/body)))
