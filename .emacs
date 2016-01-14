@@ -6,8 +6,6 @@
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 
-(require 'diminish)
-
 (defun display-startup-echo-area-message nil nil)
 (menu-bar-mode -1)
 
@@ -21,7 +19,8 @@
 (setq inhibit-startup-message t
       initial-scratch-message nil)
 
-(defconst package-list '(exec-path-from-shell
+(defconst package-list '(diminish
+			 exec-path-from-shell
                          json-mode
                          lua-mode
                          haskell-mode
@@ -171,6 +170,8 @@
   ;; (set-default-font "Inconsolata 13"))
   (set-frame-font "DejaVu Sans Mono 11"))
 ;; (setq x-alt-keysym 'meta)
+
+(require 'diminish)
 
 (when (equal system-type 'darwin)
   (exec-path-from-shell-initialize))
