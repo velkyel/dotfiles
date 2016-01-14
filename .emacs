@@ -68,7 +68,6 @@
                          rtags
                          elpy
                          racket-mode
-                         wanderlust
                          hydra
                          ))
 
@@ -481,87 +480,6 @@
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
 
-(autoload 'wl "wl" "Wanderlust" t)
-;; mail-user-agent
-(autoload 'wl-user-agent-compose "wl-draft" nil t)
-(if (boundp 'mail-user-agent)
-    (setq mail-user-agent 'wl-user-agent))
-(if (fboundp 'define-mail-user-agent)
-    (define-mail-user-agent
-      'wl-user-agent
-      'wl-user-agent-compose
-      'wl-draft-send
-      'wl-draft-kill
-      'mail-send-hook))
-
-;; fastmail imap
-(setq elmo-imap4-default-server "mail.messagingengine.com"
-      elmo-imap4-default-user "capak@inputwish.com"
-      elmo-imap4-default-authenticate-type 'clear
-      elmo-imap4-default-port '993
-      elmo-imap4-default-stream-type 'ssl)
-
-;; smtp
-(setq wl-smtp-connection-type 'starttls
-      wl-smtp-posting-port 587
-      wl-smtp-authenticate-type "plain"
-      wl-smtp-posting-user "capak@inputwish.com"
-      wl-smtp-posting-server "mail.messagingengine.com"
-      wl-local-domain "inputwish.com"
-      wl-message-id-domain "mail.messagingengine.com")
-
-(add-hook 'wl-summary-sync-updated-hook
-          (lambda () (wl-summary-rescan "date" 1)))    ;; reverse
-
-(setq wl-demo nil
-      wl-folder-check-async t
-      wl-summary-showto-folder-regexp ".*sent.*"
-
-      wl-message-ignored-field-list '("^.*:")    ;; ignore all fields
-      wl-message-visible-field-list
-      '("^\\(To\\|Cc\\):"
-        "^\\(From\\|Reply-To\\):"
-        "^Subject:"
-        "^Organization:"
-        "^\\(Posted\\|Date\\):")
-
-      ;; '/' -- filter folder, napr: /since:yesterday/%INBOX
-      wl-thread-indent-level 3
-      wl-thread-have-younger-brother-str "+"
-      wl-thread-youngest-child-str "+"
-      wl-thread-vertical-str "|"
-      wl-thread-horizontal-str "-"
-      wl-thread-space-str " "
-
-      wl-summary-width nil
-      wl-summary-indent-length-limit nil
-      wl-summary-always-sticky-folder-list t
-
-      ;; wl-folder-hierarchy-access-folders
-      ;; '("^.\\([^/.]+[/.]\\)*[^/.]+\\(:\\|@\\|$\\)"
-      ;;   "^-[^.]*\\(:\\|@\\|$\\)"
-      ;;   "^@$"
-      ;;   "^'$")
-
-      wl-from "Libor Čapák <capak@inputwish.com>"
-      wl-default-folder "%INBOX"
-      wl-draft-folder "%INBOX.Drafts"
-      wl-trash-folder "%INBOX.Trash"
-      wl-fcc "%INBOX.Sent"
-      wl-fcc-force-as-read t
-      wl-default-spec "%"
-
-      wl-show-plug-status-on-modeline t
-
-      ;; TODO: combine with wl-biff-notify-hook?
-      global-mode-string (cons '(wl-modeline-biff-status
-                                 wl-modeline-biff-state-on
-                                 wl-modeline-biff-state-off)
-                               global-mode-string)
-
-      wl-interactive-exit nil
-      wl-interactive-send nil)
-
 (global-set-key (kbd "C-s") 'isearch-forward-regexp)  ;; symbol-at-point)
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
@@ -582,7 +500,6 @@
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
 
-(global-set-key (kbd "C-c m") 'wl)
 
 ;; (add-hook 'c++-mode-hook 'irony-mode)
 ;; (add-hook 'c-mode-hook 'irony-mode)
@@ -622,6 +539,9 @@
 
 (require 'nnir)
 (require 'gnus)
+
+(global-set-key (kbd "C-c m") 'gnus)
+
 (setq gnus-select-method '(nnimap "fastmail"
                                   (nnimap-address "mail.messagingengine.com")
                                   (nnimap-server-port 993)
@@ -639,6 +559,7 @@
       ;; gnus-save-score nil
       ;; gnus-use-scoring nil
       ;; gnus-summary-default-score 0
+      gnus-interactive-exit nil
       epa-file-cache-passphrase-for-symmetric-encryption t
       gnus-read-active-file 'some
       gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
