@@ -554,15 +554,18 @@
       gnus-thread-sort-functions
       '((not gnus-thread-sort-by-date)
         (not gnus-thread-sort-by-number))
+      gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
       gnus-use-cache t
       ;; gnus-use-adaptive-scoring nil
       ;; gnus-save-score nil
       ;; gnus-use-scoring nil
       ;; gnus-summary-default-score 0
       gnus-interactive-exit nil
+      message-kill-buffer-on-exit t
       epa-file-cache-passphrase-for-symmetric-encryption t
       gnus-read-active-file 'some
-      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject)
+      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
+      mm-discouraged-alternatives '("text/html" "text/richtext"))
 
 ;; (defun fastmail-archive ()
 ;;   (interactive)
