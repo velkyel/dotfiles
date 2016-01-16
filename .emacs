@@ -69,6 +69,7 @@
                          elpy
                          racket-mode
                          hydra
+                         go-mode
                          ))
 
 (unless package-archive-contents
@@ -314,6 +315,8 @@
   (add-to-list 'vc-handled-backends 'DARCS t)
   (autoload 'vc-darcs-find-file-hook "vc-darcs")
   (add-hook 'find-file-hooks 'vc-darcs-find-file-hook))
+
+(require 'go-mode-autoloads)
 
 ;; (use-package clojure-mode
 ;;   :defer t
