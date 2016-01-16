@@ -1,10 +1,11 @@
 (setq gc-cons-threshold 20000000)
 
 (require 'package)
-(package-initialize)
 
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+
+(package-initialize)
 
 (defun display-startup-echo-area-message nil nil)
 (menu-bar-mode -1)
