@@ -21,7 +21,7 @@
       initial-scratch-message nil)
 
 (defconst package-list '(diminish
-			 exec-path-from-shell
+                         exec-path-from-shell
                          json-mode
                          lua-mode
                          haskell-mode
@@ -586,6 +586,15 @@
 ;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 ;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
 
+;; (require 'bbdb)
+;; (setq 'bbdb-complete-mail-allow-cycling t)
+;; (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
+;; (add-hook 'message-mode-hook
+;;           '(lambda ()
+;;              (bbdb-initialize 'message)
+;;              (bbdb-initialize 'gnus)
+;;              (local-set-key "<TAB>" 'bbdb-complete-name)))
+
 (eval-after-load 'gnus-group
   '(progn
      (defhydra hydra-gnus-group (:color blue)
@@ -631,7 +640,7 @@
        ("R" gnus-article-reply-with-original "Reply with original R")
        ("r" gnus-article-reply "Reply r")
        ("W" gnus-article-wide-reply-with-original "Reply all with original S W")
-       ("o" gnus-mime-save-part "Save attachment o")
+       ("o" gnus-mime-save-part "Save attachment at point o")
        ("w" gnus-article-wide-reply "Reply all S w")
        ("q" nil "cancel"))
      ;; y is not used by default
@@ -644,4 +653,4 @@
        ("ca" mml-attach-file "Attach C-c C-a")
        ("cc" message-send-and-exit "Send C-c C-c")
        ("q" nil "cancel"))
-     (global-set-key (kbd "C-c y") 'hydra-message/body)))
+     (global-set-key (kbd "C-c C-y") 'hydra-message/body)))
