@@ -555,7 +555,7 @@
                                   (nnir-search-engine imap)
                                   ;; press E to expire mail
                                   (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash")
-                                  (nnmail-expiry-wait 90))
+                                  (nnmail-expiry-wait 7))
       gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
       gnus-thread-sort-functions
       '((not gnus-thread-sort-by-date)
