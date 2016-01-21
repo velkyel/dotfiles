@@ -368,6 +368,10 @@
 
 (set-background-color "gray90")
 
+(with-eval-after-load 'highlight-symbol
+  (setq highlight-symbol-idle-delay 1.0)
+  (set-face-background 'highlight-symbol-face "gray75"))
+
 ;; vystup z customize-face:
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -412,8 +416,6 @@
                                  " ConstructorInitializerIndentWidth: 2,"
                                  " ContinuationIndentWidth: 2,"
                                  " Standard: Cpp11}"))
-
-(setq highlight-symbol-idle-delay 1.5)
 
 (with-eval-after-load 'company (diminish 'company-mode))
 (setq company-idle-delay 0.1)
