@@ -38,7 +38,6 @@
                          helm-projectile
                          super-save
                          anzu
-                         smartscan
                          shell
                          avy
                          ace-jump-helm-line
@@ -71,6 +70,7 @@
                          racket-mode
                          hydra
                          go-mode
+                         smooth-scrolling
                          ))
 
 (unless package-archive-contents
@@ -173,6 +173,7 @@
 ;; (setq x-alt-keysym 'meta)
 
 (require 'diminish)
+(require 'smooth-scrolling)
 
 (when (equal system-type 'darwin)
   (exec-path-from-shell-initialize))
@@ -365,7 +366,6 @@
   (diminish 'rainbow-mode))
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 
-;; ;; (load-theme 'tango t)
 (set-background-color "gray90")
 
 ;; vystup z customize-face:
@@ -413,7 +413,7 @@
                                  " ContinuationIndentWidth: 2,"
                                  " Standard: Cpp11}"))
 
-(setq highlight-symbol-idle-delay 0.5)
+(setq highlight-symbol-idle-delay 1.5)
 
 (with-eval-after-load 'company (diminish 'company-mode))
 (setq company-idle-delay 0.1)
@@ -434,7 +434,7 @@
 
 (defun my-prog-mode-hook ()
   (highlight-symbol-mode)
-  (smartscan-mode)           ;; M-n, M-p
+  (highlight-symbol-nav-mode)    ;; M-n, M-p
   (company-mode)
   (whitespace-mode)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
