@@ -388,18 +388,21 @@
             (if (executable-find "clang-format-3.6") "clang-format-3.6"
               (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
 (setq clang-format-style (concat "{BasedOnStyle: Google,"
-                                 " BreakBeforeBraces: Linux,"
+                                 " BreakBeforeBraces: Mozilla,"
                                  " BinPackParameters: true,"
                                  " BreakBeforeBinaryOperators: NonAssignment,"
                                  " IndentWidth: 2,"
                                  " ColumnLimit: 90,"
                                  " AlwaysBreakBeforeMultilineStrings: false,"
                                  " SpacesBeforeTrailingComments: 4,"
-                                 " AllowShortFunctionsOnASingleLine: false,"
+                                 " AccessModifierOffset: -2,"
+                                 " AllowShortFunctionsOnASingleLine: Inline,"
                                  " NamespaceIndentation: All,"
                                  " UseTab: Never,"
                                  " ConstructorInitializerIndentWidth: 2,"
                                  " ContinuationIndentWidth: 2,"
+                                 " PointerAlignment: Left,"
+                                 " DerivePointerAlignment: false,"
                                  " Standard: Cpp11}"))
 
 (with-eval-after-load 'company (diminish 'company-mode))
