@@ -45,8 +45,8 @@
                          quelpa
                          quelpa-use-package
                          ninja-mode
-                         ;; clojure-mode    ;; TODO: pin melpa-stable
-                         ;; cider  ;; pin melpa-stable
+                         clojure-mode
+                         cider
                          pixie-mode
                          browse-kill-ring
                          easy-kill
@@ -72,6 +72,10 @@
                          go-mode
                          smooth-scrolling
                          ))
+
+(setq package-pinned-packages
+      '((cider . "melpa-stable")
+        (clojure-mode . "melpa-stable")))
 
 (unless package-archive-contents
   (package-refresh-contents))
@@ -117,7 +121,7 @@
 ;; (setq show-paren-style 'expression)
 (transient-mark-mode t)
 (which-function-mode)
-(semantic-mode 1)
+;; (semantic-mode 1)
 ;; (iswitchb-mode t)   ;; substring buffer switch
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
@@ -320,25 +324,6 @@
 
 (require 'go-mode-autoloads)
 
-;; (use-package clojure-mode
-;;   :defer t
-;;   :if (not (kelly?))
-;;   :pin melpa-stable)
-
-;; (use-package cider
-;;   :defer t
-;;   :if (not (kelly?))
-;;   :pin melpa-stable
-;;   :config
-;;   (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-;;   ;; (setq cider-auto-mode nil)
-;;   ;; (setq nrepl-log-messages nil)
-;;   ;; (setq nrepl-hide-special-buffers t)
-;;   (setq cider-repl-use-pretty-printing t)
-;;   (setq cider-prompt-save-file-on-load nil)
-;;   (add-hook 'cider-mode-hook 'eldoc-mode)
-;;   :init (add-hook 'clojure-mode-hook 'cider-mode))
-
 (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
 
 (global-set-key [remap yank-pop] 'browse-kill-ring)   ;; remap yank-pop
@@ -370,7 +355,7 @@
 
 (with-eval-after-load 'highlight-symbol
   (setq highlight-symbol-idle-delay 1.0)
-  (set-face-background 'highlight-symbol-face "gray75"))
+  (set-face-background 'highlight-symbol-face "gray82"))
 
 ;; vystup z customize-face:
 (custom-set-faces
@@ -470,6 +455,15 @@
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+;; (setq cider-auto-mode nil)
+;; (setq nrepl-log-messages nil)
+;; (setq nrepl-hide-special-buffers t)
+(setq cider-repl-use-pretty-printing t)
+(setq cider-prompt-save-file-on-load nil)
+(add-hook 'cider-mode-hook 'eldoc-mode)
+(add-hook 'clojure-mode-hook 'cider-mode)
+
 (with-eval-after-load 'python
   (progn
     (elpy-enable)
@@ -506,21 +500,7 @@
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
 
-
-;; (add-hook 'c++-mode-hook 'irony-mode)
-;; (add-hook 'c-mode-hook 'irony-mode)
-;; (add-hook 'objc-mode-hook 'irony-mode)
-
-;; (defun my-irony-mode-hook ()
-;;   (define-key irony-mode-map [remap completion-at-point]
-;;     'irony-completion-at-point-async)
-;;   (define-key irony-mode-map [remap complete-symbol]
-;;     'irony-completion-at-point-async))
-;; (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-
 ;; (require 'company)
-;; (require 'company-irony)
 ;; (setq company-backends (delete 'company-semantic company-backends)
 ;;       company-global-modes '(not term-mode)
 ;;       company-transformers '(company-sort-by-occurrence)
@@ -529,7 +509,6 @@
 ;;       company-show-numbers t
 ;;       company-require-match nil
 ;;       company-dabbrev-downcase nil)
-;; (add-to-list 'company-backends 'company-irony)
 ;; ;; (setq company-idle-delay 0.1)
 ;; (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
 
