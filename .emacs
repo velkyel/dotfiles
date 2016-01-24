@@ -354,6 +354,7 @@
 (set-background-color "gray90")
 
 (with-eval-after-load 'highlight-symbol
+  (diminish 'highlight-symbol-mode)
   (setq highlight-symbol-idle-delay 1.0)
   (set-face-background 'highlight-symbol-face "gray82"))
 
