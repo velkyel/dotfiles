@@ -71,6 +71,7 @@
                          hydra
                          go-mode
                          smooth-scrolling
+                         unkillable-scratch
                          ))
 
 (setq package-pinned-packages
@@ -178,6 +179,9 @@
 
 (require 'diminish)
 (require 'smooth-scrolling)
+
+(require 'unkillable-scratch)
+(unkillable-scratch 1)
 
 (when (equal system-type 'darwin)
   (exec-path-from-shell-initialize))
@@ -488,9 +492,7 @@
 (global-set-key (kbd "C-r") 'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
-(global-set-key (kbd "C-x k")
-                '(lambda () (interactive)
-                   (let (kill-buffer-query-functions) (kill-buffer))))
+(global-set-key (kbd "C-x k") 'kill-this-buffer)
 
 (define-key function-key-map "\e[$" (kbd "C-$"))
 (define-key function-key-map "\e[%" (kbd "C-%"))
