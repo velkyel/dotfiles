@@ -474,9 +474,12 @@
 
 (with-eval-after-load 'python
   (progn
+    (require 'elpy)
+    (setq python-shell-interpreter "python3"
+          elpy-rpc-python-command "python3")
     (elpy-enable)
     (remove-hook 'elpy-modules 'elpy-module-yasnippet)
-    (when (or (equal system-type 'darwin) (kelly?))
+    (when (kelly?)
       (remove-hook 'elpy-modules 'elpy-module-flymake))))
 
 (with-eval-after-load 'racket-mode
