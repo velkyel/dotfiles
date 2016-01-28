@@ -72,6 +72,7 @@
                          go-mode
                          smooth-scrolling
                          unkillable-scratch
+                         geiser
                          ))
 
 (setq package-pinned-packages
@@ -123,7 +124,6 @@
 (transient-mark-mode t)
 (which-function-mode)
 ;; (semantic-mode 1)
-;; (iswitchb-mode t)   ;; substring buffer switch
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default py-indent-offset 4)
@@ -482,6 +482,9 @@
 (with-eval-after-load 'racket-mode
   (define-key racket-mode-map (kbd "C-c r") 'racket-run))
 
+(setq geiser-active-implementations '(chicken)
+      geiser-mode-start-repl-p t)
+
 (when (not (kelly?))
   (setq compile-command "scons"))
 
@@ -516,7 +519,6 @@
 ;;       company-require-match nil
 ;;       company-dabbrev-downcase nil)
 ;; ;; (setq company-idle-delay 0.1)
-;; (add-hook 'prog-mode-hook (lambda () (company-mode 1)))
 
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-auth-credentials "~/.authinfo"
