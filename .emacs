@@ -558,6 +558,7 @@
       ;; gnus-summary-default-score 0
       gnus-interactive-exit nil
       message-kill-buffer-on-exit t
+      gnus-large-newsgroup nil
       epa-file-cache-passphrase-for-symmetric-encryption t
       gnus-read-active-file 'some
       gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
