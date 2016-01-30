@@ -73,6 +73,7 @@
                          smooth-scrolling
                          unkillable-scratch
                          geiser
+                         slime
                          ))
 
 (setq package-pinned-packages
@@ -487,6 +488,9 @@
 
 (setq geiser-active-implementations '(chicken)
       geiser-mode-start-repl-p t)
+
+(setq inferior-lisp-program "sbcl")
+(setq slime-contribs '(slime-fancy))
 
 (when (not (kelly?))
   (setq compile-command "scons"))
