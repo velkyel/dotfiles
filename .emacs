@@ -74,6 +74,7 @@
                          unkillable-scratch
                          geiser
                          slime
+                         slime-company
                          ))
 
 (setq package-pinned-packages
@@ -100,7 +101,7 @@
       use-dialog-box nil
       uniquify-buffer-name-style 'forward
       ediff-window-setup-function 'ediff-setup-windows-plain
-      font-lock-maximum-decoration '((racket-mode . t) (t . 1))
+      ;; font-lock-maximum-decoration '((racket-mode . t) (t . 1))
       vc-diff-switches "-u"
       search-highlight t
       isearch-allow-scroll t
@@ -411,13 +412,20 @@
                                  " DerivePointerAlignment: false,"
                                  " Standard: Cpp11}"))
 
-(with-eval-after-load 'company (diminish 'company-mode))
-(setq company-idle-delay 0.1)
+(with-eval-after-load 'company
+  (diminish 'company-mode)
+  (setq company-idle-delay 0.1)
+  (define-key company-active-map (kbd "\C-n") 'company-select-next)
+  (define-key company-active-map (kbd "\C-p") 'company-select-previous)
+  (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
+  (define-key company-active-map (kbd "M-.") 'company-show-location))
 
 (require 'rtags)
 (require 'popup)
 (require 'company)
 (require 'company-rtags)
+
+(add-to-list 'company-backends 'company-rtags)
 
 (defun my-imenu ()
   (interactive)
@@ -440,7 +448,6 @@
 
 (defun my-c-mode-common-hook ()
   (setq fill-column 90)
-  (setq company-backends '(company-rtags company-files))
   (setq rtags-completions-enabled t
         rtags-display-current-error-as-tooltip t
         rtags-autostart-diagnostics t
@@ -489,8 +496,10 @@
 (setq geiser-active-implementations '(chicken)
       geiser-mode-start-repl-p t)
 
-(setq inferior-lisp-program "sbcl")
-(setq slime-contribs '(slime-fancy))
+(setq inferior-lisp-program (executable-find "sbcl"))
+(slime-setup '(slime-fancy slime-asdf slime-sbcl-exts slime-company))
+(setq slime-repl-history-remove-duplicates t
+      slime-repl-history-trim-whitespaces t)
 
 (when (not (kelly?))
   (setq compile-command "scons"))
