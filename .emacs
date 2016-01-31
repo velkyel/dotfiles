@@ -497,9 +497,15 @@
       geiser-mode-start-repl-p t)
 
 (setq inferior-lisp-program (executable-find "sbcl"))
-(slime-setup '(slime-fancy slime-asdf slime-sbcl-exts slime-company))
+(slime-setup '(slime-fancy
+               slime-asdf
+               slime-sbcl-exts
+               slime-compiler-notes-tree
+               slime-company))
 (setq slime-repl-history-remove-duplicates t
-      slime-repl-history-trim-whitespaces t)
+      slime-repl-history-trim-whitespaces t
+      slime-enable-evaluate-in-emacs t
+      slime-auto-start 'always)
 
 (when (not (kelly?))
   (setq compile-command "scons"))
