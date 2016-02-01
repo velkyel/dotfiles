@@ -1,4 +1,15 @@
-(setq gc-cons-threshold 20000000)
+(setq my-gc-threshold (* 64 1024 1024))
+
+(setq gc-cons-threshold most-positive-fixnum)
+
+(add-hook 'emacs-startup-hook
+          (lambda () (setq gc-cons-threshold my-gc-threshold)))
+
+(add-hook 'minibuffer-setup-hook
+          (lambda () (setq gc-cons-threshold most-positive-fixnum)))
+
+(add-hook 'minibuffer-exit-hook
+          (lambda () (setq gc-cons-threshold my-gc-threshold)))
 
 (require 'package)
 
