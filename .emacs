@@ -107,7 +107,7 @@
       column-number-mode t
       make-backup-files nil
       delete-auto-save-files t
-      imenu-auto-rescan t
+      ;; imenu-auto-rescan t
       ;; echo-keystrokes 0.1
       use-dialog-box nil
       uniquify-buffer-name-style 'forward
@@ -463,18 +463,13 @@
 (defun my-c-mode-common-hook ()
   (setq fill-column 90)
   (setq rtags-completions-enabled t
-        rtags-display-current-error-as-tooltip t
-        rtags-autostart-diagnostics t
+        ;; rtags-display-current-error-as-tooltip t
+        ;; rtags-autostart-diagnostics t
         rtags-use-helm t
-        rtags-show-containing-function t)
-        ;;rtags-track-container t)
-  ;; (add-hook 'find-file-hook
-  ;;           (lambda ()
-  ;;             (setq mode-line-misc-info '(("" rtags-cached-current-container "")))))
-  ;;                   ;; (and (rtags-is-indexed)
-  ;;                   ;;      '(:eval rtags-cached-current-container)))))
-  ;;             ;; (message header-line-format)))
-  (rtags-diagnostics)
+        rtags-show-containing-function t
+        ;; rtags-track-container t)
+        )
+  ;; (rtags-diagnostics)
   (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
   (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
   (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back)
