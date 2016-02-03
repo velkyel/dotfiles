@@ -242,36 +242,6 @@
 (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
 (global-set-key (kbd "M-i") 'helm-swoop)
 
-;; TODO: semantic + projectile, projectile
-
-;; (use-package flycheck)
-;; (use-package company)
-;; (use-package rust-mode
-;;   :defer t
-;;   :mode (("\\.rs$'" . rust-mode))
-;;   :config
-;;   (use-package toml-mode :defer t)
-;;   (use-package rustfmt :defer t)
-;;   (use-package flycheck-rust :defer t)
-;;   (use-package company-racer :defer t)
-;;   (use-package racer :defer t)
-;;   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-;;   (add-hook 'racer-mode-hook
-;;             (lambda ()
-;;               (eldoc-mode t)
-;;               (company-mode t)))
-;;   (add-hook 'rust-mode-hook
-;;             (lambda ()
-;;               (setq racer-rust-src-path "~/rustc-nightly/src/")
-;;               (setq company-tooltip-align-annotations t)
-;;               (setq company-minimum-prefix-length 2)
-;;               (setq company-idle-delay 0.2)
-;;               (racer-mode t)
-;;               (flycheck-mode t)
-;;               (setq rust-indent-offset 4)))
-;;   :bind (("TAB" . company-indent-or-complete-common)
-;;          ("M-." . racer-find-definition)))
-
 (setq projectile-enable-caching t)
 (projectile-global-mode)
 (diminish 'projectile-mode)
@@ -428,7 +398,7 @@
 
 (with-eval-after-load 'company
   (diminish 'company-mode)
-  (setq company-idle-delay 0.1)
+  (setq company-idle-delay nil)  ;; 0.1)
   (define-key company-active-map (kbd "\C-n") 'company-select-next)
   (define-key company-active-map (kbd "\C-p") 'company-select-previous)
   (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
@@ -446,9 +416,6 @@
   (if (rtags-is-indexed)
       (rtags-imenu)
     (helm-semantic-or-imenu nil)))
-
-;; https://github.com/Andersbakken/rtags + https://github.com/rizsotto/Bear
-;; to create compile_commands.json: bear scons
 
 (defun my-prog-mode-hook ()
   (highlight-symbol-mode)
