@@ -75,8 +75,6 @@
                          clang-format
                          highlight-symbol
                          company
-                         popup
-                         rtags
                          elpy
                          racket-mode
                          hydra
@@ -139,7 +137,6 @@
 ;; (setq show-paren-style 'expression)
 (transient-mark-mode t)
 (which-function-mode)
-;; (semantic-mode 1)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default py-indent-offset 4)
@@ -324,6 +321,7 @@
 
 (with-eval-after-load 'whitespace
   (diminish 'whitespace-mode))
+
 (setq whitespace-line-column 90
       whitespace-style '(face trailing newline))
 
@@ -339,6 +337,7 @@
 
 (with-eval-after-load 'rainbow-mode
   (diminish 'rainbow-mode))
+
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 
 (set-background-color "gray90")
@@ -356,7 +355,6 @@
  ;; If there is more than one, they won't work right.
  '(avy-background-face ((t (:background "gray90" :foreground "gray50"))))
  '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color"))))
- '(rtags-skippedline ((t (:background "gray90" :foreground "gray50"))))
  '(wl-highlight-summary-important-flag-face ((t (:foreground "red"))) t))
 
 (setq sml/no-confirm-load-theme t)
@@ -404,18 +402,23 @@
   (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
   (define-key company-active-map (kbd "M-.") 'company-show-location))
 
-(require 'rtags)
-(require 'popup)
 (require 'company)
-(require 'company-rtags)
 
-(add-to-list 'company-backends 'company-rtags)
+(require 'semantic)
+(require 'semantic/ia)
+(require 'semantic/bovine/gcc)
 
-(defun my-imenu ()
-  (interactive)
-  (if (rtags-is-indexed)
-      (rtags-imenu)
-    (helm-semantic-or-imenu nil)))
+(global-ede-mode t)
+(ede-enable-generic-projects)
+
+(with-eval-after-load 'semantic
+  (setq semantic-default-submodes
+        '(global-semantic-idle-scheduler-mode
+          global-semanticdb-minor-mode
+          global-semantic-idle-summary-mode
+          ;; global-semantic-decoration-mode
+          ;; global-semantic-idle-local-symbol-highlight-mode
+          )))
 
 (defun my-prog-mode-hook ()
   (highlight-symbol-mode)
@@ -423,29 +426,27 @@
   (company-mode)
   (whitespace-mode)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
-  (define-key prog-mode-map (kbd "C-.") 'my-imenu))
+  (define-key prog-mode-map (kbd "C-.") 'helm-semantic-or-imenu))
 
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
+(require 'etags)
+(defun push-tag-mark () (xref-push-marker-stack))    ;; hooks for semantic
+(defun pop-tag-mark () (xref-pop-marker-stack))
+
 (defun my-c-mode-common-hook ()
   (setq fill-column 90)
-  (setq rtags-completions-enabled t
-        ;; rtags-display-current-error-as-tooltip t
-        ;; rtags-autostart-diagnostics t
-        rtags-use-helm t
-        rtags-show-containing-function t
-        ;; rtags-track-container t)
-        )
-  ;; (rtags-diagnostics)
-  (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
-  (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
-  (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back)
-  (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
-  (define-key c-mode-base-map (kbd "M-?") 'rtags-display-summary)
-  (define-key c-mode-base-map (kbd "C-i") 'clang-format)
-  (define-key c-mode-base-map (kbd "C-.") 'my-imenu))
+  (semantic-mode 1))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
+
+(with-eval-after-load 'cc-mode
+  (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
+  (define-key c-mode-base-map (kbd "M-.") 'semantic-ia-fast-jump)
+  (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
+  (define-key c-mode-base-map (kbd "M-?") 'semantic-ia-show-summary)
+  (define-key c-mode-base-map (kbd "C-i") 'clang-format)
+  (define-key c-mode-base-map (kbd "C-.") 'helm-semantic-or-imenu))
 
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 ;; (setq cider-auto-mode nil)
@@ -506,17 +507,6 @@
 (global-set-key (kbd "M-r") 'recompile)
 (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
-
-;; (require 'company)
-;; (setq company-backends (delete 'company-semantic company-backends)
-;;       company-global-modes '(not term-mode)
-;;       company-transformers '(company-sort-by-occurrence)
-;;       company-minimum-prefix-length 2
-;;       company-selection-wrap-around t
-;;       company-show-numbers t
-;;       company-require-match nil
-;;       company-dabbrev-downcase nil)
-;; ;; (setq company-idle-delay 0.1)
 
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-auth-credentials "~/.authinfo"
