@@ -431,8 +431,7 @@
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
 (require 'etags)
-(defun push-tag-mark () (xref-push-marker-stack))    ;; hooks for semantic
-(defun pop-tag-mark () (xref-pop-marker-stack))
+(defun push-tag-mark () (xref-push-marker-stack))    ;; for semantic-ia-fast-jump
 
 (defun my-c-mode-common-hook ()
   (setq fill-column 90)
