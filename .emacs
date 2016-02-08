@@ -84,6 +84,7 @@
                          geiser
                          slime
                          slime-company
+                         cff
                          ))
 
 (setq package-pinned-packages
@@ -439,13 +440,18 @@
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
+(require 'cff)
+(add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
+(add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
+
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
   (define-key c-mode-base-map (kbd "M-.") 'semantic-ia-fast-jump)
   (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
   (define-key c-mode-base-map (kbd "M-?") 'semantic-ia-show-summary)
   (define-key c-mode-base-map (kbd "C-i") 'clang-format)
-  (define-key c-mode-base-map (kbd "C-.") 'helm-semantic-or-imenu))
+  (define-key c-mode-base-map (kbd "C-.") 'helm-semantic-or-imenu)
+  (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file))
 
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 ;; (setq cider-auto-mode nil)
@@ -504,7 +510,7 @@
 
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "M-r") 'recompile)
-(global-set-key (kbd "M-o") 'other-window)
+;; (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
 
 (setq message-send-mail-function 'smtpmail-send-it
