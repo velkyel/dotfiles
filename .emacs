@@ -419,7 +419,8 @@
           global-semantic-idle-summary-mode
           ;; global-semantic-decoration-mode
           ;; global-semantic-idle-local-symbol-highlight-mode
-          )))
+          ))
+  (semantic-add-system-include "/usr/local/include"))
 
 (defun my-prog-mode-hook ()
   (highlight-symbol-mode)
@@ -649,3 +650,4 @@
        ("cc" message-send-and-exit "Send C-c C-c")
        ("q" nil "cancel"))
      (global-set-key (kbd "C-c C-y") 'hydra-message/body)))
+
