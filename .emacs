@@ -369,6 +369,7 @@
 (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
 ;; "C-e" . mwim-end-of-code-or-line
 
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.mm$" . objc-mode))
 (add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\)\\'" . glsl-mode))
 ;; ...usf = unreal engine
@@ -411,18 +412,17 @@
 (require 'semantic/ia)
 (require 'semantic/bovine/gcc)
 
+(global-semanticdb-minor-mode 1)
+(global-semantic-idle-scheduler-mode 1)
+(global-semantic-show-parser-state-mode 1)
+(global-semantic-idle-summary-mode 1)
+;; (semantic-add-system-include "/usr/local/include" 'c++-mode)
+
+(semantic-mode 1)
+
+(require 'ede)
 (global-ede-mode t)
 (ede-enable-generic-projects)
-
-(with-eval-after-load 'semantic
-  (setq semantic-default-submodes
-        '(global-semantic-idle-scheduler-mode
-          global-semanticdb-minor-mode
-          global-semantic-idle-summary-mode
-          ;; global-semantic-decoration-mode
-          ;; global-semantic-idle-local-symbol-highlight-mode
-          ))
-  (semantic-add-system-include "/usr/local/include"))
 
 (defun my-prog-mode-hook ()
   (highlight-symbol-mode)
@@ -438,8 +438,7 @@
 (defun push-tag-mark () (xref-push-marker-stack))    ;; for semantic-ia-fast-jump
 
 (defun my-c-mode-common-hook ()
-  (setq fill-column 90)
-  (semantic-mode 1))
+  (setq-local fill-column 90))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
