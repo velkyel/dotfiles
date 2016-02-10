@@ -120,7 +120,9 @@
       isearch-allow-scroll t
       eval-expression-print-level nil
       user-mail-address "capak@inputwish.com"
-      user-full-name  "Libor Čapák")
+      user-full-name  "Libor Čapák"
+      google-translate-default-source-language "en"
+      google-translate-default-target-language "cs")
 
 (defun kelly? ()
   (or (string= system-name "typhoon.autokelly.local")
@@ -650,4 +652,3 @@
        ("cc" message-send-and-exit "Send C-c C-c")
        ("q" nil "cancel"))
      (global-set-key (kbd "C-c C-y") 'hydra-message/body)))
-
