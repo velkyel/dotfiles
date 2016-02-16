@@ -413,12 +413,12 @@
 (require 'semantic/bovine/gcc)
 
 (global-semanticdb-minor-mode 1)
-(global-semantic-idle-scheduler-mode 1)
+(global-semantic-idle-scheduler-mode 1)  ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=22287
 (global-semantic-show-parser-state-mode 1)
 (global-semantic-idle-summary-mode 1)
 ;; (semantic-add-system-include "/usr/local/include" 'c++-mode)
 
-(semantic-mode 1)
+(semantic-mode 1)   ;; + semantic-force-refresh
 
 (require 'ede)
 (global-ede-mode t)
