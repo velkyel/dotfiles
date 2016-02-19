@@ -215,10 +215,10 @@
 (helm-push-mark-mode 1)
 
 ;; TODO: doesn't work in emacs >=25.1
-;; (advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
-;;             :around (lambda (fcn file)
-;;                       (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
-;;                         (funcall fcn file))))
+(advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
+            :around (lambda (fcn file)
+                      (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
+                        (funcall fcn file))))
 
 (add-hook 'helm-grep-mode-hook (lambda () (grep-mode)))
 
