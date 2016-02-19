@@ -200,7 +200,8 @@
 (unkillable-scratch 1)
 
 (when (equal system-type 'darwin)
-  (exec-path-from-shell-initialize))
+  (exec-path-from-shell-initialize)
+  (setq python-shell-completion-native-enable nil))
 
 ;; Workaround for "ad-handle-definition: `tramp-read-passwd' got redefined".
 ;; Message is triggered by helm, it is likely missing this require.
