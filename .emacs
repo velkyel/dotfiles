@@ -347,22 +347,10 @@
 
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 
-(set-background-color "gray90")
-
 (with-eval-after-load 'highlight-symbol
   (diminish 'highlight-symbol-mode)
   (setq highlight-symbol-idle-delay 1.0)
   (set-face-background 'highlight-symbol-face "gray82"))
-
-;; vystup z customize-face:
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(avy-background-face ((t (:background "gray90" :foreground "gray50"))))
- '(region ((t (:background "#f1c40f" :distant-foreground "gtk_selection_fg_color"))))
- '(wl-highlight-summary-important-flag-face ((t (:foreground "red"))) t))
 
 (setq sml/no-confirm-load-theme t)
 (sml/setup)
@@ -655,3 +643,14 @@
        ("cc" message-send-and-exit "Send C-c C-c")
        ("q" nil "cancel"))
      (global-set-key (kbd "C-c C-y") 'hydra-message/body)))
+
+(set-background-color "gray90")
+
+(set-face-attribute 'helm-source-header
+                    nil
+                    :height 0.9)
+
+(set-face-attribute 'region
+                    nil
+                    :background "#f1c40f"
+                    :distant-foreground "gtk_selection_fg_color")
