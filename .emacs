@@ -216,10 +216,10 @@
 (helm-push-mark-mode 1)
 
 ;; TODO: doesn't work in emacs >=25.1
-(advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
-            :around (lambda (fcn file)
-                      (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
-                        (funcall fcn file))))
+;; (advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
+;;             :around (lambda (fcn file)
+;;                       (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
+;;                         (funcall fcn file))))
 
 (add-hook 'helm-grep-mode-hook (lambda () (grep-mode)))
 
@@ -529,7 +529,7 @@
                                   (nnir-search-engine imap)
                                   ;; press E to expire mail
                                   (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash")
-                                  (nnmail-expiry-wait 7))
+                                  (nnmail-expiry-wait 2))
       gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
       gnus-summary-line-format "%U%R%z %(%&user-date;  %-20,20f  %B%s%)\n"
       gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
