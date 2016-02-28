@@ -422,13 +422,17 @@ Exit the save between databases if there is user input."
 (global-semantic-idle-scheduler-mode 1)
 (global-semantic-show-parser-state-mode 1)
 (global-semantic-idle-summary-mode 1)
+;; (global-semantic-show-unmatched-syntax-mode 1)
+
 ;; (semantic-add-system-include "/usr/local/include" 'c++-mode)
 
 (semantic-mode 1)   ;; + semantic-force-refresh
+(setq-default semanticdb-project-root-functions
+              projectile-project-root-files-functions)
 
-(require 'ede)
-(global-ede-mode t)
-(ede-enable-generic-projects)
+;; (require 'ede)
+;; (global-ede-mode t)
+;; (ede-enable-generic-projects)
 
 (defun my-prog-mode-hook ()
   (highlight-symbol-mode)
