@@ -608,6 +608,11 @@ Exit the save between databases if there is user input."
                     nil
                     :height 0.9)
 
+(set-face-attribute 'font-lock-comment-face
+                    nil
+                    ;; :height 0.9
+                    :slant 'italic)
+
 (set-face-attribute 'region
                     nil
                     :background "#f1c40f"
