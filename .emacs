@@ -85,6 +85,7 @@
                          slime
                          slime-company
                          cff
+                         bbdb
                          ))
 
 (setq package-pinned-packages
@@ -593,14 +594,19 @@ Exit the save between databases if there is user input."
 ;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 ;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
 
-;; (require 'bbdb)
-;; (setq 'bbdb-complete-mail-allow-cycling t)
-;; (add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
-;; (add-hook 'message-mode-hook
-;;           '(lambda ()
-;;              (bbdb-initialize 'message)
-;;              (bbdb-initialize 'gnus)
-;;              (local-set-key "<TAB>" 'bbdb-complete-name)))
+(require 'bbdb)
+
+(setq bbdb-file "~/.bbdb"
+      bbdb-complete-mail-allow-cycling t)
+
+(bbdb-initialize 'message 'gnus)
+
+(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
+
+(add-hook 'message-mode-hook
+          '(lambda ()
+             (flyspell-mode t)
+             (local-set-key (kbd "<tab>") 'bbdb-complete-mail)))
 
 (set-background-color "gray90")
 
@@ -617,4 +623,3 @@ Exit the save between databases if there is user input."
                     nil
                     :background "#f1c40f"
                     :distant-foreground "gtk_selection_fg_color")
-
