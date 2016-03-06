@@ -216,7 +216,6 @@
       helm-candidate-number-limit 50)
 (helm-push-mark-mode 1)
 
-;; TODO: doesn't work in emacs >=25.1
 (advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
             :around (lambda (fcn file)
                       (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
@@ -425,6 +424,13 @@ Exit the save between databases if there is user input."
 (global-semantic-idle-summary-mode 1)
 ;; (global-semantic-show-unmatched-syntax-mode 1)
 
+(when (kelly?)
+  (progn
+    (semantic-add-system-include "~" 'c++-mode)
+    (semantic-add-system-include "~/ido" 'c++-mode)
+    (semantic-add-system-include "~/sklad-dist/include" 'c++-mode)
+    (setq semantic-c-obey-conditional-section-parsing-flag nil)))
+
 ;; (semantic-add-system-include "/usr/local/include" 'c++-mode)
 
 (semantic-mode 1)   ;; + semantic-force-refresh
@@ -502,8 +508,9 @@ Exit the save between databases if there is user input."
       slime-enable-evaluate-in-emacs t
       slime-auto-start 'always)
 
-(when (not (kelly?))
-  (setq compile-command "scons"))
+(setq compile-command (if (kelly?)
+                          "make -k -j 8"
+                        "scons"))
 
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
