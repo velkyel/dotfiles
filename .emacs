@@ -52,7 +52,6 @@
                          shell
                          avy
                          ace-jump-helm-line
-                         saveplace
                          quelpa
                          quelpa-use-package
                          ninja-mode
@@ -303,7 +302,7 @@
 
 (define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
-(toggle-save-place-globally)
+(save-place-mode 1)    ;; >= 25.1
 
 (require 'quelpa-use-package)
 (setq quelpa-update-melpa-p nil)
@@ -630,3 +629,4 @@ Exit the save between databases if there is user input."
                     nil
                     :background "#f1c40f"
                     :distant-foreground "gtk_selection_fg_color")
+
