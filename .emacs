@@ -106,6 +106,7 @@
       column-number-mode t
       make-backup-files nil
       delete-auto-save-files t
+      auto-save-default nil
       ;; imenu-auto-rescan t
       ;; echo-keystrokes 0.1
       use-dialog-box nil
@@ -279,7 +280,8 @@
 (global-set-key (kbd "C-x b") 'my-helm-projectile-buffers-list)
 
 (require 'super-save)
-(super-save-initialize)
+(super-save-mode 1)
+(diminish 'super-save-mode)
 
 (global-anzu-mode 1)
 (diminish 'anzu-mode)
