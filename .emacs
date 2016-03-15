@@ -408,17 +408,16 @@
 (require 'semantic/ia)
 (require 'semantic/bovine/gcc)
 
-(when (not (file-exists-p "~/cedet"))
-  ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=22287
-  (defun semanticdb-save-all-db-idle ()
-    (semantic-safe "Auto-DB Save: %S"
-      ;; FIXME: Use `while-no-input'?
-      (save-mark-and-excursion
-       (semantic-exit-on-input 'semanticdb-idle-save
-         (mapc (lambda (db)
-                 (semantic-throw-on-input 'semanticdb-idle-save)
-                 (semanticdb-save-db db t))
-               semanticdb-database-list))))))
+;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=22287
+(defun semanticdb-save-all-db-idle ()
+  (semantic-safe "Auto-DB Save: %S"
+    ;; FIXME: Use `while-no-input'?
+    (save-mark-and-excursion
+     (semantic-exit-on-input 'semanticdb-idle-save
+       (mapc (lambda (db)
+               (semantic-throw-on-input 'semanticdb-idle-save)
+               (semanticdb-save-db db t))
+             semanticdb-database-list)))))
 
 (global-semanticdb-minor-mode 1)
 (global-semantic-idle-scheduler-mode 1)
