@@ -85,6 +85,7 @@
                          slime-company
                          cff
                          bbdb
+                         tide
                          ))
 
 (setq package-pinned-packages
@@ -309,16 +310,13 @@
 
 (save-place-mode 1)    ;; >= 25.1
 
-(require 'quelpa-use-package)
 (setq quelpa-update-melpa-p nil)
-(quelpa-use-package-activate-advice)   ;; quelpa-upgrade
-(use-package vc-darcs
-  :quelpa (vc-darcs :fetcher github :repo "velkyel/vc-darcs")
-  :config
-  (setq vc-disable-async-diff nil)                ;; hotfix
-  (add-to-list 'vc-handled-backends 'DARCS t)
-  (autoload 'vc-darcs-find-file-hook "vc-darcs")
-  (add-hook 'find-file-hooks 'vc-darcs-find-file-hook))
+
+(quelpa '(vc-darcs :fetcher github :repo "velkyel/vc-darcs"))
+(setq vc-disable-async-diff nil)                ;; hotfix
+(add-to-list 'vc-handled-backends 'DARCS t)
+(autoload 'vc-darcs-find-file-hook "vc-darcs")
+(add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
 (require 'go-mode-autoloads)
 
@@ -438,10 +436,6 @@
 (setq-default semanticdb-project-root-functions
               projectile-project-root-files-functions)
 
-;; (require 'ede)
-;; (global-ede-mode t)
-;; (ede-enable-generic-projects)
-
 (defun my-prog-mode-hook ()
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
@@ -508,6 +502,20 @@
       slime-repl-history-trim-whitespaces t
       slime-enable-evaluate-in-emacs t
       slime-auto-start 'always)
+
+(require 'tide)
+(with-eval-after-load 'tide
+  (define-key tide-mode-map (kbd "C-.") 'imenu))
+
+(add-hook 'typescript-mode-hook
+          (lambda ()
+            (tide-setup)
+            (flycheck-mode 1)
+            (setq typescript-indent-level 2
+                  flycheck-check-syntax-automatically '(save mode-enabled)
+                  company-tooltip-align-annotations t)
+            (eldoc-mode 1)
+            (company-mode-on)))
 
 (setq compile-command (if (kelly?)
                           "make -k -j 8"
