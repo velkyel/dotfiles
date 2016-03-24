@@ -306,6 +306,18 @@
 (global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
 (define-key isearch-mode-map (kbd "C-;") 'avy-isearch)
 
+(defun endless/goto-match-beginning ()
+  "Go to the start of current isearch match.  Use in
+`isearch-mode-end-hook'."
+  (when (and isearch-forward
+             (number-or-marker-p isearch-other-end)
+             (not mark-active)
+             (not isearch-mode-end-hook-quit))
+    (goto-char isearch-other-end)))
+
+(add-hook 'isearch-mode-end-hook
+          #'endless/goto-match-beginning)
+
 (define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
 (save-place-mode 1)    ;; >= 25.1
