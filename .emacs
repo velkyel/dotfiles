@@ -204,7 +204,8 @@
 (require 'unkillable-scratch)
 (unkillable-scratch 1)
 
-(when (equal system-type 'darwin)
+(when (or (equal system-type 'darwin)
+          (equal system-type 'gnu/linux))
   (exec-path-from-shell-initialize)
   (setq python-shell-completion-native-enable nil))
 
@@ -305,18 +306,6 @@
 (setq avy-background t)
 (global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
 (define-key isearch-mode-map (kbd "C-;") 'avy-isearch)
-
-(defun endless/goto-match-beginning ()
-  "Go to the start of current isearch match.  Use in
-`isearch-mode-end-hook'."
-  (when (and isearch-forward
-             (number-or-marker-p isearch-other-end)
-             (not mark-active)
-             (not isearch-mode-end-hook-quit))
-    (goto-char isearch-other-end)))
-
-(add-hook 'isearch-mode-end-hook
-          #'endless/goto-match-beginning)
 
 (define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
