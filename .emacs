@@ -195,7 +195,7 @@
 
 (when (and window-system (equal system-type 'gnu/linux))
   ;; (set-default-font "Inconsolata 13"))
-  (set-frame-font "DejaVu Sans Mono 11"))
+  (set-frame-font "DejaVu Sans Mono-11.5"))
 ;; (setq x-alt-keysym 'meta)
 
 (require 'diminish)
@@ -625,7 +625,7 @@
              (flyspell-mode t)
              (local-set-key (kbd "<tab>") 'bbdb-complete-mail)))
 
-(set-background-color "gray90")
+(set-background-color "gray85")
 
 (set-face-attribute 'helm-source-header
                     nil
@@ -641,3 +641,12 @@
                     :background "#f1c40f"
                     :distant-foreground "gtk_selection_fg_color")
 
+(set-face-attribute 'mode-line
+                    nil
+                    :background "gray95"
+                    :box '(:line-width -1 :style released-button))
+
+(set-face-attribute 'mode-line-inactive
+                    nil
+                    :background "gray80"
+                    :box '(:line-width -1 :style released-button))
