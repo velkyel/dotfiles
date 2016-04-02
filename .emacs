@@ -86,6 +86,8 @@
                          cff
                          bbdb
                          tide
+                         popup
+                         rtags
                          ))
 
 (setq package-pinned-packages
@@ -403,39 +405,51 @@
 
 (require 'company)
 
-(require 'semantic)
-(require 'semantic/ia)
-(require 'semantic/bovine/gcc)
+(require 'rtags)
+(require 'popup)
 
-;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=22287
-(defun semanticdb-save-all-db-idle ()
-  (semantic-safe "Auto-DB Save: %S"
-    ;; FIXME: Use `while-no-input'?
-    (save-mark-and-excursion
-     (semantic-exit-on-input 'semanticdb-idle-save
-       (mapc (lambda (db)
-               (semantic-throw-on-input 'semanticdb-idle-save)
-               (semanticdb-save-db db t))
-             semanticdb-database-list)))))
+(add-to-list 'company-backends 'company-rtags)
+(setq rtags-use-helm t)
 
-(global-semanticdb-minor-mode 1)
-(global-semantic-idle-scheduler-mode 1)
-(global-semantic-show-parser-state-mode 1)
-(global-semantic-idle-summary-mode 1)
+;; (require 'semantic)
+;; (require 'semantic/ia)
+;; (require 'semantic/bovine/gcc)
+
+;; ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=22287
+;; (defun semanticdb-save-all-db-idle ()
+;;   (semantic-safe "Auto-DB Save: %S"
+;;     ;; FIXME: Use `while-no-input'?
+;;     (save-mark-and-excursion
+;;      (semantic-exit-on-input 'semanticdb-idle-save
+;;        (mapc (lambda (db)
+;;                (semantic-throw-on-input 'semanticdb-idle-save)
+;;                (semanticdb-save-db db t))
+;;              semanticdb-database-list)))))
+
+;; (global-semanticdb-minor-mode 1)
+;; (global-semantic-idle-scheduler-mode 1)
+;; (global-semantic-show-parser-state-mode 1)
+;; (global-semantic-idle-summary-mode 1)
 ;; (global-semantic-show-unmatched-syntax-mode 1)
 
-(when (kelly?)
-  (progn
-    (semantic-add-system-include "~" 'c++-mode)
-    (semantic-add-system-include "~/ido" 'c++-mode)
-    (semantic-add-system-include "~/sklad-dist/include" 'c++-mode)
-    (setq semantic-c-obey-conditional-section-parsing-flag nil)))
+;; (when (kelly?)
+;;   (progn
+;;     (semantic-add-system-include "~" 'c++-mode)
+;;     (semantic-add-system-include "~/ido" 'c++-mode)
+;;     (semantic-add-system-include "~/sklad-dist/include" 'c++-mode)
+;;     (setq semantic-c-obey-conditional-section-parsing-flag nil)))
 
 ;; (semantic-add-system-include "/usr/local/include" 'c++-mode)
 
-(semantic-mode 1)   ;; + semantic-force-refresh
-(setq-default semanticdb-project-root-functions
-              projectile-project-root-files-functions)
+;; (semantic-mode 1)   ;; + semantic-force-refresh
+;; (setq-default semanticdb-project-root-functions
+;;               projectile-project-root-files-functions)
+
+(defun my-imenu ()
+  (interactive)
+  (if (rtags-is-indexed)
+      (rtags-imenu)
+    (helm-semantic-or-imenu nil)))
 
 (defun my-prog-mode-hook ()
   (highlight-symbol-mode)
@@ -443,7 +457,7 @@
   (company-mode)
   (whitespace-mode)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
-  (define-key prog-mode-map (kbd "C-.") 'helm-semantic-or-imenu))
+  (define-key prog-mode-map (kbd "C-.") 'my-imenu))
 
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
@@ -451,7 +465,9 @@
 (defun push-tag-mark () (xref-push-marker-stack))    ;; for semantic-ia-fast-jump
 
 (defun my-c-mode-common-hook ()
-  (setq-local fill-column 90))
+  (setq-local fill-column 90)
+  (setq rtags-autostart-diagnostics t
+        ))  ;; rtags-show-containing-function t))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
@@ -461,11 +477,12 @@
 
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
-  (define-key c-mode-base-map (kbd "M-.") 'semantic-ia-fast-jump)
+  (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
+  (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back)
   (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
-  (define-key c-mode-base-map (kbd "M-?") 'semantic-ia-show-summary)
+  (define-key c-mode-base-map (kbd "M-?") 'rtags-display-summary)
   (define-key c-mode-base-map (kbd "C-i") 'clang-format)
-  (define-key c-mode-base-map (kbd "C-.") 'helm-semantic-or-imenu)
+  (define-key c-mode-base-map (kbd "C-.") 'my-imenu)
   (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file))
 
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
@@ -626,6 +643,9 @@
              (local-set-key (kbd "<tab>") 'bbdb-complete-mail)))
 
 (set-background-color "gray85")
+(set-face-attribute 'default
+                    nil
+                    :background "gray85")   ;; terminal
 
 (set-face-attribute 'helm-source-header
                     nil
@@ -650,3 +670,11 @@
                     nil
                     :background "gray80"
                     :box '(:line-width -1 :style released-button))
+
+(set-face-attribute 'rtags-skippedline
+                    nil
+                    :background "gray80")
+
+(set-face-attribute 'rtags-warnline
+                    nil
+                    :background "#ccccff")
