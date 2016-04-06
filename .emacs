@@ -678,3 +678,8 @@
 (set-face-attribute 'rtags-warnline
                     nil
                     :background "#ccccff")
+
+(set-face-attribute 'rtags-errline
+                    nil
+                    :background "#eeb0b0")
+
