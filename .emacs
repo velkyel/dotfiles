@@ -590,11 +590,8 @@
       '((not gnus-thread-sort-by-date)
         (not gnus-thread-sort-by-number))
       gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
+      gnus-gcc-mark-as-read t
       gnus-use-cache t
-      ;; gnus-use-adaptive-scoring nil
-      ;; gnus-save-score nil
-      ;; gnus-use-scoring nil
-      ;; gnus-summary-default-score 0
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
       gnus-sum-thread-tree-leaf-with-other "├► "
