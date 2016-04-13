@@ -137,6 +137,13 @@
       (string= system-name "idev03")
       (string= system-name "idev03.autokelly.local")))
 
+(defun dos2unix ()
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (search-forward (string ?\C-m)  nil t)
+      (replace-match "" nil t))))
+
 ;; (setq compilation-skip-threshold 2)
 
 (setq-default major-mode 'indented-text-mode)    ;; instead fundamental-mode
