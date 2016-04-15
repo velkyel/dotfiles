@@ -687,3 +687,7 @@
                     nil
                     :background "#eeb0b0")
 
+(set-face-attribute 'highlight-indentation-face     ;; elpy
+                    nil
+                    :background "gray90")
+
