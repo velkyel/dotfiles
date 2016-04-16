@@ -315,7 +315,9 @@
 
 (define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
-(save-place-mode 1)    ;; >= 25.1
+(if (< emacs-major-version 25)
+    (toggle-save-place-globally)
+  (save-place-mode 1))
 
 (setq quelpa-update-melpa-p nil)
 
