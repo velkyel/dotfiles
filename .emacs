@@ -223,8 +223,7 @@
 (helm-mode 1)
 (diminish 'helm-mode)
 
-(setq helm-quick-update nil             ;; blink
-      helm-candidate-number-limit 50)
+(setq helm-candidate-number-limit 50)
 (helm-push-mark-mode 1)
 
 (advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
