@@ -94,9 +94,6 @@
       '((cider . "melpa-stable")
         (clojure-mode . "melpa-stable")))
 
-(when (file-exists-p "~/cedet")      ;; https://github.com/velkyel/cedet
-  (load-file "~/cedet/cedet-devel-load.el"))
-
 (unless package-archive-contents
   (package-refresh-contents))
 (dolist (package package-list)
