@@ -490,7 +490,12 @@
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
   (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
-  (define-key c-mode-base-map (kbd "M-,") 'rtags-location-stack-back)
+  (define-key c-mode-base-map (kbd "M-,")
+    (lambda ()
+      (interactive)
+      (if (rtags-is-indexed)
+          (rtags-location-stack-back)
+        (xref-pop-marker-stack))))    ;; could be jump from scheme or whatever
   (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
   (define-key c-mode-base-map (kbd "M-?") 'rtags-display-summary)
   (define-key c-mode-base-map (kbd "C-i") 'clang-format)
