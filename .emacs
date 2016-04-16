@@ -471,6 +471,9 @@
 (require 'etags)
 (defun push-tag-mark () (xref-push-marker-stack))    ;; for semantic-ia-fast-jump
 
+(require 'pulse)
+(setq pulse-flag nil)
+
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
   (setq rtags-autostart-diagnostics t
