@@ -318,7 +318,7 @@
     (toggle-save-place-globally)
   (save-place-mode 1))
 
-(desktop-save-mode 1)
+;; (desktop-save-mode 1)
 
 (setq quelpa-update-melpa-p nil)
 
