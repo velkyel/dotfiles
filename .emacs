@@ -80,7 +80,7 @@
                          go-mode
                          smooth-scrolling
                          unkillable-scratch
-                         geiser
+                         ;; geiser
                          slime
                          slime-company
                          cff
@@ -88,6 +88,7 @@
                          tide
                          popup
                          rtags
+                         quack
                          ))
 
 (setq package-pinned-packages
@@ -418,40 +419,6 @@
 (add-to-list 'company-backends 'company-rtags)
 (setq rtags-use-helm t)
 
-;; (require 'semantic)
-;; (require 'semantic/ia)
-;; (require 'semantic/bovine/gcc)
-
-;; ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=22287
-;; (defun semanticdb-save-all-db-idle ()
-;;   (semantic-safe "Auto-DB Save: %S"
-;;     ;; FIXME: Use `while-no-input'?
-;;     (save-mark-and-excursion
-;;      (semantic-exit-on-input 'semanticdb-idle-save
-;;        (mapc (lambda (db)
-;;                (semantic-throw-on-input 'semanticdb-idle-save)
-;;                (semanticdb-save-db db t))
-;;              semanticdb-database-list)))))
-
-;; (global-semanticdb-minor-mode 1)
-;; (global-semantic-idle-scheduler-mode 1)
-;; (global-semantic-show-parser-state-mode 1)
-;; (global-semantic-idle-summary-mode 1)
-;; (global-semantic-show-unmatched-syntax-mode 1)
-
-;; (when (kelly?)
-;;   (progn
-;;     (semantic-add-system-include "~" 'c++-mode)
-;;     (semantic-add-system-include "~/ido" 'c++-mode)
-;;     (semantic-add-system-include "~/sklad-dist/include" 'c++-mode)
-;;     (setq semantic-c-obey-conditional-section-parsing-flag nil)))
-
-;; (semantic-add-system-include "/usr/local/include" 'c++-mode)
-
-;; (semantic-mode 1)   ;; + semantic-force-refresh
-;; (setq-default semanticdb-project-root-functions
-;;               projectile-project-root-files-functions)
-
 (defun my-imenu ()
   (interactive)
   (if (rtags-is-indexed)
@@ -469,7 +436,7 @@
 (add-hook 'prog-mode-hook 'my-prog-mode-hook)
 
 (require 'etags)
-(defun push-tag-mark () (xref-push-marker-stack))    ;; for semantic-ia-fast-jump
+(defun push-tag-mark () (xref-push-marker-stack))
 
 (when (equal system-type 'gnu/linux)
   (progn
@@ -524,8 +491,12 @@
 (with-eval-after-load 'racket-mode
   (define-key racket-mode-map (kbd "C-c r") 'racket-run))
 
-(setq geiser-active-implementations '(chicken)
-      geiser-mode-start-repl-p t)
+(setq lua-default-application "lua5.3")
+
+;; (setq scheme-program-name "chibi-scheme -mchibi.repl -e(repl)")
+;; (add-to-list 'auto-mode-alist '("\\.sld\\'" . scheme-mode))
+(setq quack-default-program "gsi -:d-")
+(require 'quack)
 
 (setq inferior-lisp-program (executable-find "sbcl"))
 (slime-setup '(slime-fancy
