@@ -52,6 +52,7 @@
                          shell
                          avy
                          ace-jump-helm-line
+                         goto-last-change
                          quelpa
                          quelpa-use-package
                          ninja-mode
@@ -210,6 +211,9 @@
 
 (require 'unkillable-scratch)
 (unkillable-scratch 1)
+
+(require 'goto-last-change)
+(global-set-key "\C-x\C-\\" 'goto-last-change)
 
 (when (or (equal system-type 'darwin)
           (equal system-type 'gnu/linux))
