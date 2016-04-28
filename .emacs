@@ -548,7 +548,11 @@
 (define-key function-key-map "\e[." (kbd "C-."))
 
 (global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "M-r") 'recompile)
+(global-set-key (kbd "M-r") (lambda ()
+                              (interactive)
+                              (call-interactively (if (get-buffer "*compilation*")
+                                                      'recompile
+                                                    'compile))))
 ;; (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
 
