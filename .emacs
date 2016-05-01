@@ -90,6 +90,7 @@
                          popup
                          rtags
                          quack
+                         magit
                          ))
 
 (setq package-pinned-packages
@@ -332,6 +333,10 @@
 (add-to-list 'vc-handled-backends 'DARCS t)
 (autoload 'vc-darcs-find-file-hook "vc-darcs")
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
+
+(require 'magit)
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
 (require 'go-mode-autoloads)
 
