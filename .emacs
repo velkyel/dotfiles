@@ -54,7 +54,6 @@
                          ace-jump-helm-line
                          goto-last-change
                          quelpa
-                         quelpa-use-package
                          ninja-mode
                          clojure-mode
                          cider
@@ -91,6 +90,7 @@
                          rtags
                          quack
                          magit
+                         volatile-highlights
                          ))
 
 (setq package-pinned-packages
@@ -173,6 +173,13 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+(require 'diminish)
+
+(require 'volatile-highlights)
+(volatile-highlights-mode t)
+(vhl/ext/etags/off)
+(diminish 'volatile-highlights-mode)
+
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
   (interactive
@@ -207,7 +214,6 @@
   (set-frame-font "DejaVu Sans Mono-11.5"))
 ;; (setq x-alt-keysym 'meta)
 
-(require 'diminish)
 (require 'smooth-scrolling)
 
 (require 'unkillable-scratch)
@@ -333,6 +339,9 @@
 (add-to-list 'vc-handled-backends 'DARCS t)
 (autoload 'vc-darcs-find-file-hook "vc-darcs")
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
+
+(quelpa '(wren-mode :fetcher github :repo "4d47/wren-mode"))
+(require 'wren-mode)
 
 (require 'magit)
 (global-set-key (kbd "C-x g") 'magit-status)
