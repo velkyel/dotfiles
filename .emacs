@@ -546,7 +546,7 @@
 
 (setq compile-command (if (kelly?)
                           "make -k -j 8"
-                        "ninja"))
+                        "scons"))
 
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
