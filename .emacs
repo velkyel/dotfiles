@@ -91,7 +91,6 @@
                          quack
                          magit
                          volatile-highlights
-                         spu
                          ))
 
 (setq package-pinned-packages
@@ -103,8 +102,6 @@
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
-
-;; (spu-package-upgrade-daily)  doesn't work in 25.x yet
 
 (setq compilation-ask-about-save nil
       compilation-always-kill t
