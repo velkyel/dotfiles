@@ -212,7 +212,7 @@
 
 (when (and window-system (equal system-type 'gnu/linux))
   ;; (set-default-font "Inconsolata 13"))
-  (set-frame-font "DejaVu Sans Mono-11.5"))
+  (set-frame-font "mononoki-12"))   ;; DejaVu Sans Mono-11.5"))
 ;; (setq x-alt-keysym 'meta)
 
 (require 'smooth-scrolling)
