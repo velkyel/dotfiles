@@ -91,6 +91,7 @@
                          quack
                          magit
                          volatile-highlights
+                         key-chord
                          ))
 
 (setq package-pinned-packages
@@ -323,6 +324,12 @@
 (setq avy-background t)
 (global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
 (define-key isearch-mode-map (kbd "C-;") 'avy-isearch)
+
+(require 'key-chord)
+(key-chord-define-global "jj" 'avy-goto-word-1)
+(key-chord-define-global "jl" 'avy-goto-line)
+(key-chord-define-global "jk" 'avy-goto-char)
+(key-chord-mode +1)
 
 (define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
