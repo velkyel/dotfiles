@@ -210,6 +210,10 @@
   (setq ns-function-modifier 'hyper)
   (set-frame-font "Menlo 15"))
 
+(when (equal system-type 'windows-nt)
+  (setq ring-bell-function 'ignore)
+  (set-frame-font "mononoki-11"))
+
 (when (and window-system (equal system-type 'gnu/linux))
   ;; (set-default-font "Inconsolata 13"))
   (set-frame-font "mononoki-12"))   ;; DejaVu Sans Mono-11.5"))
