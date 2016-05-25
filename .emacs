@@ -412,8 +412,9 @@
       (if (executable-find "clang-format") "clang-format"
         (if (executable-find "clang-format-3.8") "clang-format-3.8"
           (if (executable-find "clang-format-3.7") "clang-format-3.7"
-            (if (executable-find "clang-format-3.6") "clang-format-3.6"
-              (if (executable-find "clang-format-3.5") "clang-format-3.5"))))))
+            (if (executable-find "clang-format37") "clang-format37"
+              (if (executable-find "clang-format-3.6") "clang-format-3.6"
+                (if (executable-find "clang-format-3.5") "clang-format-3.5")))))))
 (setq clang-format-style (concat "{BasedOnStyle: Google,"
                                  " BreakBeforeBraces: Mozilla,"
                                  " BinPackParameters: true,"
