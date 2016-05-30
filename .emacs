@@ -359,6 +359,11 @@
 (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
 (require 'go-mode-autoloads)
+(with-eval-after-load 'go-mode
+  (define-key go-mode-map (kbd "M-.")
+    (lambda ()
+      (interactive)
+      (godef-jump (point) current-prefix-arg)))) ;; go get github.com/rogpeppe/godef
 
 (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
 
