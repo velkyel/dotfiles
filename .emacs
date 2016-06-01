@@ -609,7 +609,7 @@
                                   (nnir-search-engine imap)
                                   ;; press E to expire mail
                                   (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash")
-                                  (nnmail-expiry-wait 'immediate))
+                                  (nnmail-expiry-wait 7))
       gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
       gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
       gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
