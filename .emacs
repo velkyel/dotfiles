@@ -31,68 +31,71 @@
 (setq inhibit-startup-message t
       initial-scratch-message nil)
 
-(defconst package-list '(diminish
-                         exec-path-from-shell
-                         json-mode
-                         lua-mode
-                         haskell-mode
-                         nim-mode
-                         processing-mode
-                         restart-emacs
-                         diffview
-                         ag
-                         helm
-                         helm-ag
-                         helm-descbinds
-                         helm-swoop
-                         projectile
-                         helm-projectile
-                         super-save
-                         anzu
-                         shell
-                         avy
-                         ace-jump-helm-line
-                         goto-last-change
-                         quelpa
-                         ninja-mode
-                         clojure-mode
-                         cider
-                         pixie-mode
-                         browse-kill-ring
-                         easy-kill
-                         whitespace
-                         shrink-whitespace
-                         expand-region
-                         visual-regexp
-                         eldoc
-                         rainbow-mode
-                         smart-mode-line
-                         smart-mark
-                         google-translate
-                         mwim
-                         glsl-mode
-                         clang-format
-                         highlight-symbol
-                         company
-                         elpy
-                         racket-mode
-                         hydra
-                         go-mode
-                         smooth-scrolling
-                         unkillable-scratch
-                         ;; geiser
-                         slime
-                         slime-company
-                         cff
-                         bbdb
-                         tide
-                         popup
-                         rtags
-                         quack
-                         magit
-                         volatile-highlights
-                         key-chord
-                         ))
+(setq package-list '(diminish
+                     exec-path-from-shell
+                     json-mode
+                     lua-mode
+                     haskell-mode
+                     nim-mode
+                     processing-mode
+                     restart-emacs
+                     diffview
+                     ag
+                     helm
+                     helm-ag
+                     helm-descbinds
+                     helm-swoop
+                     projectile
+                     helm-projectile
+                     super-save
+                     anzu
+                     shell
+                     avy
+                     ace-jump-helm-line
+                     goto-last-change
+                     quelpa
+                     ninja-mode
+                     clojure-mode
+                     cider
+                     pixie-mode
+                     browse-kill-ring
+                     easy-kill
+                     whitespace
+                     shrink-whitespace
+                     expand-region
+                     visual-regexp
+                     eldoc
+                     rainbow-mode
+                     smart-mode-line
+                     smart-mark
+                     google-translate
+                     mwim
+                     glsl-mode
+                     clang-format
+                     highlight-symbol
+                     company
+                     elpy
+                     racket-mode
+                     hydra
+                     go-mode
+                     smooth-scrolling
+                     unkillable-scratch
+                     ;; geiser
+                     slime
+                     slime-company
+                     cff
+                     bbdb
+                     tide
+                     popup
+                     quack
+                     magit
+                     volatile-highlights
+                     key-chord
+                     ))
+
+(if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
+    (add-to-list 'load-path "~/.local/share/emacs/site-lisp")
+  (add-to-list package-list rtags))
 
 (setq package-pinned-packages
       '((cider . "melpa-stable")
@@ -711,4 +714,3 @@
 (set-face-attribute 'highlight-indentation-face     ;; elpy
                     nil
                     :background "gray90")
-
