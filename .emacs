@@ -95,7 +95,7 @@
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
     (add-to-list 'load-path "~/.local/share/emacs/site-lisp")
-  (add-to-list package-list rtags))
+  (add-to-list 'package-list 'rtags))
 
 (setq package-pinned-packages
       '((cider . "melpa-stable")
@@ -714,3 +714,4 @@
 (set-face-attribute 'highlight-indentation-face     ;; elpy
                     nil
                     :background "gray90")
+
