@@ -348,6 +348,9 @@
 
 (setq quelpa-update-melpa-p nil)
 
+(quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
+(require 'hlsl-mode)
+
 (quelpa '(vc-darcs :fetcher github :repo "velkyel/vc-darcs"))
 (setq vc-disable-async-diff nil)                ;; hotfix
 (add-to-list 'vc-handled-backends 'DARCS t)
