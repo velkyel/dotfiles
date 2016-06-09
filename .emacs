@@ -564,9 +564,9 @@
             (eldoc-mode 1)
             (company-mode-on)))
 
-(setq compile-command (if (kelly?)
-                          "make -k -j 8"
-                        "scons"))
+(setq compile-command (cond ((kelly?) "make -k -j 8")
+                            ((equal system-type 'windows-nt) "scons.py")
+                            (t "scons")))
 
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
