@@ -265,7 +265,7 @@
 (global-set-key (kbd "C-c h") 'helm-command-prefix)
 (global-set-key (kbd "C-c <SPC>") 'helm-all-mark-rings)
 
-(setq helm-ag-base-command "ag --smart-case --nocolor --nogroup")
+(setq helm-ag-command-option "--smart-case")
 (setq helm-ag-insert-at-point 'symbol)
 (add-hook 'helm-ag-mode-hook (lambda () (grep-mode)))
 
@@ -565,7 +565,7 @@
             (company-mode-on)))
 
 (setq compile-command (cond ((kelly?) "make -k -j 8")
-                            ((equal system-type 'windows-nt) "scons.py")
+                            ((equal system-type 'windows-nt) "scons")
                             (t "scons")))
 
 (diminish 'abbrev-mode)
