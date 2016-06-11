@@ -522,8 +522,8 @@
 (with-eval-after-load 'python
   (progn
     (require 'elpy)
-    (setq python-shell-interpreter "python3"
-          elpy-rpc-python-command "python3")
+    ;; (setq python-shell-interpreter "python3"
+    ;;       elpy-rpc-python-command "python3")
     (elpy-enable)
     (remove-hook 'elpy-modules 'elpy-module-yasnippet)
     (when (kelly?)
