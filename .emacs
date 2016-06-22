@@ -91,6 +91,7 @@
                      magit
                      volatile-highlights
                      key-chord
+                     dumb-jump
                      ))
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
@@ -532,7 +533,11 @@
 (with-eval-after-load 'racket-mode
   (define-key racket-mode-map (kbd "C-c r") 'racket-run))
 
+(require 'lua-mode)
 (setq lua-default-application "lua5.3")
+(require 'dumb-jump)
+(define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
+(define-key lua-mode-map (kbd "M-,") 'dumb-jump-back)
 
 ;; (setq scheme-program-name "chibi-scheme -mchibi.repl -e(repl)")
 ;; (add-to-list 'auto-mode-alist '("\\.sld\\'" . scheme-mode))
