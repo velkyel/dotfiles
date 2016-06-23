@@ -404,7 +404,7 @@
 (with-eval-after-load 'highlight-symbol
   (diminish 'highlight-symbol-mode)
   (setq highlight-symbol-idle-delay 1.0)
-  (set-face-background 'highlight-symbol-face "gray82"))
+  (set-face-background 'highlight-symbol-face "gray78"))
 
 (setq sml/no-confirm-load-theme t)
 (sml/setup)
