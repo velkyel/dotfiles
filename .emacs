@@ -212,7 +212,7 @@
   (setq mac-option-modifier 'nil)
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
-  (set-frame-font "Menlo 15"))
+  (set-frame-font "mononoki-16"))
 
 (when (equal system-type 'windows-nt)
   (setq ring-bell-function 'ignore)
