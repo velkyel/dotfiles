@@ -118,6 +118,7 @@
       make-backup-files nil
       delete-auto-save-files t
       auto-save-default nil
+      large-file-warning-threshold nil
       ;; imenu-auto-rescan t
       ;; echo-keystrokes 0.1
       use-dialog-box nil
