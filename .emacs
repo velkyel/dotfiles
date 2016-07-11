@@ -80,7 +80,7 @@
                      go-mode
                      smooth-scrolling
                      unkillable-scratch
-                     ;; geiser
+                     geiser
                      slime
                      slime-company
                      cff
@@ -531,19 +531,20 @@
     (when (kelly?)
       (remove-hook 'elpy-modules 'elpy-module-flymake))))
 
-(with-eval-after-load 'racket-mode
-  (define-key racket-mode-map (kbd "C-c r") 'racket-run))
+(require 'racket-mode)
+(define-key racket-mode-map (kbd "C-c r") 'racket-run)
+(define-key racket-mode-map (kbd "C-c C-d") 'racket-describe)
+
+(require 'geiser)
+(setq geiser-active-implementations '(guile)
+      geiser-guile-load-init-file-p t
+      geiser-mode-start-repl-p t)
 
 (require 'lua-mode)
 (setq lua-default-application "lua5.3")
 (require 'dumb-jump)
 (define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
 (define-key lua-mode-map (kbd "M-,") 'dumb-jump-back)
-
-;; (setq scheme-program-name "chibi-scheme -mchibi.repl -e(repl)")
-;; (add-to-list 'auto-mode-alist '("\\.sld\\'" . scheme-mode))
-(setq quack-default-program "gsi -:d-")
-(require 'quack)
 
 (setq inferior-lisp-program (executable-find "sbcl"))
 (slime-setup '(slime-fancy
