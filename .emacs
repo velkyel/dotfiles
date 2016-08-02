@@ -422,13 +422,6 @@
 (add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\)\\'" . glsl-mode))
 ;; ...usf = unreal engine
 
-(setq clang-format-executable
-      (if (executable-find "clang-format") "clang-format"
-        (if (executable-find "clang-format-3.8") "clang-format-3.8"
-          (if (executable-find "clang-format-3.7") "clang-format-3.7"
-            (if (executable-find "clang-format37") "clang-format37"
-              (if (executable-find "clang-format-3.6") "clang-format-3.6"
-                (if (executable-find "clang-format-3.5") "clang-format-3.5")))))))
 (setq clang-format-style (concat "{BasedOnStyle: Google,"
                                  " BreakBeforeBraces: Mozilla,"
                                  " BinPackParameters: true,"
@@ -446,6 +439,33 @@
                                  " PointerAlignment: Left,"
                                  " DerivePointerAlignment: false,"
                                  " Standard: Cpp11}"))
+
+(setq clang-format-executable
+      (if (executable-find "clang-format") "clang-format"
+        (if (executable-find "clang-format-3.8") "clang-format-3.8"
+          (if (executable-find "clang-format-3.7") "clang-format-3.7"
+            (if (executable-find "clang-format37") "clang-format37"
+              (if (executable-find "clang-format-3.6") "clang-format-3.6"
+                (if (executable-find "clang-format-3.5")
+                    (progn
+                      (setq clang-format-style (concat "{BasedOnStyle: Google,"
+                                                       " BreakBeforeBraces: Linux,"
+                                                       " BinPackParameters: true,"
+                                                       " BreakBeforeBinaryOperators: true,"
+                                                       " IndentWidth: 2,"
+                                                       " ColumnLimit: 90,"
+                                                       " AlwaysBreakBeforeMultilineStrings: false,"
+                                                       " SpacesBeforeTrailingComments: 4,"
+                                                       " AccessModifierOffset: -2,"
+                                                       " AllowShortFunctionsOnASingleLine: Inline,"
+                                                       " NamespaceIndentation: All,"
+                                                       " UseTab: Never,"
+                                                       " ConstructorInitializerIndentWidth: 2,"
+                                                       " ContinuationIndentWidth: 2,"
+                                                       " PointerAlignment: Left,"
+                                                       " DerivePointerAlignment: false,"
+                                                       " Standard: Cpp11}"))
+                      "clang-format-3.5"))))))))
 
 (with-eval-after-load 'company
   (diminish 'company-mode)
@@ -489,8 +509,9 @@
 
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
-  (setq rtags-autostart-diagnostics t
-        ))  ;; rtags-show-containing-function t))
+  (when (not (kelly?))
+    (setq rtags-autostart-diagnostics t)))
+  ;; rtags-show-containing-function t))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
@@ -725,4 +746,3 @@
 (set-face-attribute 'highlight-indentation-face     ;; elpy
                     nil
                     :background "gray90")
-
