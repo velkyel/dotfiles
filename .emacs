@@ -606,6 +606,10 @@
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
 
+;; suspend-frame:
+(global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "C-x C-z"))
+
 (define-key function-key-map "\e[$" (kbd "C-$"))
 (define-key function-key-map "\e[%" (kbd "C-%"))
 (define-key function-key-map "\e[," (kbd "C-,"))
