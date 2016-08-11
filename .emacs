@@ -750,3 +750,7 @@
 (set-face-attribute 'highlight-indentation-face     ;; elpy
                     nil
                     :background "gray90")
+
+(setq custom-file "~/.emacs.d/emacs-custom.el")
+(when (file-exists-p custom-file)
+  (load custom-file))
