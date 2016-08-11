@@ -76,7 +76,6 @@
                      company
                      elpy
                      racket-mode
-                     hydra
                      go-mode
                      smooth-scrolling
                      unkillable-scratch
