@@ -359,7 +359,7 @@
 (autoload 'vc-darcs-find-file-hook "vc-darcs")
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
-(quelpa '(wren-mode :fetcher github :repo "4d47/wren-mode"))
+(quelpa '(wren-mode :fetcher github :repo "4d47/wren-mode.el"))
 (require 'wren-mode)
 
 (require 'magit)
