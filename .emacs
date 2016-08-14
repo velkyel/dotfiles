@@ -75,7 +75,6 @@
                      highlight-symbol
                      company
                      elpy
-                     racket-mode
                      go-mode
                      smooth-scrolling
                      unkillable-scratch
@@ -86,7 +85,6 @@
                      bbdb
                      tide
                      popup
-                     quack
                      magit
                      volatile-highlights
                      key-chord
@@ -566,17 +564,11 @@
     (when (kelly?)
       (remove-hook 'elpy-modules 'elpy-module-flymake))))
 
-(require 'racket-mode)
-(define-key racket-mode-map (kbd "C-c r") 'racket-run)
-(define-key racket-mode-map (kbd "C-c C-d") 'racket-describe)
-
 (require 'geiser)
-(setq geiser-active-implementations '(guile)
-      geiser-guile-load-init-file-p t
-      geiser-mode-start-repl-p t)
+(setq geiser-active-implementations '(racket))
 
 (require 'lua-mode)
-(setq lua-default-application "lua5.3")
+
 (require 'dumb-jump)
 (define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
 (define-key lua-mode-map (kbd "M-,") 'dumb-jump-back)
