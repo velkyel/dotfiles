@@ -83,7 +83,6 @@
                      slime-company
                      cff
                      bbdb
-                     tide
                      popup
                      magit
                      volatile-highlights
@@ -363,7 +362,8 @@
 (setq quelpa-update-melpa-p nil)
 
 (quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
-(require 'hlsl-mode)
+(autoload 'hlsl-mode "hlsl-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
 
 (quelpa '(vc-darcs :fetcher github :repo "velkyel/vc-darcs"))
 (setq vc-disable-async-diff nil)                ;; hotfix
@@ -372,9 +372,7 @@
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
 (quelpa '(wren-mode :fetcher github :repo "4d47/wren-mode.el"))
-(require 'wren-mode)
 
-(require 'magit)
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
@@ -564,7 +562,7 @@
     (when (kelly?)
       (remove-hook 'elpy-modules 'elpy-module-flymake))))
 
-(require 'geiser)
+;; (require 'geiser)
 (setq geiser-active-implementations '(racket))
 
 (require 'lua-mode)
@@ -583,20 +581,6 @@
       slime-repl-history-trim-whitespaces t
       slime-enable-evaluate-in-emacs t
       slime-auto-start 'always)
-
-(require 'tide)
-(with-eval-after-load 'tide
-  (define-key tide-mode-map (kbd "C-.") 'imenu))
-
-(add-hook 'typescript-mode-hook
-          (lambda ()
-            (tide-setup)
-            (flycheck-mode 1)
-            (setq typescript-indent-level 2
-                  flycheck-check-syntax-automatically '(save mode-enabled)
-                  company-tooltip-align-annotations t)
-            (eldoc-mode 1)
-            (company-mode-on)))
 
 (setq compile-command (cond ((kelly?) "make -k -j 8")
                             ((equal system-type 'windows-nt) "scons")
