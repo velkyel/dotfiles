@@ -406,6 +406,7 @@
 (global-set-key (kbd "C-c r") 'vr/replace)
 
 (diminish 'eldoc-mode)
+(setq eldoc-idle-delay 0.2)
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
 (add-hook 'ielm-mode-hook 'eldoc-mode)
