@@ -372,8 +372,6 @@
 
 ;; (desktop-save-mode 1)
 
-(setq quelpa-update-melpa-p nil)
-
 (quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
 (autoload 'hlsl-mode "hlsl-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
