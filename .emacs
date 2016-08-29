@@ -150,7 +150,7 @@
 
 ;; (setq compilation-skip-threshold 2)
 
-(setq-default major-mode 'indented-text-mode)    ;; instead fundamental-mode
+(setq-default major-mode 'text-mode)    ;; instead fundamental-mode
 
 (delete-selection-mode t)
 (setq show-paren-delay 0)   ;; must be set before mode activating
@@ -372,6 +372,8 @@
 
 ;; (desktop-save-mode 1)
 
+(setq quelpa-update-melpa-p nil)
+
 (quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
 (autoload 'hlsl-mode "hlsl-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
@@ -510,15 +512,26 @@
       (rtags-imenu)
     (helm-semantic-or-imenu nil)))
 
-(defun my-prog-mode-hook ()
+(defun my-non-special-modes-setup ()
+  (setq indicate-empty-lines t)
+  (whitespace-mode)
+  (goto-address-mode))
+
+(defun my-prog-modes-hook ()
+  (my-non-special-modes-setup)
+  (make-local-variable 'comment-auto-fill-only-comments)
+  (setq comment-auto-fill-only-comments t)
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (company-mode)
-  (whitespace-mode)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
   (define-key prog-mode-map (kbd "C-.") 'my-imenu))
 
-(add-hook 'prog-mode-hook 'my-prog-mode-hook)
+(add-hook 'text-mode-hook 'auto-fill-mode)
+(add-hook 'text-mode-hook 'my-non-special-modes-setup)
+(add-hook 'diff-mode-hook 'my-non-special-modes-setup)
+
+(add-hook 'prog-mode-hook 'my-prog-modes-hook)
 
 (require 'etags)
 (defun push-tag-mark () (xref-push-marker-stack))
@@ -624,7 +637,7 @@
                               (call-interactively (if (get-buffer "*compilation*")
                                                       'recompile
                                                     'compile))))
-;; (global-set-key (kbd "M-o") 'other-window)
+(global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
 
 (setq message-send-mail-function 'smtpmail-send-it
