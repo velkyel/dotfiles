@@ -353,6 +353,9 @@
 
 (define-key dired-mode-map (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
+(put 'dired-find-alternate-file 'disabled nil)
+(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+
 (if (< emacs-major-version 25)
     (toggle-save-place-globally)
   (save-place-mode 1))
