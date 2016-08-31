@@ -661,8 +661,7 @@
                                   (nnimap-stream ssl)
                                   (nnir-search-engine imap)
                                   ;; press E to expire mail
-                                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash")
-                                  (nnmail-expiry-wait 7))
+                                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
       gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
       gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
       gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
@@ -685,10 +684,14 @@
       gnus-read-active-file 'some
       gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
       mm-discouraged-alternatives '("text/html" "text/richtext")
-      ;; gnus-parameters
-      ;; '((".*"
-      ;;    (display . all)))
-      )
+      gnus-parameters
+      '((".*"
+         (display . all))))
+
+(setq nnmail-expiry-wait-function
+      (lambda (group)
+        (cond ((string= group "nnimap+fastmail:INBOX") 'immediate)
+              (t 'never))))
 
 ;; (defun fastmail-archive ()
 ;;   (interactive)
