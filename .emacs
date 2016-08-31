@@ -690,7 +690,7 @@
 
 (setq nnmail-expiry-wait-function
       (lambda (group)
-        (cond ((string= group "nnimap+fastmail:INBOX") 'immediate)
+        (cond ((string= group "INBOX") 'immediate)
               (t 'never))))
 
 ;; (defun fastmail-archive ()
