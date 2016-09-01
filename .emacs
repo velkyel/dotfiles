@@ -637,7 +637,7 @@
                               (call-interactively (if (get-buffer "*compilation*")
                                                       'recompile
                                                     'compile))))
-(global-set-key (kbd "M-o") 'other-window)
+;; (global-set-key (kbd "M-o") 'other-window)
 (global-set-key (kbd "C-c C-g") 'goto-line)
 
 (setq message-send-mail-function 'smtpmail-send-it
