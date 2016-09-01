@@ -671,6 +671,7 @@
       gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
       gnus-gcc-mark-as-read t
       gnus-use-cache t
+      gnus-cacheable-groups "^nnimap"
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
       gnus-sum-thread-tree-leaf-with-other "├► "
