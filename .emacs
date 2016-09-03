@@ -151,7 +151,7 @@
 
 ;; (setq compilation-skip-threshold 2)
 
-(setq-default major-mode 'text-mode)    ;; instead fundamental-mode
+;; (setq-default major-mode 'text-mode)    ;; instead fundamental-mode
 
 (delete-selection-mode t)
 (setq show-paren-delay 0)   ;; must be set before mode activating
@@ -725,6 +725,7 @@
 
 (add-hook 'message-mode-hook
           '(lambda ()
+             (my-non-special-modes-setup)
              (flyspell-mode t)
              (local-set-key (kbd "<tab>") 'bbdb-complete-mail)))
 
