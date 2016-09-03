@@ -89,6 +89,7 @@
                      key-chord
                      dumb-jump
                      shackle
+                     x-path-walker
                      ))
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
@@ -317,6 +318,10 @@
       shackle-default-size 0.4
       shackle-inhibit-window-quit-on-same-windows t)
 (shackle-mode)
+
+(require 'x-path-walker)
+(with-eval-after-load 'json-mode
+  (define-key json-mode-map (kbd "C-.") 'helm-x-path-walker))
 
 (require 'super-save)
 (super-save-mode 1)
