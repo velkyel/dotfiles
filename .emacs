@@ -775,6 +775,10 @@
                     nil
                     :background "#eeb0b0")
 
+(set-face-attribute 'popup-face
+                    nil
+                    :background "#dddd30")
+
 (require 'highlight-indentation)
 (set-face-attribute 'highlight-indentation-face     ;; elpy
                     nil
