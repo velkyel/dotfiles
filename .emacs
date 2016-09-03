@@ -505,6 +505,12 @@
 
 (require 'company)
 
+(require 'dumb-jump)
+
+(with-eval-after-load 'lua-mode
+  (define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
+  (define-key lua-mode-map (kbd "M-,") 'dumb-jump-back))
+
 (require 'rtags)
 (require 'popup)
 
@@ -560,7 +566,12 @@
 
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
-  (define-key c-mode-base-map (kbd "M-.") 'rtags-find-symbol-at-point)
+  (define-key c-mode-base-map (kbd "M-.")
+    (lambda ()
+      (interactive)
+      (if (rtags-is-indexed)
+          (rtags-find-symbol-at-point)
+        (dumb-jump-go))))
   (define-key c-mode-base-map (kbd "M-,")
     (lambda ()
       (interactive)
@@ -594,12 +605,6 @@
 
 ;; (require 'geiser)
 (setq geiser-active-implementations '(racket))
-
-(require 'lua-mode)
-
-(require 'dumb-jump)
-(define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
-(define-key lua-mode-map (kbd "M-,") 'dumb-jump-back)
 
 (setq inferior-lisp-program (executable-find "sbcl"))
 (slime-setup '(slime-fancy
