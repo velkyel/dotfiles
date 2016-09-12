@@ -739,6 +739,10 @@
                     nil
                     :background "gray85")   ;; terminal
 
+(set-face-attribute 'avy-background-face
+                    nil
+                    :foreground "gray60")
+
 (set-face-attribute 'helm-source-header
                     nil
                     :height 0.9)
