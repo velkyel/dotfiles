@@ -342,6 +342,7 @@
     (switch-to-buffer-other-window "*shell*")))
 (global-set-key (kbd "C-c t") 'visit-term-buffer)
 
+(require 'avy)
 (setq avy-background t)
 (global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
 (define-key isearch-mode-map (kbd "C-;") 'avy-isearch)
@@ -741,7 +742,7 @@
 
 (set-face-attribute 'avy-background-face
                     nil
-                    :foreground "gray60")
+                    :foreground "gray50")
 
 (set-face-attribute 'helm-source-header
                     nil
