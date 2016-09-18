@@ -245,6 +245,7 @@
 (diminish 'helm-mode)
 
 (setq helm-candidate-number-limit 50)
+(setq helm-buffer-max-length 32)
 (helm-push-mark-mode 1)
 
 (advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
