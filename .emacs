@@ -90,6 +90,7 @@
                      dumb-jump
                      shackle
                      x-path-walker
+                     back-button
                      ))
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
@@ -184,6 +185,10 @@
 (volatile-highlights-mode t)
 (vhl/ext/etags/off)
 (diminish 'volatile-highlights-mode)
+
+(require 'back-button)
+(back-button-mode 1)
+(diminish 'back-button-mode)
 
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
