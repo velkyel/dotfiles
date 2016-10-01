@@ -750,6 +750,14 @@
                     nil
                     :foreground "gray50")
 
+(set-face-attribute 'helm-selection
+                    nil
+                    :background "#a5e8be")
+
+(set-face-attribute 'helm-visible-mark
+                    nil
+                    :background "#f1c40f")
+
 (set-face-attribute 'helm-source-header
                     nil
                     :height 0.9)
