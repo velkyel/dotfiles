@@ -417,6 +417,7 @@
                                 (crux-kill-whole-line))))
 
 (global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
+(global-set-key (kbd "C-c d") 'crux-duplicate-current-line-or-region)
 
 (with-eval-after-load 'whitespace
   (diminish 'whitespace-mode))
