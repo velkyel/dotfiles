@@ -111,6 +111,7 @@
       compilation-always-kill t
       compilation-scroll-output 'first-error
       next-line-add-newlines nil
+      ring-bell-function 'ignore
       load-prefer-newer t
       require-final-newline t
       column-number-mode t
@@ -228,7 +229,6 @@
   (set-frame-font "mononoki-16"))
 
 (when (equal system-type 'windows-nt)
-  (setq ring-bell-function 'ignore)
   (set-frame-font "mononoki-11"))
 
 (when (and window-system (equal system-type 'gnu/linux))
