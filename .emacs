@@ -92,6 +92,7 @@
                      x-path-walker
                      back-button
                      annotate
+                     jump-char
                      ))
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
@@ -359,6 +360,10 @@
 (key-chord-define-global "jl" 'avy-goto-line)
 (key-chord-define-global "jk" 'avy-goto-char)
 (key-chord-mode +1)
+
+(require 'jump-char)
+(global-set-key (kbd "M-m") #'jump-char-forward)
+(global-set-key (kbd "M-M") #'jump-char-backward)
 
 (define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
