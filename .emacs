@@ -58,8 +58,6 @@
                      clojure-mode
                      cider
                      pixie-mode
-                     browse-kill-ring
-                     easy-kill
                      whitespace
                      shrink-whitespace
                      expand-region
@@ -413,11 +411,11 @@
 
 (add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
 
-(global-set-key [remap yank-pop] 'browse-kill-ring)   ;; remap yank-pop
-(setq browse-kill-ring-replace-yank t)
-
-(global-set-key [remap kill-ring-save] 'easy-kill)
-(global-set-key [remap mark-sexp] 'easy-mark)
+(global-set-key (kbd "C-w") (lambda ()
+                              (interactive)
+                              (if mark-active
+                                  (kill-region (point) (mark))
+                                (crux-kill-whole-line))))
 
 (with-eval-after-load 'whitespace
   (diminish 'whitespace-mode))
@@ -656,6 +654,7 @@
 (define-key function-key-map "\e[." (kbd "C-."))
 
 (global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "S-RET") 'crux-smart-open-line)
 (global-set-key (kbd "M-r") (lambda ()
                               (interactive)
                               (call-interactively (if (get-buffer "*compilation*")
