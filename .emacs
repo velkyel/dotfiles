@@ -67,7 +67,6 @@
                      smart-mode-line
                      smart-mark
                      google-translate
-                     mwim
                      glsl-mode
                      clang-format
                      highlight-symbol
@@ -417,6 +416,8 @@
                                   (kill-region (point) (mark))
                                 (crux-kill-whole-line))))
 
+(global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
+
 (with-eval-after-load 'whitespace
   (diminish 'whitespace-mode))
 
@@ -449,9 +450,6 @@
 ;; (setq sml/theme 'respectful)
 
 (smart-mark-mode)
-
-(global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
-;; "C-e" . mwim-end-of-code-or-line
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.mm$" . objc-mode))
