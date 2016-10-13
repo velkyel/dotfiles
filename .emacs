@@ -93,6 +93,7 @@
                      back-button
                      annotate
                      jump-char
+                     crux
                      ))
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
@@ -180,6 +181,14 @@
     (set-keyboard-coding-system 'utf-8)))
 
 (defalias 'yes-or-no-p 'y-or-n-p)
+
+(require 'crux)
+
+(setenv "PAGER" (executable-find "cat"))
+(global-set-key (kbd "C-c t")
+                (lambda ()
+                  (interactive)
+                  (crux-start-or-switch-to 'shell "*shell*")))
 
 (require 'diminish)
 
@@ -337,18 +346,6 @@
 
 (global-anzu-mode 1)
 (diminish 'anzu-mode)
-
-(setenv "PAGER" (executable-find "cat"))
-(defun visit-term-buffer ()
-  "Create or visit a terminal buffer."
-  (interactive)
-  (if (not (get-buffer "*shell*"))
-      (progn
-        (split-window-sensibly (selected-window))
-        (other-window 1)
-        (shell))
-    (switch-to-buffer-other-window "*shell*")))
-(global-set-key (kbd "C-c t") 'visit-term-buffer)
 
 (require 'avy)
 (setq avy-background t)
