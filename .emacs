@@ -36,7 +36,6 @@
                      json-mode
                      lua-mode
                      haskell-mode
-                     nim-mode
                      processing-mode
                      restart-emacs
                      diffview
@@ -57,7 +56,6 @@
                      ninja-mode
                      clojure-mode
                      cider
-                     pixie-mode
                      whitespace
                      shrink-whitespace
                      expand-region
@@ -396,8 +394,6 @@
 (autoload 'vc-darcs-find-file-hook "vc-darcs")
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
-(quelpa '(wren-mode :fetcher github :repo "4d47/wren-mode.el"))
-
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
@@ -407,8 +403,6 @@
     (lambda ()
       (interactive)
       (godef-jump (point) current-prefix-arg)))) ;; go get github.com/rogpeppe/godef
-
-(add-hook 'pixie-mode-hook #'inf-clojure-minor-mode)
 
 (global-set-key (kbd "C-w") (lambda ()
                               (interactive)
