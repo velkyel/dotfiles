@@ -89,6 +89,7 @@
                      annotate
                      jump-char
                      crux
+                     nyan-mode
                      ))
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
@@ -443,6 +444,7 @@
 (setq sml/no-confirm-load-theme t)
 (sml/setup)
 ;; (setq sml/theme 'respectful)
+(nyan-mode)
 
 (smart-mark-mode)
 
