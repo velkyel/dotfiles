@@ -436,7 +436,7 @@
 (setq sml/no-confirm-load-theme t)
 (sml/setup)
 ;; (setq sml/theme 'respectful)
-(nyan-mode)
+(when window-system (nyan-mode))
 
 (smart-mark-mode)
 
