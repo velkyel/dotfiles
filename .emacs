@@ -85,7 +85,6 @@
                      shackle
                      x-path-walker
                      back-button
-                     annotate
                      jump-char
                      crux
                      nyan-mode
@@ -512,9 +511,6 @@
 (add-to-list 'company-backends 'company-rtags)
 (setq rtags-use-helm t)
 
-(require 'annotate)
-(diminish 'annotate-mode)
-
 (defun my-imenu ()
   (interactive)
   (if (rtags-is-indexed)
@@ -533,7 +529,6 @@
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (company-mode)
-  (annotate-mode)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
   (define-key prog-mode-map (kbd "C-.") 'my-imenu))
 
