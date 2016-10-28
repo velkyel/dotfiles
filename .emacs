@@ -234,6 +234,7 @@
 ;; (setq x-alt-keysym 'meta)
 
 (require 'smooth-scrolling)
+(smooth-scrolling-mode 1)
 
 (require 'unkillable-scratch)
 (unkillable-scratch 1)
