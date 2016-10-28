@@ -268,6 +268,7 @@
 
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-z") 'helm-select-action)
 
 (global-set-key [remap list-buffers] 'helm-buffers-list)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -405,6 +406,11 @@
 
 (global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
 (global-set-key (kbd "C-c d") 'crux-duplicate-current-line-or-region)
+
+(autoload 'zap-up-to-char "misc")
+(global-set-key (kbd "M-z") 'zap-up-to-char)
+
+(global-set-key (kbd "M-/") 'hippie-expand)
 
 (with-eval-after-load 'whitespace
   (diminish 'whitespace-mode))
