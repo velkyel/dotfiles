@@ -410,8 +410,6 @@
 (autoload 'zap-up-to-char "misc")
 (global-set-key (kbd "M-z") 'zap-up-to-char)
 
-(global-set-key (kbd "M-/") 'hippie-expand)
-
 (with-eval-after-load 'whitespace
   (diminish 'whitespace-mode))
 
