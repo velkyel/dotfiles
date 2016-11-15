@@ -533,6 +533,7 @@
   (setq comment-auto-fill-only-comments t)
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
+  (goto-address-prog-mode)
   (company-mode)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
   (define-key prog-mode-map (kbd "C-.") 'my-imenu))
