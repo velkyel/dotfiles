@@ -55,7 +55,7 @@
                      quelpa
                      ninja-mode
                      clojure-mode
-                     cider
+                     inf-clojure
                      whitespace
                      shrink-whitespace
                      expand-region
@@ -72,7 +72,6 @@
                      elpy
                      smooth-scrolling
                      unkillable-scratch
-                     geiser
                      slime
                      slime-company
                      cff
@@ -88,15 +87,12 @@
                      jump-char
                      crux
                      nyan-mode
+                     io-mode
                      ))
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
     (add-to-list 'load-path "~/.local/share/emacs/site-lisp/rtags")
   (add-to-list 'package-list 'rtags))
-
-(setq package-pinned-packages
-      '((cider . "melpa-stable")
-        (clojure-mode . "melpa-stable")))
 
 (unless package-archive-contents
   (package-refresh-contents))
@@ -584,14 +580,10 @@
   (define-key c-mode-base-map (kbd "C-.") 'my-imenu)
   (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file))
 
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-;; (setq cider-auto-mode nil)
-;; (setq nrepl-log-messages nil)
-;; (setq nrepl-hide-special-buffers t)
-(setq cider-repl-use-pretty-printing t)
-(setq cider-prompt-save-file-on-load nil)
-(add-hook 'cider-mode-hook 'eldoc-mode)
-(add-hook 'clojure-mode-hook 'cider-mode)
+(setq inf-clojure-program '("localhost" 9999))   ;; "planck"
+(add-hook 'clojure-mode-hook #'eldoc-mode)
+(add-hook 'inf-clojure-mode-hook #'eldoc-mode)
+(add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
 
 (with-eval-after-load 'python
   (progn
