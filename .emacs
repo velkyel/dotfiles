@@ -770,7 +770,7 @@
 
 (set-face-attribute 'rtags-skippedline
                     nil
-                    :background "gray80")
+                    :background "gray70")
 
 (set-face-attribute 'rtags-warnline
                     nil
