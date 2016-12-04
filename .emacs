@@ -88,6 +88,7 @@
                      crux
                      nyan-mode
                      io-mode
+                     auto-package-update
                      ))
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
@@ -784,6 +785,9 @@
 (set-face-attribute 'highlight-indentation-face     ;; elpy
                     nil
                     :background "gray90")
+
+(require 'auto-package-update)
+(auto-package-update-maybe)
 
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (when (file-exists-p custom-file)
