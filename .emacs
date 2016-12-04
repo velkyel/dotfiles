@@ -381,10 +381,6 @@
 
 (setq quelpa-update-melpa-p nil)
 
-(quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
-(autoload 'hlsl-mode "hlsl-mode" nil t)
-(add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
-
 (quelpa '(vc-darcs :fetcher github :repo "velkyel/vc-darcs"))
 (setq vc-disable-async-diff nil)                ;; hotfix
 (add-to-list 'vc-handled-backends 'DARCS t)
