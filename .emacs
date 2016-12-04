@@ -343,12 +343,13 @@
 (require 'avy)
 (setq avy-background t)
 (global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
+(global-set-key (kbd "M-m") 'avy-goto-char-timer)
 (define-key isearch-mode-map (kbd "C-;") 'avy-isearch)
 
 (require 'key-chord)
-(key-chord-define-global "jj" 'avy-goto-word-1)
+(key-chord-define-global "jj" 'avy-goto-word-or-subword-1)
 (key-chord-define-global "jl" 'avy-goto-line)
-(key-chord-define-global "jk" 'avy-goto-char)
+(key-chord-define-global "jk" 'avy-goto-char-timer)
 (key-chord-mode +1)
 
 (require 'jump-char)
