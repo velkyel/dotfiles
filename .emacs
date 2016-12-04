@@ -577,10 +577,10 @@
   (define-key c-mode-base-map (kbd "C-.") 'my-imenu)
   (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file))
 
-(setq inf-clojure-program '("localhost" 9999))   ;; "planck"
-(add-hook 'clojure-mode-hook #'eldoc-mode)
-(add-hook 'inf-clojure-mode-hook #'eldoc-mode)
-(add-hook 'clojure-mode-hook #'inf-clojure-minor-mode)
+(setq inf-clojure-program '("localhost" . 9999))   ;; "planck"
+(add-hook 'clojure-mode-hook 'inf-clojure-minor-mode)
+(add-hook 'clojure-mode-hook 'eldoc-mode)
+(add-hook 'inf-clojure-mode-hook 'eldoc-mode)
 
 (with-eval-after-load 'python
   (progn
