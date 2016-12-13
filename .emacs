@@ -88,6 +88,7 @@
                      crux
                      nyan-mode
                      io-mode
+                     web-mode
                      auto-package-update
                      ))
 
@@ -332,6 +333,9 @@
 (require 'x-path-walker)
 (with-eval-after-load 'json-mode
   (define-key json-mode-map (kbd "C-.") 'helm-x-path-walker))
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 (require 'super-save)
 (super-save-mode 1)
