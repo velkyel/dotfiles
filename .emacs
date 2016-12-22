@@ -26,7 +26,7 @@
       (tool-bar-mode -1)
       (tooltip-mode -1)
       (scroll-bar-mode -1)
-      (fringe-mode 2)))
+      (fringe-mode '(6 . 0))))
 
 (setq inhibit-startup-message t
       initial-scratch-message nil)
