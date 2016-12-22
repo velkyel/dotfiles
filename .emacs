@@ -397,6 +397,18 @@
 (autoload 'js2-mode "js2-mode" nil t)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
+(quelpa '(inf-js :fetcher github :repo "velkyel/inf-js"))
+(autoload 'inf-js "inf-js" "Run an inferior js process" t)
+(autoload 'inf-js-minor-mode "inf-js")
+(setq inf-js-program '("localhost" . 5555))
+(add-hook 'js2-mode-hook 'inf-js-minor-mode)
+
+(quelpa '(inf-femtolisp :fetcher github :repo "velkyel/inf-femtolisp")
+(autoload 'inf-femtolisp "inf-femtolisp" "Run an inferior Femtolisp process" t)
+(autoload 'inf-femtolisp-minor-mode "inf-femtolisp")
+(setq inf-femtolisp-program '("localhost" . 5555))
+(add-hook 'scheme-mode-hook 'inf-femtolisp-minor-mode)
+
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
