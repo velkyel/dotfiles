@@ -89,6 +89,7 @@
                      nyan-mode
                      io-mode
                      web-mode
+                     js2-mode
                      auto-package-update
                      ))
 
@@ -392,6 +393,9 @@
 (add-to-list 'vc-handled-backends 'DARCS t)
 (autoload 'vc-darcs-find-file-hook "vc-darcs")
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
+
+(autoload 'js2-mode "js2-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
