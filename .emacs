@@ -403,7 +403,7 @@
 (setq inf-js-program '("localhost" . 5555))
 (add-hook 'js2-mode-hook 'inf-js-minor-mode)
 
-(quelpa '(inf-femtolisp :fetcher github :repo "velkyel/inf-femtolisp")
+(quelpa '(inf-femtolisp :fetcher github :repo "velkyel/inf-femtolisp"))
 (autoload 'inf-femtolisp "inf-femtolisp" "Run an inferior Femtolisp process" t)
 (autoload 'inf-femtolisp-minor-mode "inf-femtolisp")
 (setq inf-femtolisp-program '("localhost" . 5555))
