@@ -9,10 +9,12 @@ main = xmonad $ defaultConfig {
   terminal = "urxvtc",
   borderWidth = 4,
   focusFollowsMouse = False,
-  manageHook = composeOne [ isFullscreen -?> doFullFloat ],
+  manageHook = composeOne
+               [ className =? "bgfx" -?> doFloat
+               , isFullscreen -?> doFullFloat ],
   startupHook = setWMName "LG3D"
   }
-       `removeKeysP`
+  `removeKeysP`
        [ "M-k", "M-n", "M-m", "M-w", "M-q", "M-e", "M-r",
          "M-S-/", "M-S-w", "M-S-w", "M-S-e", "M-S-j", "M-S-k",
          "M-q",     -- restart (xmonad --recompile && xmonad --restart)
