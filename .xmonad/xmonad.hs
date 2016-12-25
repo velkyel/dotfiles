@@ -10,7 +10,7 @@ main = xmonad $ defaultConfig {
   borderWidth = 4,
   focusFollowsMouse = False,
   manageHook = composeOne
-               [ className =? "bgfx" -?> doFloat
+               [ className =? "BGFX" -?> doFloat
                , isFullscreen -?> doFullFloat ],
   startupHook = setWMName "LG3D"
   }
