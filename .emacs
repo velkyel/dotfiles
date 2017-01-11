@@ -529,6 +529,7 @@
 (require 'popup)
 
 (add-to-list 'company-backends 'company-rtags)
+(require 'rtags-helm)
 (setq rtags-use-helm t)
 
 (defun my-imenu ()
