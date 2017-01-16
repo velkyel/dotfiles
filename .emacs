@@ -480,7 +480,8 @@
                                  " ContinuationIndentWidth: 2,"
                                  " PointerAlignment: Left,"
                                  " DerivePointerAlignment: false,"
-                                 " Standard: Cpp11}"))
+                                 " Standard: Cpp11,"
+                                 " SortIncludes: false}"))
 
 (setq clang-format-executable
       (if (executable-find "clang-format") "clang-format"
