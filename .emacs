@@ -337,6 +337,8 @@
 
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(when (kelly?)
+  (add-to-list 'auto-mode-alist '("\\.tem?\\'" . web-mode)))
 
 (require 'super-save)
 (super-save-mode 1)
