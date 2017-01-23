@@ -42,7 +42,6 @@
                      ag
                      helm
                      helm-ag
-                     helm-descbinds
                      helm-swoop
                      projectile
                      helm-projectile
@@ -75,7 +74,6 @@
                      slime
                      slime-company
                      cff
-                     bbdb
                      popup
                      magit
                      volatile-highlights
@@ -86,8 +84,6 @@
                      back-button
                      jump-char
                      crux
-                     nyan-mode
-                     io-mode
                      web-mode
                      js2-mode
                      auto-package-update
@@ -282,8 +278,6 @@
 (setq helm-ag-insert-at-point 'symbol)
 (add-hook 'helm-ag-mode-hook (lambda () (grep-mode)))
 
-(helm-descbinds-mode)
-
 (require 'helm-swoop)
 (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
 (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
@@ -310,6 +304,8 @@
         :buffer "*helm buffers*"
         :keymap helm-buffer-map
         :truncate-lines helm-buffers-truncate-lines))
+
+(require 'helm-ag)
 
 (global-set-key (kbd "M-g") (lambda ()
                               (interactive)
@@ -457,8 +453,6 @@
 (setq sml/no-confirm-load-theme t)
 (sml/setup)
 ;; (setq sml/theme 'respectful)
-(when window-system (nyan-mode))
-
 (smart-mark-mode)
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -735,20 +729,10 @@
 ;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 ;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
 
-(require 'bbdb)
-
-(setq bbdb-file "~/.bbdb"
-      bbdb-complete-mail-allow-cycling t)
-
-(bbdb-initialize 'message 'gnus)
-
-(add-hook 'gnus-startup-hook 'bbdb-insinuate-gnus)
-
 (add-hook 'message-mode-hook
           '(lambda ()
              (my-non-special-modes-setup)
-             (flyspell-mode t)
-             (local-set-key (kbd "<tab>") 'bbdb-complete-mail)))
+             (flyspell-mode t)))
 
 (set-background-color "gray85")
 (set-face-attribute 'default
