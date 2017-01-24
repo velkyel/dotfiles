@@ -39,9 +39,7 @@
                      processing-mode
                      restart-emacs
                      diffview
-                     ag
                      helm
-                     helm-ag
                      helm-swoop
                      projectile
                      helm-projectile
@@ -274,9 +272,7 @@
 (global-set-key (kbd "C-c h") 'helm-command-prefix)
 (global-set-key (kbd "C-c <SPC>") 'helm-all-mark-rings)
 
-(setq helm-ag-command-option "--smart-case")
-(setq helm-ag-insert-at-point 'symbol)
-(add-hook 'helm-ag-mode-hook (lambda () (grep-mode)))
+;; (setq helm-ag-command-option "--smart-case")
 
 (require 'helm-swoop)
 (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
@@ -305,15 +301,15 @@
         :keymap helm-buffer-map
         :truncate-lines helm-buffers-truncate-lines))
 
-(require 'helm-ag)
+(require 'helm-grep)
 
 (global-set-key (kbd "M-g") (lambda ()
                               (interactive)
-                              (helm-do-ag (projectile-project-root))))
+                              (helm-grep-ag (projectile-project-root) nil)))
 
 (global-set-key (kbd "M-G") (lambda ()
                               (interactive)
-                              (helm-do-ag (helm-current-directory))))
+                              (helm-grep-ag (helm-current-directory) nil)))
 
 (global-set-key (kbd "C-c C-f") 'helm-projectile-find-file)
 (global-set-key (kbd "C-x b") 'my-helm-projectile-buffers-list)
