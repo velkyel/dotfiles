@@ -80,10 +80,11 @@
                      shackle
                      x-path-walker
                      back-button
-                     jump-char
+                     ;; jump-char
                      crux
                      web-mode
                      js2-mode
+                     mu4e-alert
                      auto-package-update
                      ))
 
@@ -351,9 +352,9 @@
 (key-chord-define-global "jk" 'avy-goto-char-timer)
 (key-chord-mode +1)
 
-(require 'jump-char)
-(global-set-key (kbd "M-m") #'jump-char-forward)
-(global-set-key (kbd "M-M") #'jump-char-backward)
+;; (require 'jump-char)
+;; (global-set-key (kbd "M-m") #'jump-char-forward)
+;; (global-set-key (kbd "M-M") #'jump-char-backward)
 
 (define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
@@ -446,9 +447,10 @@
   (setq highlight-symbol-idle-delay 0.5)
   (set-face-background 'highlight-symbol-face "gray78"))
 
-(setq sml/no-confirm-load-theme t)
-(sml/setup)
+;; (setq sml/no-confirm-load-theme t)
+;; (sml/setup)
 ;; (setq sml/theme 'respectful)
+
 (smart-mark-mode)
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -666,69 +668,47 @@
       smtpmail-smtp-server "mail.messagingengine.com"
       smtpmail-smtp-service 587)
 
-(require 'nnir)
-(require 'gnus)
+(when (not (kelly?))
+  (progn
+    (when (equal system-type 'gnu/linux)
+      (setq mu4e-mu-binary "/usr/bin/mu")
+      (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
+    (when (equal system-type 'darwin)
+      (setq mu4e-mu-binary "/usr/local/bin/mu")
+      (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
+    (require 'mu4e)
+    (setq mu4e-maildir (expand-file-name "~/Maildir")
+          mu4e-drafts-folder "/INBOX.Drafts"
+          mu4e-sent-folder "/INBOX.Sent"
+          mu4e-trash-folder "/INBOX.Trash"
+          ;; mu4e-sent-messages-behavior 'delete
+          mu4e-maildir-shortcuts '(("/INBOX" . ?i)
+                                   ("/INBOX.Drafts" . ?d)
+                                   ("/INBOX.Sent" . ?s)
+                                   ("/INBOX.Archive" . ?a)
+                                   ("/INBOX.Trash" . ?t))
+          ;;mu4e-book
+          mu4e-get-mail-command "offlineimap -q"
+          mu4e-update-interval 600
+          mu4e-view-show-images t
+          ;; mu4e-html2text-command "w3m -T text/html"
+          mu4e-headers-skip-duplicates t
+          message-signature nil
+          mu4e-confirm-quit nil
+          mu4e-hide-index-messages t
+          mu4e-view-show-addresses t
+          mu4e-date-format-long "%d.%m.%Y"
+          mu4e-headers-date-format "%d.%m.%y"
+          message-kill-buffer-on-exit t)
+    (require 'mu4e-alert)
+    (setq mu4e-alert-interesting-mail-query
+          (concat "flag:unread"
+                  " AND NOT flag:trashed"
+                  " AND NOT maildir:/INBOX.Trash"
+                  " AND NOT maildir:/INBOX.Spam"))
+    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)))
 
-(global-set-key (kbd "C-c m") 'gnus)
-
-(setq gnus-select-method '(nnimap "fastmail"
-                                  (nnimap-address "mail.messagingengine.com")
-                                  (nnimap-server-port 993)
-                                  (nnimap-stream ssl)
-                                  (nnir-search-engine imap)
-                                  ;; press E to expire mail
-                                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
-      gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
-      gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
-      gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
-      gnus-thread-sort-functions
-      '((not gnus-thread-sort-by-date)
-        (not gnus-thread-sort-by-number))
-      gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
-      gnus-gcc-mark-as-read t
-      gnus-use-cache t
-      gnus-cacheable-groups "^nnimap"
-      gnus-sum-thread-tree-false-root ""
-      gnus-sum-thread-tree-indent " "
-      gnus-sum-thread-tree-leaf-with-other "├► "
-      gnus-sum-thread-tree-root ""
-      gnus-sum-thread-tree-single-leaf "╰► "
-      gnus-sum-thread-tree-vertical "│"
-      gnus-interactive-exit nil
-      message-kill-buffer-on-exit t
-      gnus-large-newsgroup nil
-      epa-file-cache-passphrase-for-symmetric-encryption t
-      gnus-read-active-file 'some
-      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
-      mm-discouraged-alternatives '("text/html" "text/richtext")
-      gnus-parameters
-      '((".*"
-         (display . all))))
-
-(setq nnmail-expiry-wait-function
-      (lambda (group)
-        (cond ((string= group "INBOX") 'immediate)
-              (t 'never))))
-
-;; (defun fastmail-archive ()
-;;   (interactive)
-;;   (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
-
-(defun fastmail-report-spam ()
-  (interactive)
-  (guns-summary-move-article nil "nnimap+fastmail:INBOX.Spam"))
-
-(defun my-gnus-summary-keys ()
-  ;; (local-set-key "y" 'fastmail-archive)
-  (local-set-key "$" 'fastmail-report-spam))
-
-;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
-
-(add-hook 'message-mode-hook
-          '(lambda ()
-             (my-non-special-modes-setup)
-             (flyspell-mode t)))
+(global-set-key (kbd "C-c m") 'mu4e)
 
 (set-background-color "gray85")
 (set-face-attribute 'default
