@@ -304,6 +304,9 @@
 
 (require 'helm-grep)
 
+(when (equal system-type 'windows-nt)
+  (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s"))
+
 (global-set-key (kbd "M-g") (lambda ()
                               (interactive)
                               (helm-grep-ag (projectile-project-root) nil)))
@@ -668,7 +671,7 @@
       smtpmail-smtp-server "mail.messagingengine.com"
       smtpmail-smtp-service 587)
 
-(when (not (kelly?))
+(when (not (or (kelly?) (equal system-type 'windows-nt)))
   (progn
     (when (equal system-type 'gnu/linux)
       (setq mu4e-mu-binary "/usr/bin/mu")
