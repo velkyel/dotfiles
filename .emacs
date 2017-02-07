@@ -703,6 +703,9 @@
           mu4e-date-format-long "%d.%m.%Y"
           mu4e-headers-date-format "%d.%m.%y"
           message-kill-buffer-on-exit t)
+    (fset 'my-move-to-trash "mt")
+    (define-key mu4e-headers-mode-map (kbd "d") 'my-move-to-trash)
+    (define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
     (require 'mu4e-alert)
     (setq mu4e-alert-interesting-mail-query
           (concat "flag:unread"
