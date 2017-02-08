@@ -706,6 +706,12 @@
   (define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
   (global-set-key (kbd "C-c m") 'mu4e))
 
+(defun what-face (pos) ;; under cursor
+  (interactive "d")
+  (let ((face (or (get-char-property (point) 'read-face-name)
+                  (get-char-property (point) 'face))))
+    (if face (message "Face: %s" face) (message "No face at %d" pos))))
+
 (set-background-color "gray85")
 (set-face-attribute 'default
                     nil
