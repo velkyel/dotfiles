@@ -257,7 +257,7 @@
                       (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
                         (funcall fcn file))))
 
-(add-hook 'helm-grep-mode-hook (lambda () (grep-mode)))
+(add-hook 'helm-grep-mode-hook 'grep-mode)
 
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
