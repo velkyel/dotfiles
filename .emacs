@@ -84,7 +84,6 @@
                      crux
                      web-mode
                      js2-mode
-                     mu4e-alert
                      auto-package-update
                      ))
 
@@ -672,47 +671,39 @@
       smtpmail-smtp-service 587)
 
 (when (not (or (kelly?) (equal system-type 'windows-nt)))
-  (progn
-    (when (equal system-type 'gnu/linux)
-      (setq mu4e-mu-binary "/usr/bin/mu")
-      (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
-    (when (equal system-type 'darwin)
-      (setq mu4e-mu-binary "/usr/local/bin/mu")
-      (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
-    (require 'mu4e)
-    (setq mu4e-maildir (expand-file-name "~/Maildir")
-          mu4e-drafts-folder "/INBOX.Drafts"
-          mu4e-sent-folder "/INBOX.Sent"
-          mu4e-trash-folder "/INBOX.Trash"
-          ;; mu4e-sent-messages-behavior 'delete
-          mu4e-maildir-shortcuts '(("/INBOX" . ?i)
-                                   ("/INBOX.Drafts" . ?d)
-                                   ("/INBOX.Sent" . ?s)
-                                   ("/INBOX.Archive" . ?a)
-                                   ("/INBOX.Trash" . ?t))
-          ;;mu4e-book
-          mu4e-get-mail-command "offlineimap -q"
-          mu4e-update-interval 600
-          mu4e-view-show-images t
-          ;; mu4e-html2text-command "w3m -T text/html"
-          mu4e-headers-skip-duplicates t
-          message-signature nil
-          mu4e-confirm-quit nil
-          mu4e-hide-index-messages t
-          mu4e-view-show-addresses t
-          mu4e-date-format-long "%d.%m.%Y"
-          mu4e-headers-date-format "%d.%m.%y"
-          message-kill-buffer-on-exit t)
-    (fset 'my-move-to-trash "mt")
-    (define-key mu4e-headers-mode-map (kbd "d") 'my-move-to-trash)
-    (define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
-    (require 'mu4e-alert)
-    (setq mu4e-alert-interesting-mail-query
-          (concat "flag:unread"
-                  " AND NOT flag:trashed"
-                  " AND NOT maildir:/INBOX.Trash"
-                  " AND NOT maildir:/INBOX.Spam"))
-    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
+  (when (equal system-type 'gnu/linux)
+    (setq mu4e-mu-binary "/usr/bin/mu")
+    (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
+  (when (equal system-type 'darwin)
+    (setq mu4e-mu-binary "/usr/local/bin/mu")
+    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
+  (require 'mu4e)
+  (setq mu4e-maildir (expand-file-name "~/Maildir")
+        mu4e-drafts-folder "/INBOX.Drafts"
+        mu4e-sent-folder "/INBOX.Sent"
+        mu4e-trash-folder "/INBOX.Trash"
+        ;; mu4e-sent-messages-behavior 'delete
+        mu4e-maildir-shortcuts '(("/INBOX" . ?i)
+                                 ("/INBOX.Drafts" . ?d)
+                                 ("/INBOX.Sent" . ?s)
+                                 ("/INBOX.Archive" . ?a)
+                                 ("/INBOX.Trash" . ?t))
+        ;;mu4e-book
+        mu4e-get-mail-command "offlineimap -q"
+        mu4e-update-interval nil
+        mu4e-view-show-images t
+        ;; mu4e-html2text-command "w3m -T text/html"
+        mu4e-headers-skip-duplicates t
+        message-signature nil
+        mu4e-confirm-quit nil
+        mu4e-hide-index-messages t
+        mu4e-view-show-addresses t
+        mu4e-date-format-long "%d.%m.%Y"
+        mu4e-headers-date-format "%d.%m.%y"
+        message-kill-buffer-on-exit t)
+  (fset 'my-move-to-trash "mt")
+  (define-key mu4e-headers-mode-map (kbd "d") 'my-move-to-trash)
+  (define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
   (global-set-key (kbd "C-c m") 'mu4e))
 
 (set-background-color "gray85")
