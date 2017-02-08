@@ -515,6 +515,8 @@
   (define-key company-active-map (kbd "M-.") 'company-show-location))
 
 (require 'company)
+(when (equal system-type 'windows-nt)
+  (delete 'company-clang company-backends))
 
 (require 'dumb-jump)
 
