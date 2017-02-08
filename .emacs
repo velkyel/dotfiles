@@ -712,9 +712,8 @@
                   " AND NOT flag:trashed"
                   " AND NOT maildir:/INBOX.Trash"
                   " AND NOT maildir:/INBOX.Spam"))
-    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display)))
-
-(global-set-key (kbd "C-c m") 'mu4e)
+    (add-hook 'after-init-hook #'mu4e-alert-enable-mode-line-display))
+  (global-set-key (kbd "C-c m") 'mu4e))
 
 (set-background-color "gray85")
 (set-face-attribute 'default
