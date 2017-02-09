@@ -303,7 +303,8 @@
 
 (require 'helm-grep)
 
-(when (equal system-type 'windows-nt)
+(when (or (equal system-type 'windows-nt)
+          (equal system-type 'darwin))
   (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s"))
 
 (global-set-key (kbd "M-g") (lambda ()
