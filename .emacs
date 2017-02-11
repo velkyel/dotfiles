@@ -402,6 +402,9 @@
 (setq inf-js-program '("localhost" . 5555))
 (add-hook 'js2-mode-hook 'inf-js-minor-mode)
 
+(with-eval-after-load 'js2-mode
+  (set-face-attribute 'js2-external-variable nil :foreground "red"))
+
 (quelpa '(inf-femtolisp :fetcher github :repo "velkyel/inf-femtolisp"))
 (autoload 'inf-femtolisp "inf-femtolisp" "Run an inferior Femtolisp process" t)
 (autoload 'inf-femtolisp-minor-mode "inf-femtolisp")
@@ -673,41 +676,69 @@
       smtpmail-smtp-server "mail.messagingengine.com"
       smtpmail-smtp-service 587)
 
-(when (not (or (kelly?) (equal system-type 'windows-nt)))
-  (when (equal system-type 'gnu/linux)
-    (setq mu4e-mu-binary "/usr/bin/mu")
-    (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e"))
-  (when (equal system-type 'darwin)
-    (setq mu4e-mu-binary "/usr/local/bin/mu")
-    (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e"))
-  (require 'mu4e)
-  (setq mu4e-maildir (expand-file-name "~/Maildir")
-        mu4e-drafts-folder "/INBOX.Drafts"
-        mu4e-sent-folder "/INBOX.Sent"
-        mu4e-trash-folder "/INBOX.Trash"
-        ;; mu4e-sent-messages-behavior 'delete
-        mu4e-maildir-shortcuts '(("/INBOX" . ?i)
-                                 ("/INBOX.Drafts" . ?d)
-                                 ("/INBOX.Sent" . ?s)
-                                 ("/INBOX.Archive" . ?a)
-                                 ("/INBOX.Trash" . ?t))
-        ;;mu4e-book
-        mu4e-get-mail-command "offlineimap -q"
-        mu4e-update-interval nil
-        mu4e-view-show-images t
-        ;; mu4e-html2text-command "w3m -T text/html"
-        mu4e-headers-skip-duplicates t
-        message-signature nil
-        mu4e-confirm-quit nil
-        mu4e-hide-index-messages t
-        mu4e-view-show-addresses t
-        mu4e-date-format-long "%d.%m.%Y"
-        mu4e-headers-date-format "%d.%m.%y"
-        message-kill-buffer-on-exit t)
-  (fset 'my-move-to-trash "mt")
-  (define-key mu4e-headers-mode-map (kbd "d") 'my-move-to-trash)
-  (define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
-  (global-set-key (kbd "C-c m") 'mu4e))
+(require 'nnir)
+(require 'gnus)
+
+(global-set-key (kbd "C-c m") 'gnus)
+
+(setq gnus-select-method '(nnimap "fastmail"
+                                  (nnimap-address "mail.messagingengine.com")
+                                  (nnimap-server-port 993)
+                                  (nnimap-stream ssl)
+                                  (nnir-search-engine imap)
+                                  ;; press E to expire mail
+                                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
+      gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
+      gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
+      gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
+      gnus-thread-sort-functions
+      '((not gnus-thread-sort-by-date)
+        (not gnus-thread-sort-by-number))
+      gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
+      gnus-gcc-mark-as-read t
+      gnus-use-cache t
+      gnus-cacheable-groups "^nnimap"
+      gnus-sum-thread-tree-false-root ""
+      gnus-sum-thread-tree-indent " "
+      gnus-sum-thread-tree-leaf-with-other "├► "
+      gnus-sum-thread-tree-root ""
+      gnus-sum-thread-tree-single-leaf "╰► "
+      gnus-sum-thread-tree-vertical "│"
+      gnus-interactive-exit nil
+      message-kill-buffer-on-exit t
+      gnus-large-newsgroup nil
+      epa-file-cache-passphrase-for-symmetric-encryption t
+      gnus-read-active-file 'some
+      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
+      mm-discouraged-alternatives '("text/html" "text/richtext")
+      gnus-parameters
+      '((".*"
+         (display . all))))
+
+(setq nnmail-expiry-wait-function
+      (lambda (group)
+        (cond ((string= group "INBOX") 'immediate)
+              (t 'never))))
+
+;; (defun fastmail-archive ()
+;;   (interactive)
+;;   (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
+
+(defun fastmail-report-spam ()
+  (interactive)
+  (guns-summary-move-article nil "nnimap+fastmail:INBOX.Spam"))
+
+(defun my-gnus-summary-keys ()
+  ;; (local-set-key "y" 'fastmail-archive)
+  (local-set-key "$" 'fastmail-report-spam))
+
+;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
+
+(add-hook 'message-mode-hook
+          '(lambda ()
+             (my-non-special-modes-setup)
+             (flyspell-mode t)))
 
 (defun what-face (pos) ;; under cursor
   (interactive "d")
