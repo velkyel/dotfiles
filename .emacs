@@ -87,6 +87,8 @@
                      auto-package-update
                      ))
 
+(add-to-list 'package-pinned-packages '(expand-region . "melpa-stable") t)
+
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
     (add-to-list 'load-path "~/.local/share/emacs/site-lisp/rtags")
   (add-to-list 'package-list 'rtags))
@@ -303,8 +305,7 @@
 
 (require 'helm-grep)
 
-(when (or (equal system-type 'windows-nt)
-          (equal system-type 'darwin))
+(when (not (kelly?))
   (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s"))
 
 (global-set-key (kbd "M-g") (lambda ()
@@ -433,6 +434,8 @@
       whitespace-style '(face trailing newline))
 
 (global-set-key (kbd "M-\\") 'shrink-whitespace)
+
+(require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 
 (global-set-key (kbd "C-c r") 'vr/replace)
