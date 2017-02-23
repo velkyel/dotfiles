@@ -1,11 +1,10 @@
 
 ! https://wiki.haskell.org/Xmonad/Frequently_asked_questions#Emacs_mini-buffer_starts_at_wrong_size
-Emacs.font: DejaVu Sans Mono-11.5
 Emacs.menuBar: off
 Emacs.toolBar: off
 Emacs.verticalScrollBars: off
-Emacs.leftFringe: 2
-Emacs.rightFringe: 2
+! Emacs.leftFringe: 2
+! Emacs.rightFringe: 2
 
 XTerm*termName: xterm-256color
 
