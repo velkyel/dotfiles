@@ -79,11 +79,12 @@
                      dumb-jump
                      shackle
                      x-path-walker
-                     back-button
+                     ;; back-button
                      ;; jump-char
                      crux
                      web-mode
                      js2-mode
+                     esup
                      auto-package-update
                      ))
 
@@ -187,9 +188,9 @@
 (vhl/ext/etags/off)
 (diminish 'volatile-highlights-mode)
 
-(require 'back-button)
-(back-button-mode 1)
-(diminish 'back-button-mode)
+;; (require 'back-button)
+;; (back-button-mode 1)
+;; (diminish 'back-button-mode)
 
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
