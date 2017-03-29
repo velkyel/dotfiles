@@ -243,6 +243,8 @@
   (exec-path-from-shell-initialize)
   (setq python-shell-completion-native-enable nil))
 
+(semantic-mode 1)
+
 ;; Workaround for "ad-handle-definition: `tramp-read-passwd' got redefined".
 ;; Message is triggered by helm, it is likely missing this require.
 (require 'tramp)
@@ -265,6 +267,9 @@
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-z") 'helm-select-action)
+
+;; (require 'helm-dabbrev)
+;; (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
 
 (global-set-key [remap list-buffers] 'helm-buffers-list)
 (global-set-key (kbd "M-x") 'helm-M-x)
@@ -403,9 +408,12 @@
 (autoload 'inf-js-minor-mode "inf-js")
 (setq inf-js-program '("localhost" . 5555))
 (add-hook 'js2-mode-hook 'inf-js-minor-mode)
+;; (js2-imenu-extras-mode 1)
 
 (with-eval-after-load 'js2-mode
-  (set-face-attribute 'js2-external-variable nil :foreground "red"))
+  (set-face-attribute 'js2-external-variable nil :foreground "red")
+  ;; (define-key js2-mode-map (kbd "C-.") 'imenu)
+  )
 
 (quelpa '(inf-femtolisp :fetcher github :repo "velkyel/inf-femtolisp"))
 (autoload 'inf-femtolisp "inf-femtolisp" "Run an inferior Femtolisp process" t)
@@ -587,20 +595,21 @@
 (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
 (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
 
+(defun ciao-goto-symbol ()
+  (interactive)
+  (deactivate-mark)
+  (ring-insert find-tag-marker-ring (point-marker))
+  (or (and (require 'rtags nil t)
+           (rtags-find-symbol-at-point))
+      (and (require 'semantic/ia)
+           (condition-case nil
+               (semantic-ia-fast-jump (point))
+             (error nil)))))
+
 (with-eval-after-load 'cc-mode
   (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
-  (define-key c-mode-base-map (kbd "M-.")
-    (lambda ()
-      (interactive)
-      (if (rtags-is-indexed)
-          (rtags-find-symbol-at-point)
-        (dumb-jump-go))))
-  (define-key c-mode-base-map (kbd "M-,")
-    (lambda ()
-      (interactive)
-      (if (rtags-is-indexed)
-          (rtags-location-stack-back)
-        (xref-pop-marker-stack))))    ;; could be jump from scheme or whatever
+  (define-key c-mode-base-map (kbd "M-.") 'ciao-goto-symbol)
+  (define-key c-mode-base-map (kbd "M-,") 'pop-tag-mark)
   (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
   (define-key c-mode-base-map (kbd "M-?") 'rtags-display-summary)
   (define-key c-mode-base-map (kbd "C-i") 'clang-format)
