@@ -412,6 +412,8 @@
 
 (with-eval-after-load 'js2-mode
   (set-face-attribute 'js2-external-variable nil :foreground "red")
+  (define-key js2-mode-map (kbd "M-.") 'dumb-jump-go)
+  (define-key js2-mode-map (kbd "M-,") 'dumb-jump-back)
   ;; (define-key js2-mode-map (kbd "C-.") 'imenu)
   )
 
