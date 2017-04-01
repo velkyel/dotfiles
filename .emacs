@@ -602,6 +602,7 @@
   (deactivate-mark)
   (ring-insert find-tag-marker-ring (point-marker))
   (or (and (require 'rtags nil t)
+           (rtags-is-indexed)
            (rtags-find-symbol-at-point))
       (and (require 'semantic/ia)
            (condition-case nil
