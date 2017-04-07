@@ -586,8 +586,7 @@
 
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
-  (when (not (kelly?))
-    (setq rtags-autostart-diagnostics t)))
+  (setq rtags-autostart-diagnostics t))
   ;; rtags-show-containing-function t))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
