@@ -610,6 +610,7 @@
              (error nil)))))
 
 (with-eval-after-load 'cc-mode
+  (fset 'c-indent-region 'clang-format-region)
   (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
   (define-key c-mode-base-map (kbd "M-.") 'ciao-goto-symbol)
   (define-key c-mode-base-map (kbd "M-,") 'pop-tag-mark)
