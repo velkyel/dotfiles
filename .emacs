@@ -461,6 +461,7 @@
   (diminish 'rainbow-mode))
 
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+(add-hook 'js2-mode-hook 'rainbow-mode)
 
 (with-eval-after-load 'highlight-symbol
   (diminish 'highlight-symbol-mode)
