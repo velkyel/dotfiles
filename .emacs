@@ -85,7 +85,6 @@
                      web-mode
                      js2-mode
                      esup
-                     vc-darcs
                      auto-package-update
                      ))
 
@@ -394,7 +393,7 @@
 
 (setq quelpa-update-melpa-p nil)
 
-(require 'vc-darcs)
+(quelpa '(vc-darcs :fetcher github :repo "velkyel/vc-darcs"))
 (setq vc-disable-async-diff nil)                ;; hotfix
 (add-to-list 'vc-handled-backends 'DARCS t)
 (autoload 'vc-darcs-find-file-hook "vc-darcs")
