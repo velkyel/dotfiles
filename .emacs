@@ -263,6 +263,7 @@
                         (funcall fcn file))))
 
 (add-hook 'helm-grep-mode-hook 'grep-mode)
+(setq helm-grep-save-buffer-name-no-confirm 1)
 
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
