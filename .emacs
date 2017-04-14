@@ -21,12 +21,16 @@
 (defun display-startup-echo-area-message nil nil)
 (menu-bar-mode -1)
 
+(defun setup-my-fringe ()
+  (fringe-mode '(8 . 0)))
+
 (if window-system
     (progn
       (tool-bar-mode -1)
       (tooltip-mode -1)
       (scroll-bar-mode -1)
-      (fringe-mode '(6 . 0))))
+      (add-hook 'window-setup-hook 'setup-my-fringe)
+      (add-hook 'after-make-frame-functions 'setup-my-fringe)))
 
 (setq inhibit-startup-message t
       initial-scratch-message nil)
