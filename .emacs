@@ -89,6 +89,7 @@
                      web-mode
                      js2-mode
                      esup
+                     smart-hungry-delete
                      auto-package-update
                      ))
 
@@ -329,6 +330,10 @@
 
 (global-set-key (kbd "C-c C-f") 'helm-projectile-find-file)
 (global-set-key (kbd "C-x b") 'my-helm-projectile-buffers-list)
+
+(require 'smart-hungry-delete)
+(global-set-key (kbd "<backspace>") 'smart-hungry-delete-backward-char)
+(global-set-key (kbd "C-d") 'smart-hungry-delete-forward-char)
 
 (setq shackle-rules
       '(("*Help*" :align t :select t)
