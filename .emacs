@@ -97,7 +97,10 @@
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
     (add-to-list 'load-path "~/.local/share/emacs/site-lisp/rtags")
-  (add-to-list 'package-list 'rtags))
+  (progn
+    (add-to-list 'package-list 'rtags)
+    (add-to-list 'package-list 'company-rtags)
+    (add-to-list 'package-list 'helm-rtags)))
 
 (unless package-archive-contents
   (package-refresh-contents))
@@ -554,6 +557,8 @@
   (define-key lua-mode-map (kbd "M-,") 'dumb-jump-back))
 
 (require 'rtags)
+(require 'company-rtags)
+(require 'helm-rtags)
 (require 'popup)
 
 (add-to-list 'company-backends 'company-rtags)
