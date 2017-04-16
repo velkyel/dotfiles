@@ -373,6 +373,7 @@
 (key-chord-define-global "jj" 'avy-goto-word-or-subword-1)
 (key-chord-define-global "jl" 'avy-goto-line)
 (key-chord-define-global "jk" 'avy-goto-char-timer)
+(key-chord-define-global "JJ" 'crux-switch-to-previous-buffer)
 (key-chord-mode +1)
 
 ;; (require 'jump-char)
@@ -441,8 +442,8 @@
 
 (global-set-key (kbd "C-w") (lambda ()
                               (interactive)
-                              (if mark-active
-                                  (kill-region (point) (mark))
+                              (if (use-region-p)
+                                  (call-interactively 'kill-region)
                                 (crux-kill-whole-line))))
 
 (global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
@@ -456,6 +457,9 @@
 
 (setq whitespace-line-column 90
       whitespace-style '(face trailing newline))
+
+(when (not (kelly?))
+  (add-hook 'before-save-hook 'delete-trailing-whitespace))
 
 (global-set-key (kbd "M-\\") 'shrink-whitespace)
 
