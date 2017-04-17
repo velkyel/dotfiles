@@ -458,9 +458,6 @@
 (setq whitespace-line-column 90
       whitespace-style '(face trailing newline))
 
-(when (not (kelly?))
-  (add-hook 'before-save-hook 'delete-trailing-whitespace))
-
 (global-set-key (kbd "M-\\") 'shrink-whitespace)
 
 (require 'expand-region)
