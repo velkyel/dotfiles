@@ -88,6 +88,7 @@
                      crux
                      web-mode
                      js2-mode
+                     smartparens
                      esup
                      smart-hungry-delete
                      auto-package-update
@@ -236,6 +237,8 @@
   ;; (set-default-font "Inconsolata 13"))
   (set-frame-font "mononoki-12"))   ;; DejaVu Sans Mono-11.5"))
 ;; (setq x-alt-keysym 'meta)
+
+(require 'smartparens-config)
 
 (require 'smooth-scrolling)
 (smooth-scrolling-mode 1)
@@ -436,6 +439,10 @@
 (autoload 'inf-femtolisp-minor-mode "inf-femtolisp")
 (setq inf-femtolisp-program '("localhost" . 5555))
 (add-hook 'scheme-mode-hook 'inf-femtolisp-minor-mode)
+
+(when (file-exists-p "~/ctrifle/misc")
+  (add-to-list 'load-path "~/ctrifle/misc")
+  (require 'trifle-mode))
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
