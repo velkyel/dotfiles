@@ -852,5 +852,4 @@
 (auto-package-update-maybe)
 
 (setq custom-file "~/.emacs.d/emacs-custom.el")
-(when (file-exists-p custom-file)
-  (load custom-file))
+(load custom-file :noerror)
