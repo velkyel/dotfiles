@@ -239,6 +239,7 @@
 ;; (setq x-alt-keysym 'meta)
 
 (require 'smartparens-config)
+(add-hook 'prog-mode-hook 'smartparens-mode)
 
 (require 'smooth-scrolling)
 (smooth-scrolling-mode 1)
