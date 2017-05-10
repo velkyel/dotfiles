@@ -85,6 +85,7 @@
                      x-path-walker
                      ;; back-button
                      ;; jump-char
+                     helm-xref
                      crux
                      web-mode
                      js2-mode
@@ -601,8 +602,8 @@
 
 (add-hook 'prog-mode-hook 'my-prog-modes-hook)
 
-(require 'etags)
-(defun push-tag-mark () (xref-push-marker-stack))
+;; (require 'helm-xref)
+;; (setq xref-show-xrefs-function 'helm-xref-show-xrefs)   ;; nefunguje spravne (TODO)
 
 (when (equal system-type 'gnu/linux)
   (progn
