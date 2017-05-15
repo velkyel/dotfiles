@@ -145,7 +145,9 @@
       (string= system-name "idev02")
       (string= system-name "idev02.autokelly.local")
       (string= system-name "idev03")
-      (string= system-name "idev03.autokelly.local")))
+      (string= system-name "idev03.autokelly.local")
+      (string= system-name "idev05")
+      (string= system-name "idev05.autokelly.local")))
 
 (defun dos2unix ()
   (interactive)
