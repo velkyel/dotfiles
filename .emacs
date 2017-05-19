@@ -242,7 +242,6 @@
 ;; (setq x-alt-keysym 'meta)
 
 (require 'smartparens-config)
-(add-hook 'prog-mode-hook 'smartparens-mode)
 
 (require 'smooth-scrolling)
 (smooth-scrolling-mode 1)
@@ -594,6 +593,7 @@
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (goto-address-prog-mode)
+  (smartparens-mode)
   (company-mode)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
   (define-key prog-mode-map (kbd "C-.") 'my-imenu))
