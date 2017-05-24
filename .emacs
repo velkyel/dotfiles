@@ -267,7 +267,7 @@
 (helm-mode 1)
 (diminish 'helm-mode)
 
-(setq helm-candidate-number-limit 50)
+(setq helm-candidate-number-limit 100)
 (setq helm-buffer-max-length 32)
 (helm-push-mark-mode 1)
 
