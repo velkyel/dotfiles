@@ -257,8 +257,6 @@
   (exec-path-from-shell-initialize)
   (setq python-shell-completion-native-enable nil))
 
-(semantic-mode 1)
-
 ;; Workaround for "ad-handle-definition: `tramp-read-passwd' got redefined".
 ;; Message is triggered by helm, it is likely missing this require.
 (require 'tramp)
@@ -595,6 +593,7 @@
   (goto-address-prog-mode)
   (smartparens-mode)
   (company-mode)
+  (semantic-mode 1)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
   (define-key prog-mode-map (kbd "C-.") 'my-imenu))
 
