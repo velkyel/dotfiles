@@ -242,6 +242,7 @@
 ;; (setq x-alt-keysym 'meta)
 
 (require 'smartparens-config)
+(diminish 'smartparens-mode)
 
 (require 'smooth-scrolling)
 (smooth-scrolling-mode 1)
