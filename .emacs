@@ -247,6 +247,7 @@
 (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
 (add-hook 'lisp-interaction-mode-hook 'smartparens-mode)
 (add-hook 'lisp-mode-hook 'smartparens-mode)
+(add-hook 'scheme-mode-hook 'smartparens-mode)
 (add-hook 'ielm-mode-hook 'smartparens-mode)
 
 (require 'smooth-scrolling)
