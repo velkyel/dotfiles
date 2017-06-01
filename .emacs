@@ -244,6 +244,11 @@
 (require 'smartparens-config)
 (diminish 'smartparens-mode)
 
+(add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
+(add-hook 'lisp-interaction-mode-hook 'smartparens-mode)
+(add-hook 'lisp-mode-hook 'smartparens-mode)
+(add-hook 'ielm-mode-hook 'smartparens-mode)
+
 (require 'smooth-scrolling)
 (smooth-scrolling-mode 1)
 
@@ -592,7 +597,6 @@
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (goto-address-prog-mode)
-  (smartparens-mode)
   (company-mode)
   (semantic-mode 1)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
@@ -650,6 +654,7 @@
 (setq inf-clojure-program '("localhost" . 9999))   ;; "planck"
 (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode)
 (add-hook 'clojure-mode-hook 'eldoc-mode)
+(add-hook 'clojure-mode-hook 'smartparens-mode)
 (add-hook 'inf-clojure-mode-hook 'eldoc-mode)
 
 (with-eval-after-load 'python
