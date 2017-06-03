@@ -331,8 +331,8 @@
 
 (require 'helm-grep)
 
-(when (not (kelly?))
-  (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s"))
+;; (when (not (kelly?))
+;;   (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s"))
 
 (global-set-key (kbd "M-g") (lambda ()
                               (interactive)
