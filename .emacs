@@ -79,7 +79,7 @@
                      popup
                      magit
                      volatile-highlights
-                     key-chord
+                     key-seq
                      dumb-jump
                      shackle
                      x-path-walker
@@ -380,11 +380,11 @@
 (global-set-key (kbd "M-m") 'avy-goto-char-timer)
 (define-key isearch-mode-map (kbd "C-;") 'avy-isearch)
 
-(require 'key-chord)
-(key-chord-define-global "jj" 'avy-goto-word-or-subword-1)
-(key-chord-define-global "jl" 'avy-goto-line)
-(key-chord-define-global "jk" 'avy-goto-char-timer)
-(key-chord-define-global "JJ" 'crux-switch-to-previous-buffer)
+(require 'key-seq)
+(key-seq-define-global "jj" 'avy-goto-word-or-subword-1)
+(key-seq-define-global "jl" 'avy-goto-line)
+(key-seq-define-global "jk" 'avy-goto-char-timer)
+(key-seq-define-global "JJ" 'crux-switch-to-previous-buffer)
 (key-chord-mode +1)
 
 ;; (require 'jump-char)
