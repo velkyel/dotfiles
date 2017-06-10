@@ -242,6 +242,7 @@
 ;; (setq x-alt-keysym 'meta)
 
 (require 'smartparens-config)
+(sp-use-smartparens-bindings)
 (diminish 'smartparens-mode)
 
 (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
