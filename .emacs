@@ -92,6 +92,7 @@
                      smartparens
                      esup
                      smart-hungry-delete
+                     helpful
                      auto-package-update
                      ))
 
@@ -345,6 +346,11 @@
 
 (global-set-key (kbd "C-c C-f") 'helm-projectile-find-file)
 (global-set-key (kbd "C-x b") 'my-helm-projectile-buffers-list)
+
+(require 'helpful)
+(global-set-key (kbd "C-h f") 'helpful-function)
+(global-set-key (kbd "C-h F") 'helpful-command)
+(global-set-key (kbd "C-h M") 'helpful-macro)
 
 (require 'smart-hungry-delete)
 (global-set-key (kbd "<backspace>") 'smart-hungry-delete-backward-char)
