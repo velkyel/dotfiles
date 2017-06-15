@@ -238,9 +238,11 @@
   (set-frame-font "mononoki-11"))
 
 (when (and window-system (equal system-type 'gnu/linux))
-  ;; (set-default-font "Inconsolata 13"))
-  (set-frame-font "mononoki-12"))   ;; DejaVu Sans Mono-11.5"))
-;; (setq x-alt-keysym 'meta)
+  (set-frame-font "Inconsolata 13")
+  ;; (set-frame-font "mononoki-12")
+  ;; (set-frame-font "DejaVu Sans Mono-11.5")
+  ;; (setq x-alt-keysym 'meta)
+  )
 
 (require 'smartparens-config)
 (sp-use-smartparens-bindings)
@@ -314,6 +316,7 @@
 (diminish 'projectile-mode)
 
 (setq helm-projectile-fuzzy-match nil)
+(add-to-list 'projectile-globally-ignored-files ".DS_Store")
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
 
@@ -586,6 +589,7 @@
 
 (add-to-list 'company-backends 'company-rtags)
 (setq rtags-display-result-backend 'helm)
+(setq rtags-imenu-syntax-highlighting t)     ;; TODO: doesn't work
 
 (defun my-imenu ()
   (interactive)
@@ -768,6 +772,7 @@
       gnus-read-active-file 'some
       gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
       mm-discouraged-alternatives '("text/html" "text/richtext")
+      gnus-inhibit-startup-message t
       gnus-parameters
       '((".*"
          (display . all))))
@@ -811,6 +816,10 @@
 (set-face-attribute 'avy-background-face
                     nil
                     :foreground "gray50")
+
+(set-face-attribute 'helm-ff-executable
+                    nil
+                    :foreground "#228b22")
 
 (set-face-attribute 'helm-selection
                     nil
