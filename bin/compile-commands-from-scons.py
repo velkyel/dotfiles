@@ -15,7 +15,7 @@ lines = lines.split('\n')[:-1]
 res = []
 
 for line in lines:
-    if not line or line.startswith('scons:'):
+    if not line or line.startswith('scons:') or line.startswith('ranlib ') or line.startswith('ar '):
         continue
     filename = os.path.abspath(line.split()[-1])
     if os.path.exists(filename):       # linker apod..
