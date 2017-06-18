@@ -128,8 +128,8 @@
       use-dialog-box nil
       uniquify-buffer-name-style 'forward
       ediff-window-setup-function 'ediff-setup-windows-plain
-      font-lock-maximum-decoration '((c-mode . 1)
-                                     (c++-mode . 1)
+      font-lock-maximum-decoration '((c-mode . 2)
+                                     (c++-mode . 2)
                                      (objc-mode . 1)
                                      (t . t))
       vc-diff-switches "-u"
