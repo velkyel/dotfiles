@@ -234,11 +234,10 @@
   (set-frame-font "mononoki-11"))
 
 (when (and window-system (equal system-type 'gnu/linux))
-  (set-frame-font "Inconsolata 13")
+  (set-frame-font "Inconsolata 13"))
   ;; (set-frame-font "mononoki-12")
   ;; (set-frame-font "DejaVu Sans Mono-11.5")
   ;; (setq x-alt-keysym 'meta)
-  )
 
 (require 'smartparens-config)
 (sp-use-smartparens-bindings)
@@ -444,15 +443,14 @@
 (with-eval-after-load 'js2-mode
   (set-face-attribute 'js2-external-variable nil :foreground "red")
   (define-key js2-mode-map (kbd "M-.") 'dumb-jump-go)
-  (define-key js2-mode-map (kbd "M-,") 'dumb-jump-back)
+  (define-key js2-mode-map (kbd "M-,") 'dumb-jump-back))
   ;; (define-key js2-mode-map (kbd "C-.") 'imenu)
-  )
 
-(quelpa '(inf-femtolisp :fetcher github :repo "velkyel/inf-femtolisp"))
-(autoload 'inf-femtolisp "inf-femtolisp" "Run an inferior Femtolisp process" t)
-(autoload 'inf-femtolisp-minor-mode "inf-femtolisp")
-(setq inf-femtolisp-program '("localhost" . 5555))
-(add-hook 'scheme-mode-hook 'inf-femtolisp-minor-mode)
+;; (quelpa '(inf-femtolisp :fetcher github :repo "velkyel/inf-femtolisp"))
+;; (autoload 'inf-femtolisp "inf-femtolisp" "Run an inferior Femtolisp process" t)
+;; (autoload 'inf-femtolisp-minor-mode "inf-femtolisp")
+;; (setq inf-femtolisp-program '("localhost" . 5555))
+;; (add-hook 'scheme-mode-hook 'inf-femtolisp-minor-mode)
 
 (when (file-exists-p "~/ctrifle/misc")
   (add-to-list 'load-path "~/ctrifle/misc")
@@ -591,7 +589,7 @@
   (interactive)
   (if (rtags-is-indexed)
       (rtags-imenu)
-    (helm-semantic-or-imenu nil)))
+    (helm-imenu-in-all-buffers)))   ;; semantic-or-imenu nil
 
 (defun my-non-special-modes-setup ()
   (setq indicate-empty-lines t)
@@ -606,7 +604,8 @@
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (goto-address-prog-mode)
   (company-mode)
-  (semantic-mode 1)
+  ;; (semantic-mode 1)
+  ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
   (define-key prog-mode-map (kbd "C-.") 'my-imenu))
 
@@ -619,6 +618,17 @@
 ;; (require 'helm-xref)
 ;; (setq xref-show-xrefs-function 'helm-xref-show-xrefs)   ;; nefunguje spravne (TODO)
 
+(defun run-s7 ()
+  (interactive)
+  (require 'cmuscheme)
+  (setq scheme-program-name "s7")
+  (if (not (comint-check-proc "*scheme*"))
+      (let ((cmdlist (list '("localhost" . 5555))))
+	    (set-buffer (apply 'make-comint "scheme" (car cmdlist) nil nil))
+	    (inferior-scheme-mode)))
+  (setq scheme-buffer "*scheme*")
+  (pop-to-buffer-same-window "*scheme*"))
+
 (when (equal system-type 'gnu/linux)
   (progn
     (require 'pulse)
@@ -627,8 +637,11 @@
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
   (setq rtags-show-containing-function t)
-  (when (not (kelly?))
-    (setq rtags-autostart-diagnostics t)))
+  ;; (setq-local eldoc-documentation-function #'rtags-eldoc)
+  ;; (eldoc-mode 1)
+  ;; (when (not (kelly?))
+  ;;  (setq rtags-autostart-diagnostics t)))
+)
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
