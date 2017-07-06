@@ -649,22 +649,19 @@
 (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
 (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
 
-(defun ciao-goto-symbol ()
+(defun my-goto-symbol ()
   (interactive)
   (deactivate-mark)
   (ring-insert find-tag-marker-ring (point-marker))
   (or (and (require 'rtags nil t)
            (rtags-is-indexed)
            (rtags-find-symbol-at-point))
-      (and (require 'semantic/ia)
-           (condition-case nil
-               (semantic-ia-fast-jump (point))
-             (error nil)))))
+      (dumb-jump-go)))
 
 (with-eval-after-load 'cc-mode
   (fset 'c-indent-region 'clang-format-region)
   (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
-  (define-key c-mode-base-map (kbd "M-.") 'ciao-goto-symbol)
+  (define-key c-mode-base-map (kbd "M-.") 'my-goto-symbol)
   (define-key c-mode-base-map (kbd "M-,") 'pop-tag-mark)
   (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
   (define-key c-mode-base-map (kbd "M-?") 'rtags-display-summary)
