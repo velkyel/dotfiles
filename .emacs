@@ -693,14 +693,13 @@
       slime-repl-history-remove-duplicates t
       slime-repl-history-trim-whitespaces t
       slime-enable-evaluate-in-emacs t
-      slime-auto-start 'always)
-(with-eval-after-load 'slime
-    (slime-setup '(slime-fancy
-                   slime-asdf
-                   slime-sbcl-exts
-                   slime-compiler-notes-tree
-                   slime-company
-                   slime-repl)))
+      slime-auto-start 'always
+      slime-contribs '(slime-fancy
+                       slime-asdf
+                       slime-sbcl-exts
+                       slime-compiler-notes-tree
+                       slime-company
+                       slime-repl))
 
 (setq compile-command (cond ((kelly?) "make -k -j 8")
                             ((equal system-type 'windows-nt) "scons")
