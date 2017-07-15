@@ -741,8 +741,7 @@
       smtpmail-smtp-server "mail.messagingengine.com"
       smtpmail-smtp-service 587)
 
-(require 'gnus)
-
+(autoload 'gnus "gnus" "Read network news." t)
 (global-set-key (kbd "C-c m") 'gnus)
 
 (setq gnus-select-method '(nnimap "fastmail"
