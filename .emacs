@@ -98,11 +98,7 @@
 (add-to-list 'package-pinned-packages '(expand-region . "melpa-stable") t)
 
 (if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
-    (add-to-list 'load-path "~/.local/share/emacs/site-lisp/rtags")
-  (progn
-    (add-to-list 'package-list 'rtags)
-    (add-to-list 'package-list 'company-rtags)
-    (add-to-list 'package-list 'helm-rtags)))
+    (add-to-list 'load-path "~/.local/share/emacs/site-lisp/rtags"))
 
 (unless package-archive-contents
   (package-refresh-contents))
@@ -181,7 +177,12 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(require 'crux)
+(autoload 'crux-start-or-switch-to "crux")
+(autoload 'crux-switch-to-previous-buffer "crux")
+(autoload 'crux-kill-whole-line "crux")
+(autoload 'crux-move-beginning-of-line "crux")
+(autoload 'crux-duplicate-current-line-or-region "crux")
+(autoload 'crux-smart-open-line "crux")
 
 (setenv "PAGER" (executable-find "cat"))
 (global-set-key (kbd "C-c t")
@@ -189,7 +190,7 @@
                   (interactive)
                   (crux-start-or-switch-to 'shell "*shell*")))
 
-(require 'diminish)
+(autoload 'diminish "diminish" nil t)
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -254,7 +255,7 @@
 (require 'unkillable-scratch)
 (unkillable-scratch 1)
 
-(require 'goto-last-change)
+(autoload 'goto-last-change "goto-last-change")
 (global-set-key "\C-x\C-\\" 'goto-last-change)
 
 (when (or (equal system-type 'darwin)
@@ -296,9 +297,10 @@
 
 ;; (setq helm-ag-command-option "--smart-case")
 
-(require 'helm-swoop)
-(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+(autoload 'helm-swoop "helm-swoop")
+(with-eval-after-load 'helm-swoop
+  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line))
 (global-set-key (kbd "M-i") 'helm-swoop)
 
 (setq projectile-enable-caching t)
@@ -340,7 +342,6 @@
 (global-set-key (kbd "C-c C-f") 'helm-projectile-find-file)
 (global-set-key (kbd "C-x b") 'my-helm-projectile-buffers-list)
 
-(require 'helpful)
 (global-set-key (kbd "C-h f") 'helpful-function)
 (global-set-key (kbd "C-h F") 'helpful-command)
 (global-set-key (kbd "C-h M") 'helpful-macro)
@@ -358,11 +359,11 @@
       shackle-inhibit-window-quit-on-same-windows t)
 (shackle-mode)
 
-(require 'x-path-walker)
+(autoload 'helm-x-path-walker "x-path-walker")
 (with-eval-after-load 'json-mode
   (define-key json-mode-map (kbd "C-.") 'helm-x-path-walker))
 
-(require 'web-mode)
+(autoload 'web-mode "web-mode")
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (when (kelly?)
   (add-to-list 'auto-mode-alist '("\\.tem?\\'" . web-mode)))
@@ -474,7 +475,7 @@
 
 (global-set-key (kbd "M-\\") 'shrink-whitespace)
 
-(require 'expand-region)
+(autoload 'er/expand-region "expand-region")
 (global-set-key (kbd "C-=") 'er/expand-region)
 
 (global-set-key (kbd "C-c r") 'vr/replace)
@@ -555,32 +556,44 @@
                                                        " Standard: Cpp11}"))
                       "clang-format-3.5"))))))))
 
+(autoload 'company-mode "company" nil t)
 (with-eval-after-load 'company
   (diminish 'company-mode)
   (setq company-idle-delay nil)  ;; 0.1)
+  (when (equal system-type 'windows-nt)
+    (delete 'company-clang company-backends))
   (define-key company-active-map (kbd "\C-n") 'company-select-next)
   (define-key company-active-map (kbd "\C-p") 'company-select-previous)
   (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
   (define-key company-active-map (kbd "M-.") 'company-show-location))
 
-(require 'company)
-(when (equal system-type 'windows-nt)
-  (delete 'company-clang company-backends))
-
-(require 'dumb-jump)
+(autoload 'dumb-jump-go "dumb-jump")
+(autoload 'dumb-jump-back "dumb-jump")
+;; (setq dumb-jump-selector 'helm)
 
 (with-eval-after-load 'lua-mode
   (define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
   (define-key lua-mode-map (kbd "M-,") 'dumb-jump-back))
 
-(require 'rtags)
-(require 'company-rtags)
-(require 'helm-rtags)
-(require 'popup)
+(autoload 'rtags-is-indexed "rtags")
+(autoload 'rtags-imenu "rtags")
+(autoload 'rtags-find-symbol-at-point "rtags")
+(autoload 'rtags-display-summary "rtags")
 
-(add-to-list 'company-backends 'company-rtags)
-(setq rtags-display-result-backend 'helm)
-(setq rtags-imenu-syntax-highlighting t)     ;; TODO: doesn't work
+(with-eval-after-load 'rtags
+  (setq rtags-display-result-backend 'helm)
+  (setq rtags-imenu-syntax-highlighting t)     ;; TODO: doesn't work
+  (set-face-attribute 'rtags-skippedline
+                      nil
+                      :background "gray70")
+
+  (set-face-attribute 'rtags-warnline
+                      nil
+                      :background "#ccccff")
+
+  (set-face-attribute 'rtags-errline
+                      nil
+                      :background "#eeb0b0"))
 
 (defun my-imenu ()
   (interactive)
@@ -626,13 +639,15 @@
   (setq scheme-buffer "*scheme*")
   (pop-to-buffer-same-window "*scheme*"))
 
-(when (equal system-type 'gnu/linux)
-  (progn
-    (require 'pulse)
-    (setq pulse-flag nil)))
+(setq pulse-delay .06)
+;; (when (equal system-type 'gnu/linux)
+;;   (progn
+;;     (require 'pulse)
+;;     (setq pulse-flag nil)))
 
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
+  (add-to-list 'company-backends 'company-rtags)
   (setq rtags-show-containing-function t)
   ;; (setq-local eldoc-documentation-function #'rtags-eldoc)
   ;; (eldoc-mode 1)
@@ -642,9 +657,11 @@
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-(require 'cff)
-(add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
-(add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
+(autoload 'cff-find-other-file "cff")
+
+(with-eval-after-load 'cff
+  (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
+  (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm")))))
 
 (defun my-goto-symbol ()
   (interactive)
@@ -859,26 +876,15 @@
                     :background "gray80"
                     :box '(:line-width -1 :style released-button))
 
-(set-face-attribute 'rtags-skippedline
-                    nil
-                    :background "gray70")
+(with-eval-after-load 'popup
+  (set-face-attribute 'popup-face
+                      nil
+                      :background "#dddd30"))
 
-(set-face-attribute 'rtags-warnline
-                    nil
-                    :background "#ccccff")
-
-(set-face-attribute 'rtags-errline
-                    nil
-                    :background "#eeb0b0")
-
-(set-face-attribute 'popup-face
-                    nil
-                    :background "#dddd30")
-
-(require 'highlight-indentation)
-(set-face-attribute 'highlight-indentation-face     ;; elpy
-                    nil
-                    :background "gray90")
+(with-eval-after-load 'highlight-indentation
+  (set-face-attribute 'highlight-indentation-face     ;; elpy
+                      nil
+                      :background "gray90"))
 
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file :noerror)
