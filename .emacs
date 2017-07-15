@@ -741,7 +741,6 @@
       smtpmail-smtp-server "mail.messagingengine.com"
       smtpmail-smtp-service 587)
 
-(require 'nnir)
 (require 'gnus)
 
 (global-set-key (kbd "C-c m") 'gnus)
