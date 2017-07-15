@@ -263,10 +263,6 @@
   (exec-path-from-shell-initialize)
   (setq python-shell-completion-native-enable nil))
 
-;; Workaround for "ad-handle-definition: `tramp-read-passwd' got redefined".
-;; Message is triggered by helm, it is likely missing this require.
-(require 'tramp)
-
 (require 'helm-config)
 (helm-mode 1)
 (diminish 'helm-mode)
