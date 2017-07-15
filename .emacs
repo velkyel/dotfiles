@@ -686,16 +686,21 @@
 ;; (require 'geiser)
 (setq geiser-active-implementations '(racket))
 
-(setq inferior-lisp-program (executable-find "sbcl"))
-(slime-setup '(slime-fancy
-               slime-asdf
-               slime-sbcl-exts
-               slime-compiler-notes-tree
-               slime-company))
-(setq slime-repl-history-remove-duplicates t
+
+(require 'slime-autoloads)
+(setq slime-lisp-implementations '((sbcl ("sbcl" "--noinform") :coding-system utf-8-unix))
+      slime-default-lisp 'sbcl
+      slime-repl-history-remove-duplicates t
       slime-repl-history-trim-whitespaces t
       slime-enable-evaluate-in-emacs t
       slime-auto-start 'always)
+(with-eval-after-load 'slime
+    (slime-setup '(slime-fancy
+                   slime-asdf
+                   slime-sbcl-exts
+                   slime-compiler-notes-tree
+                   slime-company
+                   slime-repl)))
 
 (setq compile-command (cond ((kelly?) "make -k -j 8")
                             ((equal system-type 'windows-nt) "scons")
