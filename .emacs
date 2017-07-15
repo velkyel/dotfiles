@@ -499,7 +499,9 @@
 (with-eval-after-load 'highlight-symbol
   (diminish 'highlight-symbol-mode)
   (setq highlight-symbol-idle-delay 0.5)
-  (set-face-background 'highlight-symbol-face "gray78"))
+  (set-face-background 'highlight-symbol-face "gray78")
+  ;; (set-face-attribute 'highlight-symbol-face nil :underline t :background "gray85")
+  )
 
 ;; (setq sml/no-confirm-load-theme t)
 ;; (sml/setup)
@@ -651,6 +653,7 @@
 
 (defun my-goto-symbol ()
   (interactive)
+  ;; TODO: save all buffers
   (deactivate-mark)
   (ring-insert find-tag-marker-ring (point-marker))
   (or (and (require 'rtags nil t)
