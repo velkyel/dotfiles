@@ -689,7 +689,7 @@
 
 (defun my-goto-symbol ()
   (interactive)
-  ;; TODO: save all buffers
+  (save-buffer)
   (deactivate-mark)
   (ring-insert find-tag-marker-ring (point-marker))
   (or (and (require 'rtags nil t)
