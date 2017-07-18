@@ -106,6 +106,8 @@
   (unless (package-installed-p package)
     (package-install package)))
 
+(require 'subr-x)    ;; string-trim
+
 (setq compilation-ask-about-save nil
       compilation-always-kill t
       compilation-scroll-output 'first-error
