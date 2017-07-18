@@ -657,16 +657,17 @@
     (buffer-string)))
 
 (defun rtags-eldoc-function ()
-  (let ((summary (rtags-get-summary-text)))
-    (and summary
-         (fontify-string
-          (replace-regexp-in-string
-           "{[^}]*$" ""
-           (mapconcat
-            (lambda (str) (if (= 0 (length str)) "//" (string-trim str)))
-            (split-string summary "\r?\n")
-            ""))
-          major-mode))))
+  (if (rtags-is-indexed)
+      (let ((summary (rtags-get-summary-text)))
+        (and summary
+             (fontify-string
+              (replace-regexp-in-string
+               "{[^}]*$" ""
+               (mapconcat
+                (lambda (str) (if (= 0 (length str)) "//" (string-trim str)))
+                (split-string summary "\r?\n")
+                ""))
+              major-mode)))))
 
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
@@ -676,7 +677,7 @@
   (eldoc-mode 1)
   ;; (when (not (kelly?))
   ;;  (setq rtags-autostart-diagnostics t)))
-)
+  )
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
