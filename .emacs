@@ -93,6 +93,7 @@
                      esup
                      smart-hungry-delete
                      helpful
+                     dired-collapse
                      ))
 
 (add-to-list 'package-pinned-packages '(expand-region . "melpa-stable") t)
@@ -412,6 +413,8 @@
 
 (put 'dired-find-alternate-file 'disabled nil)
 (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+
+(add-hook 'dired-mode-hook #'dired-collapse-mode)
 
 (if (< emacs-major-version 25)
     (toggle-save-place-globally)
