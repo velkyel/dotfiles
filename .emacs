@@ -53,6 +53,7 @@
                      avy
                      ace-jump-helm-line
                      goto-last-change
+                     unfill
                      quelpa
                      ninja-mode
                      clojure-mode
@@ -395,6 +396,8 @@
 ;; (require 'jump-char)
 ;; (global-set-key (kbd "M-m") #'jump-char-forward)
 ;; (global-set-key (kbd "M-M") #'jump-char-backward)
+
+(global-set-key [remap fill-paragraph] #'unfill-toggle)
 
 (define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
