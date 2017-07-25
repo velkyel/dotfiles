@@ -635,8 +635,8 @@
 
 (add-hook 'prog-mode-hook 'my-prog-modes-hook)
 
-;; (require 'helm-xref)
-;; (setq xref-show-xrefs-function 'helm-xref-show-xrefs)   ;; nefunguje spravne (TODO)
+(require 'helm-xref)
+(setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
 (defun run-s7 ()
   (interactive)
