@@ -94,6 +94,7 @@
                      smart-hungry-delete
                      helpful
                      dired-collapse
+                     auto-package-update
                      ))
 
 (add-to-list 'package-pinned-packages '(expand-region . "melpa-stable") t)
