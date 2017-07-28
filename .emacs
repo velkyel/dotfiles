@@ -268,6 +268,7 @@
   (exec-path-from-shell-initialize)
   (setq python-shell-completion-native-enable nil))
 
+(require 'helm)
 (require 'helm-config)
 (diminish 'helm-mode)
 
