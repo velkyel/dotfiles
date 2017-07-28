@@ -298,6 +298,7 @@
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-c h") 'helm-command-prefix)
 (global-set-key (kbd "C-c <SPC>") 'helm-all-mark-rings)
+(global-set-key (kbd "C-c C-r") 'helm-resume)
 
 ;; (setq helm-ag-command-option "--smart-case")
 
