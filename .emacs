@@ -269,7 +269,6 @@
   (setq python-shell-completion-native-enable nil))
 
 (require 'helm-config)
-(helm-mode 1)
 (diminish 'helm-mode)
 
 (setq helm-candidate-number-limit 100)
