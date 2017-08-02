@@ -89,6 +89,7 @@
                      crux
                      web-mode
                      js2-mode
+                     rust-mode
                      smartparens
                      esup
                      smart-hungry-delete
