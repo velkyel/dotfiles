@@ -38,7 +38,6 @@
 (setq package-list '(diminish
                      exec-path-from-shell
                      json-mode
-                     lua-mode
                      haskell-mode
                      processing-mode
                      restart-emacs
@@ -580,6 +579,8 @@
 (autoload 'dumb-jump-go "dumb-jump")
 (autoload 'dumb-jump-back "dumb-jump")
 ;; (setq dumb-jump-selector 'helm)
+
+(quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
 
 (with-eval-after-load 'lua-mode
   (define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
