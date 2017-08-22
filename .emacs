@@ -389,7 +389,7 @@
 
 (require 'key-seq)
 (key-seq-define-global "jj" 'avy-goto-word-or-subword-1)
-(key-seq-define-global "jl" 'avy-goto-line)
+(key-seq-define-global "jl" 'goto-line)
 (key-seq-define-global "jk" 'avy-goto-char-timer)
 (key-seq-define-global "JJ" 'crux-switch-to-previous-buffer)
 (key-chord-mode +1)
@@ -786,7 +786,6 @@
                                                       'recompile
                                                     'compile))))
 ;; (global-set-key (kbd "M-o") 'other-window)
-(global-set-key (kbd "C-c C-g") 'goto-line)
 
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-auth-credentials "~/.authinfo"
