@@ -162,7 +162,7 @@
 (show-paren-mode 1)
 ;; (setq show-paren-style 'expression)
 (transient-mark-mode t)
-(which-function-mode)
+;; (which-function-mode)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default py-indent-offset 4)
@@ -726,11 +726,16 @@
 (add-hook 'clojure-mode-hook 'smartparens-mode)
 (add-hook 'inf-clojure-mode-hook 'eldoc-mode)
 
+(add-hook 'python-mode-hook
+          '(lambda ()
+             (setq-local eldoc-mode nil)))
+
 (with-eval-after-load 'python
   (progn
     (require 'elpy)
-    ;; (setq python-shell-interpreter "python3"
-    ;;       elpy-rpc-python-command "python3")
+    (setq python-shell-interpreter "python3")
+    (setq elpy-rpc-python-command "python3")
+    (setq elpy-eldoc-show-current-function nil)
     (elpy-enable)
     (remove-hook 'elpy-modules 'elpy-module-yasnippet)
     (when (kelly?)
