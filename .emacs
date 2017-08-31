@@ -71,7 +71,6 @@
                      highlight-symbol
                      company
                      elpy
-                     smooth-scrolling
                      unkillable-scratch
                      slime
                      slime-company
@@ -254,8 +253,7 @@
 (add-hook 'scheme-mode-hook 'smartparens-mode)
 (add-hook 'ielm-mode-hook 'smartparens-mode)
 
-(require 'smooth-scrolling)
-(smooth-scrolling-mode 1)
+(setq scroll-conservatively 101)
 
 (require 'unkillable-scratch)
 (unkillable-scratch 1)
