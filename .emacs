@@ -95,6 +95,7 @@
                      smart-hungry-delete
                      helpful
                      dired-collapse
+                     dired-rainbow
                      auto-package-update
                      ))
 
@@ -420,10 +421,27 @@
 
 (add-hook 'dired-mode-hook #'dired-collapse-mode)
 
-(if (< emacs-major-version 25)
-    (toggle-save-place-globally)
-  (save-place-mode 1))
+(require 'dired-rainbow)
 
+(defconst my-dired-media-files-extensions
+  '("mp3" "mp4" "MP3" "MP4" "avi" "mpg" "flv" "ogg")
+  "Media files.")
+
+(defconst my-dired-image-files-extensions
+  '("png" "jpg" "jpeg" "tga" "bmp")
+  "Image files.")
+
+(dired-rainbow-define html "#4e9a06" ("htm" "html" "xhtml"))
+(dired-rainbow-define media "#ce5c00" my-dired-media-files-extensions)
+(dired-rainbow-define image "#5c00ce" my-dired-image-files-extensions)
+
+;; boring regexp due to lack of imagination
+(dired-rainbow-define log (:inherit default :italic t) ".*\\.log")
+
+;; highlight executable files, but not directories
+(dired-rainbow-define-chmod executable-unix "#228b22" "-[rw-]+x.*")
+
+(save-place-mode 1))
 ;; (desktop-save-mode 1)
 
 (setq quelpa-update-melpa-p nil)
