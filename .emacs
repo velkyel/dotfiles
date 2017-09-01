@@ -101,8 +101,8 @@
 
 (add-to-list 'package-pinned-packages '(expand-region . "melpa-stable") t)
 
-(if (file-exists-p "~/.local/share/emacs/site-lisp/rtags")
-    (add-to-list 'load-path "~/.local/share/emacs/site-lisp/rtags"))
+(if (file-exists-p "~/rtags/src")
+    (add-to-list 'load-path "~/rtags/src"))
 
 (unless package-archive-contents
   (package-refresh-contents))
