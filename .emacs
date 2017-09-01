@@ -370,6 +370,10 @@
 (with-eval-after-load 'json-mode
   (define-key json-mode-map (kbd "C-.") 'helm-x-path-walker))
 
+(add-hook 'json-mode-hook (lambda ()
+                            (make-local-variable 'js-indent-level)
+                            (setq js-indent-level 4)))
+
 (autoload 'web-mode "web-mode")
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (when (kelly?)
@@ -761,7 +765,6 @@
 
 ;; (require 'geiser)
 (setq geiser-active-implementations '(racket))
-
 
 (require 'slime-autoloads)
 (setq slime-lisp-implementations '((sbcl ("sbcl" "--noinform") :coding-system utf-8-unix))
