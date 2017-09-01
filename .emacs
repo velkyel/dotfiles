@@ -612,7 +612,7 @@
 
 (with-eval-after-load 'rtags
   (setq rtags-display-result-backend 'helm)
-  (setq rtags-imenu-syntax-highlighting t)     ;; TODO: doesn't work
+  ;; (setq rtags-imenu-syntax-highlighting t)     ;; TODO: doesn't work with helm
   (set-face-attribute 'rtags-skippedline
                       nil
                       :background "gray70")
@@ -702,8 +702,8 @@
   (setq-local fill-column 90)
   (add-to-list 'company-backends 'company-rtags)
   (setq rtags-show-containing-function t)
-  (setq-local eldoc-documentation-function #'rtags-eldoc-function)
-  (eldoc-mode 1)
+  ;; (setq-local eldoc-documentation-function #'rtags-eldoc-function)
+  ;; (eldoc-mode 1)
   ;; (when (not (kelly?))
   ;;  (setq rtags-autostart-diagnostics t)))
   )
