@@ -270,6 +270,7 @@
 
 (require 'helm)
 (require 'helm-config)
+(helm-mode 1)   ;; completion-read etc..
 (diminish 'helm-mode)
 
 (setq helm-candidate-number-limit 100)
