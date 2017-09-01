@@ -446,7 +446,7 @@
 ;; highlight executable files, but not directories
 (dired-rainbow-define-chmod executable-unix "#228b22" "-[rw-]+x.*")
 
-(save-place-mode 1))
+(save-place-mode 1)
 ;; (desktop-save-mode 1)
 
 (setq quelpa-update-melpa-p nil)
