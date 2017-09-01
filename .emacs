@@ -38,6 +38,7 @@
 (setq package-list '(diminish
                      exec-path-from-shell
                      json-mode
+                     json-navigator
                      haskell-mode
                      processing-mode
                      restart-emacs
