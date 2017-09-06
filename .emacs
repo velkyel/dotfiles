@@ -275,7 +275,7 @@
 
 (setq helm-candidate-number-limit 100)
 (setq helm-buffer-max-length 32)
-(helm-push-mark-mode 1)
+;; (helm-push-mark-mode 1)
 
 (advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
             :around (lambda (fcn file)
@@ -411,6 +411,8 @@
   (interactive)
   (beginning-of-buffer)
   (dired-next-line 4))
+
+(require 'dired)
 
 (define-key dired-mode-map (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)
 
