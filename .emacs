@@ -319,6 +319,8 @@
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
 
+(require 'helm-for-files)    ;; helm-source-recentf
+
 (defun my-helm-projectile-buffers-list ()
   (interactive)
   (unless helm-source-buffers-list
