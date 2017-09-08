@@ -43,15 +43,17 @@
                      processing-mode
                      restart-emacs
                      diffview
-                     helm
-                     helm-swoop
                      projectile
-                     helm-projectile
+                     ivy
+                     ivy-rich
+                     ivy-hydra
+                     smex
+                     counsel
+                     counsel-projectile
                      super-save
                      anzu
                      shell
                      avy
-                     ace-jump-helm-line
                      goto-last-change
                      unfill
                      quelpa
@@ -82,10 +84,9 @@
                      key-seq
                      dumb-jump
                      shackle
-                     x-path-walker
+                     ;; x-path-walker
                      ;; back-button
                      ;; jump-char
-                     helm-xref
                      crux
                      web-mode
                      js2-mode
@@ -268,88 +269,47 @@
   (exec-path-from-shell-initialize)
   (setq python-shell-completion-native-enable nil))
 
-(require 'helm)
-(require 'helm-config)
-(helm-mode 1)   ;; completion-read etc..
-(diminish 'helm-mode)
+(require 'ivy)
+(ivy-mode 1)
+(diminish 'ivy-mode)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
 
-(setq helm-candidate-number-limit 100)
-(setq helm-buffer-max-length 32)
-;; (helm-push-mark-mode 1)
+(setq ivy-use-virtual-buffers t
+      ivy-virtual-abbreviate 'full
+      ivy-height 20
+      ivy-initial-inputs-alist nil   ;; no regexp by default
+      ivy-re-builders-alist  ;; allow input not in order
+      '((t . ivy--regex-ignore-order)))
 
-(advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
-            :around (lambda (fcn file)
-                      (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
-                        (funcall fcn file))))
+(require 'ivy-rich)
+(ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
 
-(add-hook 'helm-grep-mode-hook 'grep-mode)
-(setq helm-grep-save-buffer-name-no-confirm 1)
+(setq ivy-rich-switch-buffer-align-virtual-buffer t)
 
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-z") 'helm-select-action)
+(require 'counsel)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-h a") 'counsel-apropos)
+(global-set-key (kbd "M-G") 'counsel-ag)
+(global-set-key (kbd "M-i") 'swiper)
+(global-set-key (kbd "M-y") 'counsel-yank-pop)
 
-;; (require 'helm-dabbrev)
-;; (define-key global-map [remap dabbrev-expand] 'helm-dabbrev)
+(define-key counsel-find-file-map (kbd "C-l") 'counsel-up-directory)
 
-(global-set-key [remap list-buffers] 'helm-buffers-list)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x b") 'helm-buffers-list)
-(global-set-key (kbd "C-h a") 'helm-apropos)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-c h") 'helm-command-prefix)
-(global-set-key (kbd "C-c <SPC>") 'helm-all-mark-rings)
-(global-set-key (kbd "C-c C-r") 'helm-resume)
-
-;; (setq helm-ag-command-option "--smart-case")
-
-(autoload 'helm-swoop "helm-swoop")
-(with-eval-after-load 'helm-swoop
-  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line))
-(global-set-key (kbd "M-i") 'helm-swoop)
+(require 'projectile)
 
 (setq projectile-enable-caching t)
 (projectile-global-mode)
 (diminish 'projectile-mode)
 
-(setq helm-projectile-fuzzy-match nil)
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
-(setq projectile-completion-system 'helm)
-(helm-projectile-on)
+(setq projectile-completion-system 'ivy)
 
-(require 'helm-for-files)    ;; helm-source-recentf
+(require 'counsel-projectile)
+(counsel-projectile-on)
 
-(defun my-helm-projectile-buffers-list ()
-  (interactive)
-  (unless helm-source-buffers-list
-    (setq helm-source-buffers-list
-          (helm-make-source "Buffers" 'helm-source-buffers)))
-  (helm :sources '(helm-source-buffers-list
-                   helm-source-projectile-recentf-list
-                   helm-source-projectile-files-list
-                   helm-source-recentf
-                   helm-source-buffer-not-found)
-        :buffer "*helm buffers*"
-        :keymap helm-buffer-map
-        :truncate-lines helm-buffers-truncate-lines))
-
-(require 'helm-grep)
-
-;; (when (not (kelly?))
-;;   (setq helm-grep-ag-command "rg --smart-case --no-heading --line-number %s %s %s"))
-
-(global-set-key (kbd "M-g") (lambda ()
-                              (interactive)
-                              (helm-grep-ag (projectile-project-root) nil)))
-
-(global-set-key (kbd "M-G") (lambda ()
-                              (interactive)
-                              (helm-grep-ag (helm-current-directory) nil)))
-
-(global-set-key (kbd "C-c C-f") 'helm-projectile-find-file)
-(global-set-key (kbd "C-x b") 'my-helm-projectile-buffers-list)
+(global-set-key (kbd "C-x C-p") 'counsel-projectile-find-file)
+(global-set-key (kbd "M-g") 'counsel-projectile-ag)
 
 (global-set-key (kbd "C-h f") 'helpful-function)
 (global-set-key (kbd "C-h F") 'helpful-command)
@@ -368,9 +328,9 @@
       shackle-inhibit-window-quit-on-same-windows t)
 (shackle-mode)
 
-(autoload 'helm-x-path-walker "x-path-walker")
-(with-eval-after-load 'json-mode
-  (define-key json-mode-map (kbd "C-.") 'helm-x-path-walker))
+;; (autoload 'helm-x-path-walker "x-path-walker")
+;; (with-eval-after-load 'json-mode
+;;   (define-key json-mode-map (kbd "C-.") 'helm-x-path-walker))
 
 (add-hook 'json-mode-hook (lambda ()
                             (make-local-variable 'js-indent-level)
@@ -406,8 +366,6 @@
 ;; (global-set-key (kbd "M-M") #'jump-char-backward)
 
 (global-set-key [remap fill-paragraph] #'unfill-toggle)
-
-(define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
 (defun dired-back-to-top ()
   (interactive)
@@ -605,7 +563,7 @@
 
 (autoload 'dumb-jump-go "dumb-jump")
 (autoload 'dumb-jump-back "dumb-jump")
-;; (setq dumb-jump-selector 'helm)
+(setq dumb-jump-selector 'ivy)
 
 (quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
 
@@ -620,8 +578,8 @@
 (autoload 'rtags-get-summary-text "rtags")
 
 (with-eval-after-load 'rtags
-  (setq rtags-display-result-backend 'helm)
-  ;; (setq rtags-imenu-syntax-highlighting t)     ;; TODO: doesn't work with helm
+  (setq rtags-display-result-backend 'ivy)
+  (setq rtags-imenu-syntax-highlighting t)
   (set-face-attribute 'rtags-skippedline
                       nil
                       :background "gray70")
@@ -634,11 +592,12 @@
                       nil
                       :background "#eeb0b0"))
 
+
 (defun my-imenu ()
   (interactive)
   (if (rtags-is-indexed)
       (rtags-imenu)
-    (helm-imenu-in-all-buffers)))   ;; semantic-or-imenu nil
+    (imenu)))             ;; TODO: counsel-imenu-in-all-buffers -> imenu-anywhere (ivy)
 
 (defun my-non-special-modes-setup ()
   (setq indicate-empty-lines t)
@@ -656,7 +615,8 @@
   ;; (semantic-mode 1)
   ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
-  (define-key prog-mode-map (kbd "C-.") 'my-imenu))
+  (define-key prog-mode-map (kbd "C-.") 'imenu)
+  )
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -664,8 +624,8 @@
 
 (add-hook 'prog-mode-hook 'my-prog-modes-hook)
 
-(require 'helm-xref)
-(setq xref-show-xrefs-function 'helm-xref-show-xrefs)
+;; (require 'helm-xref)
+;; (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
 (defun run-s7 ()
   (interactive)
@@ -903,22 +863,6 @@
 (set-face-attribute 'avy-background-face
                     nil
                     :foreground "gray50")
-
-(set-face-attribute 'helm-ff-executable
-                    nil
-                    :foreground "#228b22")
-
-(set-face-attribute 'helm-selection
-                    nil
-                    :background "#a5e8be")
-
-(set-face-attribute 'helm-visible-mark
-                    nil
-                    :background "#f1c40f")
-
-(set-face-attribute 'helm-source-header
-                    nil
-                    :height 0.9)
 
 (set-face-attribute 'font-lock-comment-face
                     nil
