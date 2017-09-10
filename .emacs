@@ -290,9 +290,14 @@
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (global-set-key (kbd "C-h a") 'counsel-apropos)
-(global-set-key (kbd "M-G") 'counsel-ag)
 (global-set-key (kbd "M-i") 'swiper)
 (global-set-key (kbd "M-y") 'counsel-yank-pop)
+(global-set-key (kbd "M-G")
+                (lambda ()
+                  (interactive)
+                  (counsel-ag (if (use-region-p)
+                                  (buffer-substring-no-properties (region-beginning) (region-end))
+                                (thing-at-point 'symbol t)))))
 
 (define-key counsel-find-file-map (kbd "C-l") 'counsel-up-directory)
 
@@ -309,6 +314,10 @@
 (counsel-projectile-on)
 
 (global-set-key (kbd "C-x C-p") 'counsel-projectile-find-file)
+
+(setq counsel-projectile-ag-initial-input
+      '(projectile-symbol-or-selection-at-point))
+
 (global-set-key (kbd "M-g") 'counsel-projectile-ag)
 
 (global-set-key (kbd "C-h f") 'helpful-function)
