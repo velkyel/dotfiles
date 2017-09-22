@@ -241,9 +241,10 @@
   (set-frame-font "mononoki-11"))
 
 (when (and window-system (equal system-type 'gnu/linux))
-  (set-frame-font "Inconsolata 13"))
-  ;; (set-frame-font "mononoki-12")
-  ;; (set-frame-font "DejaVu Sans Mono-11.5")
+  (set-frame-font "hack 11"))
+  ;; (set-frame-font "Inconsolata 13"))
+  ;; (set-frame-font "mononoki-12"))
+  ;; (set-frame-font "DejaVu Sans Mono-11.5"))
   ;; (setq x-alt-keysym 'meta)
 
 (require 'smartparens-config)
@@ -324,6 +325,7 @@
 (global-set-key (kbd "M-g") 'counsel-projectile-ag)
 
 (global-set-key (kbd "C-h f") 'helpful-function)
+(global-set-key (kbd "C-h v") 'helpful-variable)
 (global-set-key (kbd "C-h F") 'helpful-command)
 (global-set-key (kbd "C-h M") 'helpful-macro)
 
@@ -682,7 +684,7 @@
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
   (add-to-list 'company-backends 'company-rtags)
-  (setq rtags-show-containing-function t)
+  ;; (setq rtags-show-containing-function t)
   ;; (setq-local eldoc-documentation-function #'rtags-eldoc-function)
   ;; (eldoc-mode 1)
   ;; (when (not (kelly?))
@@ -812,9 +814,7 @@
       gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
       gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
       gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
-      gnus-thread-sort-functions
-      '((not gnus-thread-sort-by-date)
-        (not gnus-thread-sort-by-number))
+      gnus-thread-sort-functions '(gnus-thread-sort-by-most-recent-date)  ;; gnus-thread-sort-by-date))
       gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
       gnus-gcc-mark-as-read t
       gnus-use-cache t
