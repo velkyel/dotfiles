@@ -348,7 +348,7 @@
 
 (add-hook 'json-mode-hook (lambda ()
                             (make-local-variable 'js-indent-level)
-                            (setq js-indent-level 4)))
+                            (setq js-indent-level 2)))
 
 (autoload 'web-mode "web-mode")
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
