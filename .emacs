@@ -444,6 +444,10 @@
 (add-hook 'js2-mode-hook 'inf-js-minor-mode)
 ;; (js2-imenu-extras-mode 1)
 
+(quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
+(autoload 'hlsl-mode "hlsl-mode" nil t)
+(add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
+
 (with-eval-after-load 'js2-mode
   (set-face-attribute 'js2-external-variable nil :foreground "red")
   (define-key js2-mode-map (kbd "M-.") 'dumb-jump-go)
