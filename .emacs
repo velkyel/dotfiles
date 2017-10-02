@@ -228,6 +228,8 @@
 ;; (setq auto-revert-verbose nil)
 (global-auto-revert-mode 1)
 
+(add-to-list 'recentf-exclude "bookmarks")
+
 ;; ; check if we're on OSX
 (when (featurep 'ns-win)
   ;; (setq mac-command-modifier 'meta)
@@ -280,12 +282,14 @@
       ivy-height 20
       ivy-initial-inputs-alist nil   ;; no regexp by default
       ivy-re-builders-alist  ;; allow input not in order
-      '((t . ivy--regex-ignore-order)))
+      '((t . ivy--regex-ignore-order))
+      swiper-action-recenter t)
 
 (require 'ivy-rich)
 (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
 
-(setq ivy-rich-switch-buffer-align-virtual-buffer t)
+(setq ivy-rich-switch-buffer-align-virtual-buffer t
+      ivy-rich-abbreviate-paths t)
 
 (require 'counsel)
 (global-set-key (kbd "M-x") 'counsel-M-x)
@@ -466,6 +470,9 @@
 
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
+
+(with-eval-after-load 'magit
+  (setq magit-completing-read-function 'ivy-completing-read))
 
 (global-set-key (kbd "C-w") (lambda ()
                               (interactive)
