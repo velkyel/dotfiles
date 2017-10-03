@@ -228,6 +228,7 @@
 ;; (setq auto-revert-verbose nil)
 (global-auto-revert-mode 1)
 
+(require 'recentf)
 (add-to-list 'recentf-exclude "bookmarks")
 
 ;; ; check if we're on OSX
