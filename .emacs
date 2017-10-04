@@ -13,7 +13,6 @@
 
 (require 'package)
 
-(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 
 (package-initialize)
@@ -99,8 +98,6 @@
                      dired-rainbow
                      auto-package-update
                      ))
-
-(add-to-list 'package-pinned-packages '(expand-region . "melpa-stable") t)
 
 (if (file-exists-p "~/rtags/src")
     (add-to-list 'load-path "~/rtags/src"))
