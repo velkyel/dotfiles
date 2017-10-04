@@ -552,26 +552,7 @@
           (if (executable-find "clang-format-3.7") "clang-format-3.7"
             (if (executable-find "clang-format37") "clang-format37"
               (if (executable-find "clang-format-3.6") "clang-format-3.6"
-                (if (executable-find "clang-format-3.5")
-                    (progn
-                      (setq clang-format-style (concat "{BasedOnStyle: Google,"
-                                                       " BreakBeforeBraces: Linux,"
-                                                       " BinPackParameters: true,"
-                                                       " BreakBeforeBinaryOperators: true,"
-                                                       " IndentWidth: 2,"
-                                                       " ColumnLimit: 90,"
-                                                       " AlwaysBreakBeforeMultilineStrings: false,"
-                                                       " SpacesBeforeTrailingComments: 4,"
-                                                       " AccessModifierOffset: -2,"
-                                                       " AllowShortFunctionsOnASingleLine: Inline,"
-                                                       " NamespaceIndentation: All,"
-                                                       " UseTab: Never,"
-                                                       " ConstructorInitializerIndentWidth: 2,"
-                                                       " ContinuationIndentWidth: 2,"
-                                                       " PointerAlignment: Left,"
-                                                       " DerivePointerAlignment: false,"
-                                                       " Standard: Cpp11}"))
-                      "clang-format-3.5"))))))))
+                (warn "install clang-format!")))))))
 
 (autoload 'company-mode "company" nil t)
 (with-eval-after-load 'company
