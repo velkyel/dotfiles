@@ -44,7 +44,6 @@
                      diffview
                      projectile
                      ivy
-                     ivy-rich
                      ivy-hydra
                      smex
                      counsel
@@ -283,12 +282,6 @@
       '((t . ivy--regex-ignore-order))
       swiper-action-recenter t)
 
-(require 'ivy-rich)
-(ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
-
-(setq ivy-rich-switch-buffer-align-virtual-buffer t
-      ivy-rich-abbreviate-paths t)
-
 (require 'counsel)
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
@@ -319,7 +312,16 @@
 (require 'counsel-projectile)
 (counsel-projectile-on)
 
-(global-set-key (kbd "C-x C-p") 'counsel-projectile-find-file)
+(defun my-switch-to-buffer ()
+  (interactive)
+  (condition-case nil
+      (if (projectile-project-root)
+          (counsel-projectile)
+        (ivy-switch-buffer))
+    ;; fallback if error occurs (usually in projectile-project-root)
+    (error (ivy-switch-buffer))))
+
+(global-set-key (kbd "C-x b") 'my-switch-to-buffer)
 
 (setq counsel-projectile-ag-initial-input
       '(projectile-symbol-or-selection-at-point))
