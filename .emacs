@@ -161,7 +161,7 @@
 (show-paren-mode 1)
 ;; (setq show-paren-style 'expression)
 (transient-mark-mode t)
-;; (which-function-mode)
+(which-function-mode)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default py-indent-offset 4)
