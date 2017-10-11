@@ -671,6 +671,12 @@
                 ""))
               major-mode)))))
 
+(require 'compile)
+(define-key compilation-mode-map (kbd "C-c C-t")
+  (lambda ()
+    (interactive)
+    (compilation-set-skip-threshold (mod (1+ compilation-skip-threshold) 3))))
+
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
   (add-to-list 'company-backends 'company-rtags)
