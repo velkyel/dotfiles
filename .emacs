@@ -282,6 +282,9 @@
       '((t . ivy--regex-ignore-order))
       swiper-action-recenter t)
 
+;; TODO: vystavit vlastni variantu ivy--virtual-buffers ktera namisto
+;; bookmarks prida vysledek counsel-projectile--buffer-file-list
+
 (require 'counsel)
 (global-set-key (kbd "M-x") 'counsel-M-x)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
