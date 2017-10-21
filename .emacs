@@ -42,12 +42,12 @@
                      processing-mode
                      restart-emacs
                      diffview
+                     helm
+                     helm-swoop
                      projectile
-                     ivy
-                     ivy-hydra
-                     smex
-                     counsel
-                     counsel-projectile
+                     helm-projectile
+                     ace-jump-helm-line
+                     ;; smex
                      super-save
                      anzu
                      shell
@@ -82,7 +82,8 @@
                      key-seq
                      dumb-jump
                      shackle
-                     ;; x-path-walker
+                     x-path-walker
+                     helm-xref
                      ;; back-button
                      ;; jump-char
                      crux
@@ -269,40 +270,6 @@
   (exec-path-from-shell-initialize)
   (setq python-shell-completion-native-enable nil))
 
-(require 'ivy)
-(ivy-mode 1)
-(diminish 'ivy-mode)
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
-
-(setq ivy-use-virtual-buffers t
-      ivy-virtual-abbreviate 'full
-      ivy-height 20
-      ivy-initial-inputs-alist nil   ;; no regexp by default
-      ivy-re-builders-alist  ;; allow input not in order
-      '((t . ivy--regex-ignore-order))
-      swiper-action-recenter t)
-
-;; TODO: vystavit vlastni variantu ivy--virtual-buffers ktera namisto
-;; bookmarks prida vysledek counsel-projectile--buffer-file-list
-
-(require 'counsel)
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "C-h a") 'counsel-apropos)
-(global-set-key (kbd "M-i")
-                (lambda ()
-                  (interactive)
-                  (swiper (thing-at-point 'symbol t))))
-(global-set-key (kbd "M-y") 'counsel-yank-pop)
-(global-set-key (kbd "M-G")
-                (lambda ()
-                  (interactive)
-                  (counsel-ag (if (use-region-p)
-                                  (buffer-substring-no-properties (region-beginning) (region-end))
-                                (thing-at-point 'symbol t)))))
-
-(define-key counsel-find-file-map (kbd "C-l") 'counsel-up-directory)
-
 (require 'projectile)
 
 (setq projectile-enable-caching t)
@@ -310,26 +277,73 @@
 (diminish 'projectile-mode)
 
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
-(setq projectile-completion-system 'ivy)
 
-(require 'counsel-projectile)
-(counsel-projectile-on)
+(require 'helm)
+(require 'helm-config)
+(helm-mode 1)   ;; completion-read etc..
+(diminish 'helm-mode)
 
-(defun my-switch-to-buffer ()
+(setq helm-candidate-number-limit 100)
+(setq helm-buffer-max-length 32)
+;; (helm-push-mark-mode 1)
+
+;; (advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
+;;             :around (lambda (fcn file)
+;;                       (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
+;;                         (funcall fcn file))))
+
+(add-hook 'helm-grep-mode-hook 'grep-mode)
+(setq helm-grep-save-buffer-name-no-confirm 1)
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-z") 'helm-select-action)
+
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
+(setq helm-projectile-fuzzy-match nil)
+
+(require 'helm-for-files)    ;; helm-source-recentf
+
+(defun my-helm-projectile-buffers-list ()
   (interactive)
-  (condition-case nil
-      (if (projectile-project-root)
-          (counsel-projectile)
-        (ivy-switch-buffer))
-    ;; fallback if error occurs (usually in projectile-project-root)
-    (error (ivy-switch-buffer))))
+  (unless helm-source-buffers-list
+    (setq helm-source-buffers-list
+          (helm-make-source "Buffers" 'helm-source-buffers)))
+  (helm :sources '(helm-source-buffers-list
+                   helm-source-projectile-recentf-list
+                   helm-source-projectile-files-list
+                   helm-source-recentf
+                   helm-source-buffer-not-found)
+        :buffer "*helm buffers*"
+        :keymap helm-buffer-map
+        :truncate-lines helm-buffers-truncate-lines))
 
-(global-set-key (kbd "C-x b") 'my-switch-to-buffer)
+(global-set-key [remap list-buffers] 'my-helm-projectile-buffers-list)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x b") 'my-helm-projectile-buffers-list)
+(global-set-key (kbd "C-h a") 'helm-apropos)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-set-key (kbd "C-c <SPC>") 'helm-all-mark-rings)
+(global-set-key (kbd "C-c C-r") 'helm-resume)
 
-(setq counsel-projectile-ag-initial-input
-      '(projectile-symbol-or-selection-at-point))
+(autoload 'helm-swoop "helm-swoop")
+(with-eval-after-load 'helm-swoop
+  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line))
+(global-set-key (kbd "M-i") 'helm-swoop)
 
-(global-set-key (kbd "M-g") 'counsel-projectile-ag)
+(require 'helm-grep)
+
+(global-set-key (kbd "M-g") (lambda ()
+                              (interactive)
+                              (helm-grep-ag (projectile-project-root) nil)))
+
+(global-set-key (kbd "M-G") (lambda ()
+                              (interactive)
+                              (helm-grep-ag (helm-current-directory) nil)))
 
 (global-set-key (kbd "C-h f") 'helpful-function)
 (global-set-key (kbd "C-h v") 'helpful-variable)
@@ -349,9 +363,9 @@
       shackle-inhibit-window-quit-on-same-windows t)
 (shackle-mode)
 
-;; (autoload 'helm-x-path-walker "x-path-walker")
-;; (with-eval-after-load 'json-mode
-;;   (define-key json-mode-map (kbd "C-.") 'helm-x-path-walker))
+(autoload 'helm-x-path-walker "x-path-walker")
+(with-eval-after-load 'json-mode
+  (define-key json-mode-map (kbd "C-.") 'helm-x-path-walker))
 
 (add-hook 'json-mode-hook (lambda ()
                             (make-local-variable 'js-indent-level)
@@ -387,6 +401,8 @@
 ;; (global-set-key (kbd "M-M") #'jump-char-backward)
 
 (global-set-key [remap fill-paragraph] #'unfill-toggle)
+
+(define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
 
 (defun dired-back-to-top ()
   (interactive)
@@ -474,8 +490,8 @@
 (global-set-key (kbd "C-x g") 'magit-status)
 (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 
-(with-eval-after-load 'magit
-  (setq magit-completing-read-function 'ivy-completing-read))
+;; (with-eval-after-load 'magit
+;;   (setq magit-completing-read-function 'ivy-completing-read))
 
 (global-set-key (kbd "C-w") (lambda ()
                               (interactive)
@@ -572,7 +588,7 @@
 
 (autoload 'dumb-jump-go "dumb-jump")
 (autoload 'dumb-jump-back "dumb-jump")
-(setq dumb-jump-selector 'ivy)
+(setq dumb-jump-selector 'helm)
 
 (quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
 
@@ -587,7 +603,7 @@
 (autoload 'rtags-get-summary-text "rtags")
 
 (with-eval-after-load 'rtags
-  (setq rtags-display-result-backend 'ivy)
+  (setq rtags-display-result-backend 'helm)
   (setq rtags-imenu-syntax-highlighting t)
   (set-face-attribute 'rtags-skippedline
                       nil
@@ -606,7 +622,7 @@
   (interactive)
   (if (rtags-is-indexed)
       (rtags-imenu)
-    (imenu)))             ;; TODO: counsel-imenu-in-all-buffers -> imenu-anywhere (ivy)
+    (helm-imenu-in-all-buffers)))    ;; semantic-or-imenu nil
 
 (defun my-non-special-modes-setup ()
   (setq indicate-empty-lines t)
@@ -624,7 +640,7 @@
   ;; (semantic-mode 1)
   ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
-  (define-key prog-mode-map (kbd "C-.") 'imenu)
+  (define-key prog-mode-map (kbd "C-.") 'my-imenu)
   )
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
@@ -633,8 +649,8 @@
 
 (add-hook 'prog-mode-hook 'my-prog-modes-hook)
 
-;; (require 'helm-xref)
-;; (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
+(require 'helm-xref)
+(setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
 (defun run-s7 ()
   (interactive)
@@ -876,6 +892,22 @@
 (set-face-attribute 'avy-background-face
                     nil
                     :foreground "gray50")
+
+(set-face-attribute 'helm-ff-executable
+                    nil
+                    :foreground "#228b22")
+
+(set-face-attribute 'helm-selection
+                    nil
+                    :background "#a5e8be")
+
+(set-face-attribute 'helm-visible-mark
+                    nil
+                    :background "#f1c40f")
+
+(set-face-attribute 'helm-source-header
+                    nil
+                    :height 0.9)
 
 (set-face-attribute 'font-lock-comment-face
                     nil
