@@ -545,8 +545,8 @@
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.mm$" . objc-mode))
-(add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\)\\'" . glsl-mode))
-;; ...usf = unreal engine
+(add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\|sc\\)\\'" . glsl-mode))
+;; ...usf = unreal engine, sc = bgfx
 
 (setq clang-format-style (concat "{BasedOnStyle: Google,"
                                  " BreakBeforeBraces: Mozilla,"
