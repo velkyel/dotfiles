@@ -1,18 +1,28 @@
 import XMonad
+import XMonad.Config.Gnome
+import XMonad.Layout.Minimize
+import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
 import XMonad.Util.EZConfig
 import XMonad.Hooks.ManageHelpers
 import XMonad.Hooks.SetWMName
 
-main = xmonad $ defaultConfig {
-  layoutHook = smartBorders $ layoutHook defaultConfig,
+startup :: X ()
+startup = do
+    setWMName "LG3D"
+    spawn "xrdb .Xresources"
+    spawn "xsetroot -solid black"
+    spawn "urxvtd --quiet --opendisplay --fork"
+
+main = xmonad $ gnomeConfig {
+  layoutHook = smartBorders $ layoutHook gnomeConfig,
   terminal = "urxvtc",
   borderWidth = 4,
   focusFollowsMouse = False,
-  manageHook = composeOne
-               [ className =? "bgfx" -?> doFloat
-               , isFullscreen -?> doFullFloat ],
-  startupHook = setWMName "LG3D"
+  -- manageHook = composeOne
+  --             [ className =? "bgfx" -?> doFloat
+  --             , isFullscreen -?> doFullFloat ],
+  startupHook = startup
   }
   `removeKeysP`
        [ "M-k", "M-n", "M-m", "M-w", "M-q", "M-e", "M-r",
