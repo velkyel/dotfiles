@@ -18,7 +18,7 @@ Xft.rgba: rgb
 ! URxvt*font: xft:Inconsolata-13
 URxvt*font: xft:DejaVu Sans Mono:size=10
 URxvt*scrollBar: false
-URxvt*background: grey80
+URxvt*background: white
 Urxvt*foreground: black
 Urxvt*depth: 32
 URxvt.iso14755: false
@@ -32,25 +32,25 @@ URxvt.keysym.C-percent:   \033[%
 URxvt.keysym.C-equal:     \033[=
 
 URxvt*color0:             #2e3436
-URxvt*color8:             #7e807b
+URxvt*color8:             #555753
 ! red dark/light
 URxvt*color1:             #cc0000
 URxvt*color9:             #ef2929
 ! green dark/light
 URxvt*color2:             #4e9a06
-URxvt*color10:            #8aa234
+URxvt*color10:            #8ae234
 ! yellow dark/light
-URxvt*color3:             #edd400
+URxvt*color3:             #c4a000
 URxvt*color11:            #fce94f
 ! blue dark/light
 URxvt*color4:             #3465a4
 URxvt*color12:            #729fcf
 ! magenta dark/light
-URxvt*color5:             #92659a
-URxvt*color13:            #c19fbe
+URxvt*color5:             #75507b
+URxvt*color13:            #ad7fa8
 ! cyan dark/light
-URxvt*color6:             #07c7ca
-URxvt*color14:            #63b9b9
+URxvt*color6:             #06989a
+URxvt*color14:            #34e2e2
 ! white dark/light
 URxvt*color7:             #d3d7cf
 URxvt*color15:            #eeeeec
