@@ -125,6 +125,7 @@
       ;; imenu-auto-rescan t
       ;; echo-keystrokes 0.1
       use-dialog-box nil
+      shift-select-mode nil
       uniquify-buffer-name-style 'forward
       ediff-window-setup-function 'ediff-setup-windows-plain
       vc-diff-switches "-u"
@@ -247,15 +248,14 @@
   ;; (set-frame-font "DejaVu Sans Mono-11.5"))
   ;; (setq x-alt-keysym 'meta)
 
-(require 'smartparens-config)
-(sp-use-smartparens-bindings)
-(diminish 'smartparens-mode)
-
-(add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
-(add-hook 'lisp-interaction-mode-hook 'smartparens-mode)
-(add-hook 'lisp-mode-hook 'smartparens-mode)
-(add-hook 'scheme-mode-hook 'smartparens-mode)
-(add-hook 'ielm-mode-hook 'smartparens-mode)
+;; (require 'smartparens-config)
+;; (sp-use-smartparens-bindings)
+;; (diminish 'smartparens-mode)
+;; (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
+;; (add-hook 'lisp-interaction-mode-hook 'smartparens-mode)
+;; (add-hook 'lisp-mode-hook 'smartparens-mode)
+;; (add-hook 'scheme-mode-hook 'smartparens-mode)
+;; (add-hook 'ielm-mode-hook 'smartparens-mode)
 
 (setq scroll-conservatively 101)
 
@@ -394,6 +394,7 @@
 (key-seq-define-global "jl" 'goto-line)
 (key-seq-define-global "jk" 'avy-goto-char-timer)
 (key-seq-define-global "JJ" 'crux-switch-to-previous-buffer)
+(key-seq-define-global "bb" 'my-helm-projectile-buffers-list)
 (key-chord-mode +1)
 
 ;; (require 'jump-char)
@@ -740,7 +741,7 @@
 (setq inf-clojure-program '("localhost" . 9999))   ;; "planck"
 (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode)
 (add-hook 'clojure-mode-hook 'eldoc-mode)
-(add-hook 'clojure-mode-hook 'smartparens-mode)
+;; (add-hook 'clojure-mode-hook 'smartparens-mode)
 (add-hook 'inf-clojure-mode-hook 'eldoc-mode)
 
 (add-hook 'python-mode-hook
