@@ -394,7 +394,7 @@
 (key-seq-define-global "jl" 'goto-line)
 (key-seq-define-global "jk" 'avy-goto-char-timer)
 (key-seq-define-global "JJ" 'crux-switch-to-previous-buffer)
-(key-seq-define-global "bb" 'my-helm-projectile-buffers-list)
+;; (key-seq-define-global "bb" 'my-helm-projectile-buffers-list)
 (key-chord-mode +1)
 
 ;; (require 'jump-char)
@@ -850,6 +850,7 @@
       gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
       mm-discouraged-alternatives '("text/html" "text/richtext")
       gnus-inhibit-startup-message t
+      gnus-agent-expire-days 4
       gnus-parameters
       '((".*"
          (display . all))))
