@@ -39,6 +39,7 @@
                      json-mode
                      json-navigator
                      haskell-mode
+                     lua-mode
                      processing-mode
                      restart-emacs
                      diffview
@@ -96,8 +97,10 @@
                      dired-rainbow
                      ))
 
-(if (file-exists-p "~/rtags/src")
-    (add-to-list 'load-path "~/rtags/src"))
+(setq use-rtags (file-exists-p "~/rtags/src"))
+
+(when use-rtags
+  (add-to-list 'load-path "~/rtags/src"))
 
 (unless package-archive-contents
   (package-refresh-contents))
@@ -239,8 +242,9 @@
 
 (when (or (equal system-type 'darwin)
           (equal system-type 'gnu/linux))
-  (exec-path-from-shell-initialize)
-  (setq python-shell-completion-native-enable nil))
+  (exec-path-from-shell-initialize))
+
+(setq python-shell-completion-native-enable nil)
 
 (require 'projectile)
 (setq projectile-enable-caching t)
@@ -545,18 +549,19 @@
 (require 'dumb-jump)
 (setq dumb-jump-selector 'helm)
 
-(quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
+;; (quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
 (require 'lua-mode)
 (define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
 (define-key lua-mode-map (kbd "M-,") 'dumb-jump-back)
 
-(require 'rtags)
-(setq rtags-display-result-backend 'helm)
-(setq rtags-imenu-syntax-highlighting t)
+(when use-rtags
+  (require 'rtags)
+  (setq rtags-display-result-backend 'helm)
+  (setq rtags-imenu-syntax-highlighting t))
 
 (defun my-imenu ()
   (interactive)
-  (if (rtags-is-indexed)
+  (if (and use-rtags (rtags-is-indexed))
       (rtags-imenu)
     (helm-imenu-in-all-buffers)))    ;; semantic-or-imenu nil
 
@@ -638,7 +643,8 @@
 
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
-  (add-to-list 'company-backends 'company-rtags)
+  (when use-rtags
+    (add-to-list 'company-backends 'company-rtags))
   ;; (setq rtags-show-containing-function t)
   ;; (setq-local eldoc-documentation-function #'rtags-eldoc-function)
   ;; (eldoc-mode 1)
@@ -668,7 +674,7 @@
   (define-key c-mode-base-map (kbd "M-.") 'my-goto-symbol)
   (define-key c-mode-base-map (kbd "M-,") 'pop-tag-mark)
   (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
-  (define-key c-mode-base-map (kbd "M-?") 'rtags-display-summary)
+  (when use-rtags (define-key c-mode-base-map (kbd "M-?") 'rtags-display-summary))
   (define-key c-mode-base-map (kbd "C-i") 'clang-format)
   (define-key c-mode-base-map (kbd "C-.") 'my-imenu)
   (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file))
@@ -684,15 +690,18 @@
              (setq-local eldoc-mode nil)))
 
 (with-eval-after-load 'python
-  (progn
-    (require 'elpy)
-    (setq python-shell-interpreter "python3")
-    (setq elpy-rpc-python-command "python3")
-    (setq elpy-eldoc-show-current-function nil)
-    (elpy-enable)
-    (remove-hook 'elpy-modules 'elpy-module-yasnippet)
-    (when (kelly?)
-      (remove-hook 'elpy-modules 'elpy-module-flymake))))
+  (if (equal system-type 'windows-nt)
+      (progn
+        (setq python-shell-interpreter "python.exe"))
+    (progn
+      (require 'elpy)
+      (setq python-shell-interpreter "python3")
+      (setq elpy-rpc-python-command "python3")
+      (setq elpy-eldoc-show-current-function nil)
+      (elpy-enable)
+      (remove-hook 'elpy-modules 'elpy-module-yasnippet)
+      (when (kelly?)
+        (remove-hook 'elpy-modules 'elpy-module-flymake)))))
 
 ;; (require 'geiser)
 (setq geiser-active-implementations '(racket))
@@ -822,17 +831,10 @@
                     nil
                     :background "gray85")   ;; terminal
 
-(set-face-attribute 'rtags-skippedline
-                    nil
-                    :background "gray70")
-
-(set-face-attribute 'rtags-warnline
-                    nil
-                    :background "#ccccff")
-
-(set-face-attribute 'rtags-errline
-                    nil
-                    :background "#eeb0b0")
+(when use-rtags
+  (set-face-attribute 'rtags-skippedline nil :background "gray70")
+  (set-face-attribute 'rtags-warnline nil :background "#ccccff")
+  (set-face-attribute 'rtags-errline nil :background "#eeb0b0"))
 
 (set-face-attribute 'js2-external-variable
                     nil
