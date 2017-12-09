@@ -46,7 +46,6 @@
                      helm-swoop
                      projectile
                      helm-projectile
-                     ace-jump-helm-line
                      ;; smex
                      super-save
                      anzu
@@ -90,13 +89,11 @@
                      web-mode
                      js2-mode
                      rust-mode
-                     smartparens
                      esup
                      smart-hungry-delete
                      helpful
                      dired-collapse
                      dired-rainbow
-                     auto-package-update
                      ))
 
 (if (file-exists-p "~/rtags/src")
@@ -109,6 +106,7 @@
     (package-install package)))
 
 (require 'subr-x)    ;; string-trim
+(require 'diminish)
 
 (setq compilation-ask-about-save nil
       compilation-always-kill t
@@ -134,8 +132,14 @@
       eval-expression-print-level nil
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Čapák"
+      scroll-conservatively 101
       google-translate-default-source-language "en"
       google-translate-default-target-language "cs")
+
+(setq-default indent-tabs-mode nil
+              line-spacing nil
+              tab-width 4
+              py-indent-offset 4)
 
 (defun kelly? ()
   (or (string= system-name "typhoon.autokelly.local")
@@ -163,10 +167,6 @@
 ;; (setq show-paren-style 'expression)
 (transient-mark-mode t)
 (which-function-mode)
-(setq-default indent-tabs-mode nil)
-(setq-default tab-width 4)
-(setq-default py-indent-offset 4)
-;; (setq-default abbrev-mode t)
 (winner-mode t)   ;; C-c <left|right>
 (set-language-environment "czech")
 (setq default-input-method "czech-qwerty")
@@ -182,12 +182,7 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-(autoload 'crux-start-or-switch-to "crux")
-(autoload 'crux-switch-to-previous-buffer "crux")
-(autoload 'crux-kill-whole-line "crux")
-(autoload 'crux-move-beginning-of-line "crux")
-(autoload 'crux-duplicate-current-line-or-region "crux")
-(autoload 'crux-smart-open-line "crux")
+(require 'crux)
 
 (setenv "PAGER" (executable-find "cat"))
 (global-set-key (kbd "C-c t")
@@ -195,16 +190,10 @@
                   (interactive)
                   (crux-start-or-switch-to 'shell "*shell*")))
 
-(autoload 'diminish "diminish" nil t)
-
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 (vhl/ext/etags/off)
 (diminish 'volatile-highlights-mode)
-
-;; (require 'back-button)
-;; (back-button-mode 1)
-;; (diminish 'back-button-mode)
 
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
@@ -221,9 +210,7 @@
      (list (line-beginning-position)
            (line-beginning-position 2)))))
 
-;(setq-default line-spacing nil)
 (setq global-auto-revert-non-file-buffers t)
-;; (setq auto-revert-verbose nil)
 (global-auto-revert-mode 1)
 
 (require 'recentf)
@@ -243,26 +230,11 @@
 
 (when (and window-system (equal system-type 'gnu/linux))
   (set-frame-font "hack 11"))
-  ;; (set-frame-font "Inconsolata 13"))
-  ;; (set-frame-font "mononoki-12"))
-  ;; (set-frame-font "DejaVu Sans Mono-11.5"))
-  ;; (setq x-alt-keysym 'meta)
-
-;; (require 'smartparens-config)
-;; (sp-use-smartparens-bindings)
-;; (diminish 'smartparens-mode)
-;; (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
-;; (add-hook 'lisp-interaction-mode-hook 'smartparens-mode)
-;; (add-hook 'lisp-mode-hook 'smartparens-mode)
-;; (add-hook 'scheme-mode-hook 'smartparens-mode)
-;; (add-hook 'ielm-mode-hook 'smartparens-mode)
-
-(setq scroll-conservatively 101)
 
 (require 'unkillable-scratch)
 (unkillable-scratch 1)
 
-(autoload 'goto-last-change "goto-last-change")
+(require 'goto-last-change)
 (global-set-key "\C-x\C-\\" 'goto-last-change)
 
 (when (or (equal system-type 'darwin)
@@ -271,37 +243,37 @@
   (setq python-shell-completion-native-enable nil))
 
 (require 'projectile)
-
 (setq projectile-enable-caching t)
 (projectile-global-mode)
 (diminish 'projectile-mode)
-
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
 
 (require 'helm)
 (require 'helm-config)
+(require 'helm-grep)
 (helm-mode 1)   ;; completion-read etc..
 (diminish 'helm-mode)
-
 (setq helm-candidate-number-limit 100)
 (setq helm-buffer-max-length 32)
 ;; (helm-push-mark-mode 1)
-
-;; (advice-add 'helm-ff-filter-candidate-one-by-one     ;; skip ".." pattern (C-l)
-;;             :around (lambda (fcn file)
-;;                       (unless (string-match "\\(?:/\\|\\`\\)\\.\\{2\\}\\'" file)
-;;                         (funcall fcn file))))
-
-(add-hook 'helm-grep-mode-hook 'grep-mode)
-(setq helm-grep-save-buffer-name-no-confirm 1)
-
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-z") 'helm-select-action)
 
+(add-hook 'helm-grep-mode-hook 'grep-mode)
+(setq helm-grep-save-buffer-name-no-confirm 1)
+
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
 (setq helm-projectile-fuzzy-match nil)
+
+(global-set-key (kbd "M-g") (lambda ()
+                              (interactive)
+                              (helm-grep-ag (projectile-project-root) nil)))
+
+(global-set-key (kbd "M-G") (lambda ()
+                              (interactive)
+                              (helm-grep-ag (helm-current-directory) nil)))
 
 (require 'helm-for-files)    ;; helm-source-recentf
 
@@ -329,22 +301,12 @@
 (global-set-key (kbd "C-c <SPC>") 'helm-all-mark-rings)
 (global-set-key (kbd "C-c C-r") 'helm-resume)
 
-(autoload 'helm-swoop "helm-swoop")
-(with-eval-after-load 'helm-swoop
-  (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-  (define-key helm-swoop-map (kbd "C-s") 'helm-next-line))
+(require 'helm-swoop)
+(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
 (global-set-key (kbd "M-i") 'helm-swoop)
 
-(require 'helm-grep)
-
-(global-set-key (kbd "M-g") (lambda ()
-                              (interactive)
-                              (helm-grep-ag (projectile-project-root) nil)))
-
-(global-set-key (kbd "M-G") (lambda ()
-                              (interactive)
-                              (helm-grep-ag (helm-current-directory) nil)))
-
+(require 'helpful)
 (global-set-key (kbd "C-h f") 'helpful-function)
 (global-set-key (kbd "C-h v") 'helpful-variable)
 (global-set-key (kbd "C-h F") 'helpful-command)
@@ -354,6 +316,7 @@
 (global-set-key (kbd "<backspace>") 'smart-hungry-delete-backward-char)
 (global-set-key (kbd "C-d") 'smart-hungry-delete-forward-char)
 
+(require 'shackle)
 (setq shackle-rules
       '(("*Help*" :align t :select t)
         ("\\`\\*cider-repl .*" :regexp t :align t :size 0.2)
@@ -363,15 +326,15 @@
       shackle-inhibit-window-quit-on-same-windows t)
 (shackle-mode)
 
-(autoload 'helm-x-path-walker "x-path-walker")
-(with-eval-after-load 'json-mode
-  (define-key json-mode-map (kbd "C-.") 'helm-x-path-walker))
+(require 'x-path-walker)
+(require 'json-mode)
+(define-key json-mode-map (kbd "C-.") 'helm-x-path-walker)
 
 (add-hook 'json-mode-hook (lambda ()
                             (make-local-variable 'js-indent-level)
                             (setq js-indent-level 2)))
 
-(autoload 'web-mode "web-mode")
+(require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (when (kelly?)
   (add-to-list 'auto-mode-alist '("\\.tem?\\'" . web-mode)))
@@ -380,6 +343,7 @@
 (super-save-mode 1)
 (diminish 'super-save-mode)
 
+(require 'anzu)
 (global-anzu-mode 1)
 (diminish 'anzu-mode)
 
@@ -393,7 +357,7 @@
 (key-seq-define-global "jj" 'avy-goto-word-or-subword-1)
 (key-seq-define-global "jl" 'goto-line)
 (key-seq-define-global "jk" 'avy-goto-char-timer)
-(key-seq-define-global "JJ" 'crux-switch-to-previous-buffer)
+;; (key-seq-define-global "JJ" 'crux-switch-to-previous-buffer)
 ;; (key-seq-define-global "bb" 'my-helm-projectile-buffers-list)
 (key-chord-mode +1)
 
@@ -401,24 +365,23 @@
 ;; (global-set-key (kbd "M-m") #'jump-char-forward)
 ;; (global-set-key (kbd "M-M") #'jump-char-backward)
 
+(require 'unfill)
 (global-set-key [remap fill-paragraph] #'unfill-toggle)
 
-(define-key helm-map (kbd "C-'") 'ace-jump-helm-line-execute-action)
+(require 'dired)
+(require 'dired-collapse)
 
 (defun dired-back-to-top ()
   (interactive)
   (beginning-of-buffer)
   (dired-next-line 4))
 
-(require 'dired)
-
-(define-key dired-mode-map (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)
-
 (defun dired-jump-to-bottom ()
   (interactive)
   (end-of-buffer)
   (dired-next-line -1))
 
+(define-key dired-mode-map (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)
 (define-key dired-mode-map (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
 (put 'dired-find-alternate-file 'disabled nil)
@@ -454,29 +417,25 @@
 (quelpa '(vc-darcs :fetcher github :repo "velkyel/vc-darcs"))
 (setq vc-disable-async-diff nil)                ;; hotfix
 (add-to-list 'vc-handled-backends 'DARCS t)
-(autoload 'vc-darcs-find-file-hook "vc-darcs")
+(require 'vc-darcs)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
-(autoload 'js2-mode "js2-mode" nil t)
+(require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (setq js-indent-level 2)
+(define-key js2-mode-map (kbd "M-.") 'dumb-jump-go)
+(define-key js2-mode-map (kbd "M-,") 'dumb-jump-back)
+;; (define-key js2-mode-map (kbd "C-.") 'imenu)
 
 (quelpa '(inf-js :fetcher github :repo "velkyel/inf-js"))
-(autoload 'inf-js "inf-js" "Run an inferior js process" t)
-(autoload 'inf-js-minor-mode "inf-js")
+(require 'inf-js)
 (setq inf-js-program '("localhost" . 5555))
 (add-hook 'js2-mode-hook 'inf-js-minor-mode)
 ;; (js2-imenu-extras-mode 1)
 
 (quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
-(autoload 'hlsl-mode "hlsl-mode" nil t)
+(require 'hlsl-mode)
 (add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
-
-(with-eval-after-load 'js2-mode
-  (set-face-attribute 'js2-external-variable nil :foreground "red")
-  (define-key js2-mode-map (kbd "M-.") 'dumb-jump-go)
-  (define-key js2-mode-map (kbd "M-,") 'dumb-jump-back))
-  ;; (define-key js2-mode-map (kbd "C-.") 'imenu)
 
 ;; (quelpa '(inf-femtolisp :fetcher github :repo "velkyel/inf-femtolisp"))
 ;; (autoload 'inf-femtolisp "inf-femtolisp" "Run an inferior Femtolisp process" t)
@@ -503,20 +462,18 @@
 (global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
 (global-set-key (kbd "C-c d") 'crux-duplicate-current-line-or-region)
 
-(autoload 'zap-up-to-char "misc")
-(global-set-key (kbd "M-z") 'zap-up-to-char)
-
-(with-eval-after-load 'whitespace
-  (diminish 'whitespace-mode))
-
+(require 'whitespace)
+(diminish 'whitespace-mode)
 (setq whitespace-line-column 90
       whitespace-style '(face trailing newline))
 
+(require 'shrink-whitespace)
 (global-set-key (kbd "M-\\") 'shrink-whitespace)
 
-(autoload 'er/expand-region "expand-region")
+(require 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
 
+(require 'visual-regexp)
 (global-set-key (kbd "C-c r") 'vr/replace)
 
 (diminish 'eldoc-mode)
@@ -525,23 +482,22 @@
 (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
 (add-hook 'ielm-mode-hook 'eldoc-mode)
 
-(with-eval-after-load 'rainbow-mode
-  (diminish 'rainbow-mode))
-
+(require 'rainbow-mode)
+(diminish 'rainbow-mode)
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 (add-hook 'js2-mode-hook 'rainbow-mode)
 
-(with-eval-after-load 'highlight-symbol
-  (diminish 'highlight-symbol-mode)
-  (setq highlight-symbol-idle-delay 0.5)
-  (set-face-background 'highlight-symbol-face "gray78")
-  ;; (set-face-attribute 'highlight-symbol-face nil :underline t :background "gray85")
-  )
+(require 'highlight-symbol)
+(diminish 'highlight-symbol-mode)
+(setq highlight-symbol-idle-delay 0.5)
+(set-face-background 'highlight-symbol-face "gray78")
+;; (set-face-attribute 'highlight-symbol-face nil :underline t :background "gray85")
 
 ;; (setq sml/no-confirm-load-theme t)
 ;; (sml/setup)
 ;; (setq sml/theme 'respectful)
 
+(require 'smart-mark)
 (smart-mark-mode)
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -576,48 +532,27 @@
               (if (executable-find "clang-format-3.6") "clang-format-3.6"
                 (warn "install clang-format!")))))))
 
-(autoload 'company-mode "company" nil t)
-(with-eval-after-load 'company
-  (diminish 'company-mode)
-  (setq company-idle-delay nil)  ;; 0.1)
-  (when (equal system-type 'windows-nt)
-    (delete 'company-clang company-backends))
-  (define-key company-active-map (kbd "\C-n") 'company-select-next)
-  (define-key company-active-map (kbd "\C-p") 'company-select-previous)
-  (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
-  (define-key company-active-map (kbd "M-.") 'company-show-location))
+(require 'company)
+(diminish 'company-mode)
+(setq company-idle-delay nil)  ;; 0.1)
+(when (equal system-type 'windows-nt)
+  (delete 'company-clang company-backends))
+(define-key company-active-map (kbd "\C-n") 'company-select-next)
+(define-key company-active-map (kbd "\C-p") 'company-select-previous)
+(define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
+(define-key company-active-map (kbd "M-.") 'company-show-location)
 
-(autoload 'dumb-jump-go "dumb-jump")
-(autoload 'dumb-jump-back "dumb-jump")
+(require 'dumb-jump)
 (setq dumb-jump-selector 'helm)
 
 (quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
+(require 'lua-mode)
+(define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
+(define-key lua-mode-map (kbd "M-,") 'dumb-jump-back)
 
-(with-eval-after-load 'lua-mode
-  (define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
-  (define-key lua-mode-map (kbd "M-,") 'dumb-jump-back))
-
-(autoload 'rtags-is-indexed "rtags")
-(autoload 'rtags-imenu "rtags")
-(autoload 'rtags-find-symbol-at-point "rtags")
-(autoload 'rtags-display-summary "rtags")
-(autoload 'rtags-get-summary-text "rtags")
-
-(with-eval-after-load 'rtags
-  (setq rtags-display-result-backend 'helm)
-  (setq rtags-imenu-syntax-highlighting t)
-  (set-face-attribute 'rtags-skippedline
-                      nil
-                      :background "gray70")
-
-  (set-face-attribute 'rtags-warnline
-                      nil
-                      :background "#ccccff")
-
-  (set-face-attribute 'rtags-errline
-                      nil
-                      :background "#eeb0b0"))
-
+(require 'rtags)
+(setq rtags-display-result-backend 'helm)
+(setq rtags-imenu-syntax-highlighting t)
 
 (defun my-imenu ()
   (interactive)
@@ -641,8 +576,7 @@
   ;; (semantic-mode 1)
   ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
   (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
-  (define-key prog-mode-map (kbd "C-.") 'my-imenu)
-  )
+  (define-key prog-mode-map (kbd "C-.") 'my-imenu))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -698,6 +632,9 @@
   (lambda ()
     (interactive)
     (compilation-set-skip-threshold (mod (1+ compilation-skip-threshold) 3))))
+(setq compile-command (cond ((kelly?) "make -k -j 8")
+                            ((equal system-type 'windows-nt) "scons")
+                            (t "scons")))
 
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
@@ -711,11 +648,9 @@
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
-(autoload 'cff-find-other-file "cff")
-
-(with-eval-after-load 'cff
-  (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
-  (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm")))))
+(require 'cff)
+(add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
+(add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
 
 (defun my-goto-symbol ()
   (interactive)
@@ -775,10 +710,6 @@
                        slime-compiler-notes-tree
                        slime-company
                        slime-repl))
-
-(setq compile-command (cond ((kelly?) "make -k -j 8")
-                            ((equal system-type 'windows-nt) "scons")
-                            (t "scons")))
 
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
@@ -890,6 +821,22 @@
 (set-face-attribute 'default
                     nil
                     :background "gray85")   ;; terminal
+
+(set-face-attribute 'rtags-skippedline
+                    nil
+                    :background "gray70")
+
+(set-face-attribute 'rtags-warnline
+                    nil
+                    :background "#ccccff")
+
+(set-face-attribute 'rtags-errline
+                    nil
+                    :background "#eeb0b0")
+
+(set-face-attribute 'js2-external-variable
+                    nil
+                    :foreground "red")
 
 (set-face-attribute 'avy-background-face
                     nil
