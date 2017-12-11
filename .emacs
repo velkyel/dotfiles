@@ -12,12 +12,9 @@
           (lambda () (setq gc-cons-threshold my-gc-threshold)))
 
 (require 'package)
-
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-
 (package-initialize)
 
-(defun display-startup-echo-area-message nil nil)
 (menu-bar-mode -1)
 
 (defun setup-my-fringe ()
@@ -34,23 +31,20 @@
 (setq inhibit-startup-message t
       initial-scratch-message nil)
 
-(setq package-list '(diminish
+(setq package-list '(packed
+                     auto-compile
+                     diminish
                      exec-path-from-shell
                      json-mode
-                     json-navigator
                      haskell-mode
                      lua-mode
-                     processing-mode
                      restart-emacs
-                     diffview
                      helm
                      helm-swoop
                      projectile
                      helm-projectile
-                     ;; smex
                      super-save
                      anzu
-                     shell
                      avy
                      goto-last-change
                      unfill
@@ -58,11 +52,9 @@
                      ninja-mode
                      clojure-mode
                      inf-clojure
-                     whitespace
                      shrink-whitespace
                      expand-region
                      visual-regexp
-                     eldoc
                      rainbow-mode
                      smart-mode-line
                      smart-mark
@@ -84,13 +76,10 @@
                      shackle
                      x-path-walker
                      helm-xref
-                     ;; back-button
-                     ;; jump-char
                      crux
                      web-mode
                      js2-mode
                      rust-mode
-                     esup
                      smart-hungry-delete
                      helpful
                      dired-collapse
@@ -107,6 +96,11 @@
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
+
+(require 'packed)
+(require 'auto-compile)
+(auto-compile-on-load-mode 1)
+(auto-compile-on-save-mode 1)
 
 (require 'subr-x)    ;; string-trim
 (require 'diminish)
@@ -135,7 +129,8 @@
       eval-expression-print-level nil
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Čapák"
-      scroll-conservatively 101
+      ;;scroll-conservatively 101
+      scroll-preserve-screen-position 'always
       google-translate-default-source-language "en"
       google-translate-default-target-language "cs")
 
