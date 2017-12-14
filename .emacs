@@ -164,6 +164,7 @@
 (setq show-paren-delay 0)   ;; must be set before mode activating
 (show-paren-mode 1)
 ;; (setq show-paren-style 'expression)
+(electric-pair-mode 1)
 (transient-mark-mode t)
 (which-function-mode)
 (winner-mode t)   ;; C-c <left|right>
@@ -267,13 +268,19 @@
 (helm-projectile-on)
 (setq helm-projectile-fuzzy-match nil)
 
-(global-set-key (kbd "M-g") (lambda ()
-                              (interactive)
-                              (helm-grep-ag (projectile-project-root) nil)))
+(if (equal system-type 'windows-nt)
+    (global-set-key (kbd "M-g")
+                    (lambda () (interactive) (helm-grep-do-git-grep "")))
+  (global-set-key (kbd "M-g") (lambda ()
+                                (interactive)
+                                (helm-grep-ag (expand-file-name projectile-project-root) nil))))
 
-(global-set-key (kbd "M-G") (lambda ()
-                              (interactive)
-                              (helm-grep-ag (helm-current-directory) nil)))
+(if (equal system-type 'windows-nt)
+    (global-set-key (kbd "M-G") 'helm-grep-do-git-grep)
+  (global-set-key (kbd "M-G")
+                  (lambda ()
+                    (interactive)
+                    (helm-grep-ag (helm-current-directory) nil))))    ;; nebo expand-file-name default-directory ?
 
 (require 'helm-for-files)    ;; helm-source-recentf
 
