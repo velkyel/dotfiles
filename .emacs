@@ -224,7 +224,7 @@
   (set-frame-font "mononoki-16"))
 
 (when (equal system-type 'windows-nt)
-  (set-frame-font "mononoki-11"))
+  (set-frame-font "mononoki-10"))
 
 (when (and window-system (equal system-type 'gnu/linux))
   (set-frame-font "hack 11"))
