@@ -127,6 +127,7 @@
       search-highlight t
       isearch-allow-scroll t
       eval-expression-print-level nil
+      mail-user-agent 'gnus-user-agent
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Čapák"
       ;;scroll-conservatively 101
