@@ -555,6 +555,7 @@
 (quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
 (require 'lua-mode)
 (setq lua-default-application '("localhost" . 5555))
+(define-key lua-mode-map (kbd "C-M-x") 'lua-send-proc)
 (define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
 (define-key lua-mode-map (kbd "M-,") 'dumb-jump-back)
 
