@@ -37,7 +37,6 @@
                      exec-path-from-shell
                      json-mode
                      haskell-mode
-                     lua-mode
                      restart-emacs
                      helm
                      helm-swoop
@@ -552,8 +551,9 @@
 (require 'dumb-jump)
 (setq dumb-jump-selector 'helm)
 
-;; (quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
+(quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
 (require 'lua-mode)
+(setq lua-default-application '("localhost" . 5555))
 (define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
 (define-key lua-mode-map (kbd "M-,") 'dumb-jump-back)
 
@@ -594,6 +594,8 @@
 
 (require 'helm-xref)
 (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
+
+(require 'scheme)
 
 (defun run-s7 ()
   (interactive)
