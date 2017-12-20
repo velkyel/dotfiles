@@ -32,6 +32,7 @@
       initial-scratch-message nil)
 
 (setq package-list '(packed
+                     auto-package-update
                      auto-compile
                      diminish
                      exec-path-from-shell
