@@ -263,6 +263,7 @@
 
 (add-hook 'helm-grep-mode-hook 'grep-mode)
 (setq helm-grep-save-buffer-name-no-confirm 1)
+(setq helm-grep-file-path-style 'relative)
 
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
