@@ -248,6 +248,8 @@
 (projectile-global-mode)
 (diminish 'projectile-mode)
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
+(add-to-list 'projectile-globally-ignored-directories ".build")
+(add-to-list 'projectile-globally-ignored-directories "build")
 
 (require 'helm)
 (require 'helm-config)
