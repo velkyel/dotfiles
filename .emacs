@@ -74,7 +74,6 @@
                      key-seq
                      dumb-jump
                      shackle
-                     x-path-walker
                      helm-xref
                      crux
                      web-mode
@@ -336,10 +335,7 @@
       shackle-inhibit-window-quit-on-same-windows t)
 (shackle-mode)
 
-(require 'x-path-walker)
-(require 'json-mode)
-(define-key json-mode-map (kbd "C-.") 'helm-x-path-walker)
-
+(require 'json-mode)    ;; C-c C-p show-path; C-c C-f beautify
 (add-hook 'json-mode-hook (lambda ()
                             (make-local-variable 'js-indent-level)
                             (setq js-indent-level 2)))
