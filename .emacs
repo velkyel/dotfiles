@@ -20,7 +20,7 @@
 (defun setup-my-fringe ()
   (fringe-mode '(8 . 0)))
 
-(if window-system
+(if (display-graphic-p)
     (progn
       (tool-bar-mode -1)
       (tooltip-mode -1)
@@ -227,7 +227,7 @@
 (when (equal system-type 'windows-nt)
   (set-frame-font "mononoki-10"))
 
-(when (and window-system (equal system-type 'gnu/linux))
+(when (and (display-graphic-p) (equal system-type 'gnu/linux))
   (set-frame-font "hack 11"))
 
 (require 'unkillable-scratch)
