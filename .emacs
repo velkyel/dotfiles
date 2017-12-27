@@ -56,7 +56,6 @@
                      expand-region
                      visual-regexp
                      rainbow-mode
-                     smart-mode-line
                      smart-mark
                      google-translate
                      glsl-mode
@@ -150,10 +149,7 @@
 
 (defun dos2unix ()
   (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (while (search-forward (string ?\C-m)  nil t)
-      (replace-match "" nil t))))
+  (set-buffer-file-coding-system 'unix))
 
 ;; (setq compilation-skip-threshold 2)
 
@@ -257,6 +253,7 @@
 (diminish 'helm-mode)
 (setq helm-candidate-number-limit 100)
 (setq helm-buffer-max-length 32)
+(setq helm-display-header-line nil)
 ;; (helm-push-mark-mode 1)
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
@@ -498,10 +495,6 @@
 (setq highlight-symbol-idle-delay 0.5)
 (set-face-background 'highlight-symbol-face "gray78")
 ;; (set-face-attribute 'highlight-symbol-face nil :underline t :background "gray85")
-
-;; (setq sml/no-confirm-load-theme t)
-;; (sml/setup)
-;; (setq sml/theme 'respectful)
 
 (require 'smart-mark)
 (smart-mark-mode)
