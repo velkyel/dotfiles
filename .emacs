@@ -660,7 +660,7 @@
   (interactive)
   (save-buffer)
   (deactivate-mark)
-  (ring-insert find-tag-marker-ring (point-marker))
+  (xref-push-marker-stack)
   (or (and (require 'rtags nil t)
            (rtags-is-indexed)
            (rtags-find-symbol-at-point))
