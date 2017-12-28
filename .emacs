@@ -20,13 +20,12 @@
 (defun setup-my-fringe ()
   (fringe-mode '(8 . 0)))
 
-(if (display-graphic-p)
-    (progn
-      (tool-bar-mode -1)
-      (tooltip-mode -1)
-      (scroll-bar-mode -1)
-      (add-hook 'window-setup-hook 'setup-my-fringe)
-      (add-hook 'after-make-frame-functions 'setup-my-fringe)))
+(when (display-graphic-p)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (scroll-bar-mode -1)
+  (add-hook 'window-setup-hook 'setup-my-fringe)
+  (add-hook 'after-make-frame-functions 'setup-my-fringe))
 
 (setq inhibit-startup-message t
       initial-scratch-message nil)
