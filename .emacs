@@ -176,6 +176,7 @@
 (which-function-mode)
 (winner-mode t)   ;; C-c <left|right>
 (type-break-mode 1)
+(type-break-query-mode 1)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (require 'crux)
