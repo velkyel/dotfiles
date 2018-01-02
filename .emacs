@@ -162,6 +162,7 @@
 (transient-mark-mode t)
 (which-function-mode)
 (winner-mode t)   ;; C-c <left|right>
+(type-break-mode 1)
 (set-language-environment "czech")
 (setq default-input-method "czech-qwerty")
 (if (kelly?)
