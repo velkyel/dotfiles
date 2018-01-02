@@ -158,7 +158,7 @@
 (setq show-paren-delay 0)   ;; must be set before mode activating
 (show-paren-mode 1)
 ;; (setq show-paren-style 'expression)
-(electric-pair-mode 1)
+;; (electric-pair-mode 1)
 (transient-mark-mode t)
 (which-function-mode)
 (winner-mode t)   ;; C-c <left|right>
