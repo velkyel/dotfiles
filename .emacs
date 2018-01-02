@@ -703,7 +703,7 @@
   (fset 'c-indent-region 'clang-format-region)
   (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
   (define-key c-mode-base-map (kbd "M-.") 'my-goto-symbol)
-  (define-key c-mode-base-map (kbd "M-,") 'pop-tag-mark)
+  (define-key c-mode-base-map (kbd "M-,") 'xref-pop-marker-stack)
   (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
   (when use-rtags (define-key c-mode-base-map (kbd "M-?") 'rtags-display-summary))
   (define-key c-mode-base-map (kbd "C-i") 'clang-format)
