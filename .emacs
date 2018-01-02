@@ -89,6 +89,27 @@
 (when use-rtags
   (add-to-list 'load-path "~/rtags/src"))
 
+(defun kelly? ()
+  (or (string= system-name "typhoon.autokelly.local")
+      (string= system-name "idev02")
+      (string= system-name "idev02.autokelly.local")
+      (string= system-name "idev03")
+      (string= system-name "idev03.autokelly.local")
+      (string= system-name "idev05")
+      (string= system-name "idev05.autokelly.local")))
+
+(set-language-environment "czech")
+(setq default-input-method "czech-qwerty")
+(if (kelly?)
+    (progn
+      (prefer-coding-system 'iso-latin-2-unix)
+      (set-terminal-coding-system 'iso-latin-2-unix)
+      (set-keyboard-coding-system 'iso-latin-2-unix))
+  (progn
+    (prefer-coding-system 'utf-8)
+    (set-terminal-coding-system 'utf-8)
+    (set-keyboard-coding-system 'utf-8)))
+
 (unless package-archive-contents
   (package-refresh-contents))
 (dolist (package package-list)
@@ -138,15 +159,6 @@
               tab-width 4
               py-indent-offset 4)
 
-(defun kelly? ()
-  (or (string= system-name "typhoon.autokelly.local")
-      (string= system-name "idev02")
-      (string= system-name "idev02.autokelly.local")
-      (string= system-name "idev03")
-      (string= system-name "idev03.autokelly.local")
-      (string= system-name "idev05")
-      (string= system-name "idev05.autokelly.local")))
-
 (defun dos2unix ()
   (interactive)
   (set-buffer-file-coding-system 'unix))
@@ -164,18 +176,6 @@
 (which-function-mode)
 (winner-mode t)   ;; C-c <left|right>
 (type-break-mode 1)
-(set-language-environment "czech")
-(setq default-input-method "czech-qwerty")
-(if (kelly?)
-    (progn
-      (prefer-coding-system 'iso-latin-2-unix)
-      (set-terminal-coding-system 'iso-latin-2-unix)
-      (set-keyboard-coding-system 'iso-latin-2-unix))
-  (progn
-    (prefer-coding-system 'utf-8)
-    (set-terminal-coding-system 'utf-8)
-    (set-keyboard-coding-system 'utf-8)))
-
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (require 'crux)
