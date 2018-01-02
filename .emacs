@@ -36,6 +36,7 @@
                      diminish
                      exec-path-from-shell
                      json-mode
+                     flymake-lua
                      haskell-mode
                      restart-emacs
                      helm
@@ -544,8 +545,21 @@
 (require 'dumb-jump)
 (setq dumb-jump-selector 'helm)
 
+(require 'flymake)
+(defvar flymake-mode-map (make-sparse-keymap))
+(define-key flymake-mode-map (kbd "C-M-n") 'flymake-goto-next-error)
+(define-key flymake-mode-map (kbd "C-M-p") 'flymake-goto-prev-error)
+
+(or (assoc 'flymake-mode minor-mode-map-alist)
+    (setq minor-mode-map-alist
+          (cons (cons 'flymake-mode flymake-mode-map)
+                minor-mode-map-alist)))
+
 (quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
 (require 'lua-mode)
+(require 'flymake-lua)
+(setq flymake-luac-program "luac5.3")
+(add-hook 'lua-mode-hook 'flymake-lua-load)
 (setq lua-default-application '("localhost" . 5555))
 (define-key lua-mode-map (kbd "C-M-x") 'lua-send-proc)
 (define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
