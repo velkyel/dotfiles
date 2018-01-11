@@ -82,6 +82,7 @@
                      helpful
                      dired-collapse
                      dired-rainbow
+                     mu4e-alert
                      ))
 
 (setq use-rtags (file-exists-p "~/rtags/src"))
@@ -146,7 +147,6 @@
       search-highlight t
       isearch-allow-scroll t
       eval-expression-print-level nil
-      mail-user-agent 'gnus-user-agent
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Čapák"
       scroll-conservatively 101
@@ -175,8 +175,9 @@
 (transient-mark-mode t)
 (which-function-mode)
 (winner-mode t)   ;; C-c <left|right>
-(type-break-mode 1)
-(type-break-query-mode 1)
+;; (type-break-mode 1)
+;; (type-break-query-mode 1)
+;; (type-break-mode-line-message-mode 1)
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (require 'crux)
@@ -275,6 +276,16 @@
   (global-set-key (kbd "M-g") (lambda ()
                                 (interactive)
                                 (helm-grep-ag (projectile-project-root) nil))))
+
+;; ;; helm-ag
+;; (setq helm-ag-insert-at-point t)
+;; (setq helm-ag--action-save-buffer #'helm-grep-save-results
+;; (global-set-key (kbd "M-g") #'helm-projectile-ag)
+
+;; TODO:
+;; - thing-at-point
+;; - spustit helm-grep z isearch
+;; - helm-ag (volano z helm-projectile-ag) ma v gr pro "args flags 0" neprazdny vysledek, zatimco helm-grep-ag nic nenajde
 
 (if (equal system-type 'windows-nt)
     (global-set-key (kbd "M-G") 'helm-grep-do-git-grep)
@@ -781,76 +792,57 @@
                                                     'compile))))
 ;; (global-set-key (kbd "M-o") 'other-window)
 
-(setq message-send-mail-function 'smtpmail-send-it
-      smtpmail-auth-credentials "~/.authinfo"
-      ;;smtpmail-stream-type 'ssl
-      starttls-use-gnutls t
-      smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
-      smtpmail-auth-credentials '(("mail.messagingengine.com" 587 "capak@inputwish.com" nil))
-      smtpmail-default-smtp-server "mail.messagingengine.com"
-      smtpmail-smtp-server "mail.messagingengine.com"
-      smtpmail-smtp-service 587)
-
-(autoload 'gnus "gnus" "Read network news." t)
-(global-set-key (kbd "C-c m") 'gnus)
-
-(setq gnus-select-method '(nnimap "fastmail"
-                                  (nnimap-address "mail.messagingengine.com")
-                                  (nnimap-server-port 993)
-                                  (nnimap-stream ssl)
-                                  (nnir-search-engine imap)
-                                  ;; press E to expire mail
-                                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
-      gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
-      gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
-      gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
-      gnus-thread-sort-functions '(gnus-thread-sort-by-most-recent-date)  ;; gnus-thread-sort-by-date))
-      gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
-      gnus-gcc-mark-as-read t
-      gnus-use-cache t
-      gnus-cacheable-groups "^nnimap"
-      gnus-sum-thread-tree-false-root ""
-      gnus-sum-thread-tree-indent " "
-      gnus-sum-thread-tree-leaf-with-other "├► "
-      gnus-sum-thread-tree-root ""
-      gnus-sum-thread-tree-single-leaf "╰► "
-      gnus-sum-thread-tree-vertical "│"
-      gnus-interactive-exit nil
-      message-kill-buffer-on-exit t
-      gnus-large-newsgroup nil
-      gnus-read-active-file 'some
-      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
-      mm-discouraged-alternatives '("text/html" "text/richtext")
-      gnus-inhibit-startup-message t
-      gnus-agent-expire-days 4
-      gnus-parameters
-      '((".*"
-         (display . all))))
-
-(setq nnmail-expiry-wait-function
-      (lambda (group)
-        (cond ((string= group "INBOX") 'immediate)
-              (t 'never))))
-
-;; (defun fastmail-archive ()
-;;   (interactive)
-;;   (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
-
-(defun fastmail-report-spam ()
-  (interactive)
-  (guns-summary-move-article nil "nnimap+fastmail:INBOX.Spam"))
-
-(defun my-gnus-summary-keys ()
-  ;; (local-set-key "y" 'fastmail-archive)
-  (local-set-key "$" 'fastmail-report-spam))
-
-;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
+(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+(require 'mu4e)
+(setq mu4e-maildir (expand-file-name "~/Maildir")
+      mu4e-drafts-folder "/INBOX.Drafts"
+      mu4e-sent-folder "/INBOX.Sent"
+      mu4e-trash-folder "/INBOX.Trash"
+      ;;mu4e-refile-folder . "/INBOX.Archive"
+      ;; mu4e-sent-message-behavior 'delete
+      mu4e-maildir-shortcuts
+      '(("/INBOX" . ?i)
+        ("/INBOX.Sent" . ?s)
+        ("/INBOX.Trash" . ?t)
+        ("/INBOX.Archive" . ?a))
+      mu4e-get-mail-command "offlineimap"
+      mu4e-headers-skip-duplicates t
+      mu4e-confirm-quit nil
+      mu4e-date-format-long "%d.%m.%Y"
+      mu4e-headers-date-format "%d.%m.%y"
+      mu4e-view-show-images t
+      mu4e-hide-index-messages t
+      mu4e-view-show-addresses t
+      mu4e-completing-read-function 'completing-read
+      mu4e-headers-leave-behavior 'apply
+      mu4e-html2text-command "html2markdown | grep -v '&nbsp_place_holder;'"
+      ;; html2text -utf8 -width 72
+      message-kill-buffer-on-exit t)
 
 (add-hook 'message-mode-hook
           '(lambda ()
              (my-non-special-modes-setup)
              (flyspell-mode t)))
+
+(global-set-key (kbd "C-c m") 'mu4e)
+
+(require 'mu4e-alert)
+(setq mu4e-alert-interesting-mail-query "flag:unread maildir:/INBOX")
+(mu4e-alert-enable-mode-line-display)
+(defun my-refresh-mu4e-alert-mode-line ()
+  (interactive)
+  (mu4e~proc-kill)
+  (mu4e-alert-enable-mode-line-display))
+(run-with-timer 0 60 'my-refresh-mu4e-alert-mode-line)
+
+(require 'smtpmail)
+(setq smtpmail-auth-credentials (expand-file-name "~/.authinfo")
+      message-send-mail-function 'smtpmail-send-it
+      starttls-use-gnutls t
+      smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
+      smtpmail-default-smtp-server "mail.messagingengine.com"
+      smtpmail-smtp-server "mail.messagingengine.com"
+      smtpmail-smtp-service 587)
 
 (defun what-face (pos) ;; under cursor
   (interactive "d")
