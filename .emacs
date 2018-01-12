@@ -792,57 +792,56 @@
                                                     'compile))))
 ;; (global-set-key (kbd "M-o") 'other-window)
 
-(add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
-(require 'mu4e)
-(setq mu4e-maildir (expand-file-name "~/Maildir")
-      mu4e-drafts-folder "/INBOX.Drafts"
-      mu4e-sent-folder "/INBOX.Sent"
-      mu4e-trash-folder "/INBOX.Trash"
-      ;;mu4e-refile-folder . "/INBOX.Archive"
-      ;; mu4e-sent-message-behavior 'delete
-      mu4e-maildir-shortcuts
-      '(("/INBOX" . ?i)
-        ("/INBOX.Sent" . ?s)
-        ("/INBOX.Trash" . ?t)
-        ("/INBOX.Archive" . ?a))
-      mu4e-get-mail-command "offlineimap"
-      mu4e-headers-skip-duplicates t
-      mu4e-confirm-quit nil
-      mu4e-date-format-long "%d.%m.%Y"
-      mu4e-headers-date-format "%d.%m.%y"
-      mu4e-view-show-images t
-      mu4e-hide-index-messages t
-      mu4e-view-show-addresses t
-      mu4e-completing-read-function 'completing-read
-      mu4e-headers-leave-behavior 'apply
-      mu4e-html2text-command "html2markdown | grep -v '&nbsp_place_holder;'"
-      ;; html2text -utf8 -width 72
-      message-kill-buffer-on-exit t)
+(when (not (equal system-type 'windows-nt))
+  (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+  (require 'mu4e)
+  (setq mu4e-maildir (expand-file-name "~/Maildir")
+        mu4e-drafts-folder "/INBOX.Drafts"
+        mu4e-sent-folder "/INBOX.Sent"
+        mu4e-trash-folder "/INBOX.Trash"
+        ;;mu4e-refile-folder . "/INBOX.Archive"
+        ;; mu4e-sent-message-behavior 'delete
+        mu4e-maildir-shortcuts
+        '(("/INBOX" . ?i)
+          ("/INBOX.Sent" . ?s)
+          ("/INBOX.Trash" . ?t)
+          ("/INBOX.Archive" . ?a))
+        mu4e-get-mail-command "offlineimap"
+        mu4e-headers-skip-duplicates t
+        mu4e-confirm-quit nil
+        mu4e-date-format-long "%d.%m.%Y"
+        mu4e-headers-date-format "%d.%m.%y"
+        mu4e-view-show-images t
+        mu4e-hide-index-messages t
+        mu4e-view-show-addresses t
+        mu4e-completing-read-function 'completing-read
+        mu4e-headers-leave-behavior 'apply
+        mu4e-html2text-command "html2markdown | grep -v '&nbsp_place_holder;'"
+        ;; html2text -utf8 -width 72
+        message-kill-buffer-on-exit t)
+  (add-hook 'message-mode-hook
+            '(lambda ()
+               (my-non-special-modes-setup)
+               (flyspell-mode t)))
+  (global-set-key (kbd "C-c m") 'mu4e)
 
-(add-hook 'message-mode-hook
-          '(lambda ()
-             (my-non-special-modes-setup)
-             (flyspell-mode t)))
+  (require 'mu4e-alert)
+  (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/INBOX")
+  (mu4e-alert-enable-mode-line-display)
+  (defun my-refresh-mu4e-alert-mode-line ()
+    (interactive)
+    (mu4e~proc-kill)
+    (mu4e-alert-enable-mode-line-display))
+  (run-with-timer 0 60 'my-refresh-mu4e-alert-mode-line)
 
-(global-set-key (kbd "C-c m") 'mu4e)
-
-(require 'mu4e-alert)
-(setq mu4e-alert-interesting-mail-query "flag:unread maildir:/INBOX")
-(mu4e-alert-enable-mode-line-display)
-(defun my-refresh-mu4e-alert-mode-line ()
-  (interactive)
-  (mu4e~proc-kill)
-  (mu4e-alert-enable-mode-line-display))
-(run-with-timer 0 60 'my-refresh-mu4e-alert-mode-line)
-
-(require 'smtpmail)
-(setq smtpmail-auth-credentials (expand-file-name "~/.authinfo")
-      message-send-mail-function 'smtpmail-send-it
-      starttls-use-gnutls t
-      smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
-      smtpmail-default-smtp-server "mail.messagingengine.com"
-      smtpmail-smtp-server "mail.messagingengine.com"
-      smtpmail-smtp-service 587)
+  (require 'smtpmail)
+  (setq smtpmail-auth-credentials (expand-file-name "~/.authinfo")
+        message-send-mail-function 'smtpmail-send-it
+        starttls-use-gnutls t
+        smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
+        smtpmail-default-smtp-server "mail.messagingengine.com"
+        smtpmail-smtp-server "mail.messagingengine.com"
+        smtpmail-smtp-service 587))
 
 (defun what-face (pos) ;; under cursor
   (interactive "d")
