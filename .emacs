@@ -806,7 +806,7 @@
           ("/INBOX.Sent" . ?s)
           ("/INBOX.Trash" . ?t)
           ("/INBOX.Archive" . ?a))
-        mu4e-get-mail-command "offlineimap"
+        mu4e-get-mail-command "offlineimap -o"
         mu4e-headers-skip-duplicates t
         mu4e-confirm-quit nil
         mu4e-date-format-long "%d.%m.%Y"
