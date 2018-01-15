@@ -573,7 +573,8 @@
 (define-key company-active-map (kbd "M-.") 'company-show-location)
 
 (require 'dumb-jump)
-(setq dumb-jump-selector 'helm)
+(setq dumb-jump-selector 'helm
+      dumb-jump-prefer-searcher 'ag)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
 
 (require 'flymake)
 (defvar flymake-mode-map (make-sparse-keymap))
