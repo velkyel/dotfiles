@@ -707,7 +707,7 @@
   (save-buffer)
   (deactivate-mark)
   (xref-push-marker-stack)
-  (or (and (require 'rtags nil t)
+  (or (and use-rtags
            (rtags-is-indexed)
            (rtags-find-symbol-at-point))
       (dumb-jump-go)))
