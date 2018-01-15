@@ -817,7 +817,9 @@
         mu4e-view-show-addresses t
         mu4e-completing-read-function 'completing-read
         mu4e-headers-leave-behavior 'apply
-        mu4e-html2text-command "html2markdown | grep -v '&nbsp_place_holder;'"
+        mu4e-html2text-command (if (featurep 'ns-win)
+                                   "textutil -stdin -format html -convert txt -stdout"
+                                 "html2markdown | grep -v '&nbsp_place_holder;'")
         ;; html2text -utf8 -width 72
         message-kill-buffer-on-exit t)
   (add-hook 'message-mode-hook
