@@ -46,7 +46,7 @@
                      super-save
                      anzu
                      avy
-                     goto-last-change
+                     goto-chg
                      unfill
                      quelpa
                      ninja-mode
@@ -232,7 +232,7 @@
 (require 'unkillable-scratch)
 (unkillable-scratch 1)
 
-(require 'goto-last-change)
+(require 'goto-chg)
 (global-set-key "\C-x\C-\\" 'goto-last-change)
 
 (when (or (equal system-type 'darwin)
