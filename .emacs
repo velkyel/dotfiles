@@ -796,6 +796,7 @@
 (when (not (equal system-type 'windows-nt))
   (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
   (require 'mu4e)
+  (require 'mu4e-contrib)
   (setq mu4e-maildir (expand-file-name "~/Maildir")
         mu4e-drafts-folder "/INBOX.Drafts"
         mu4e-sent-folder "/INBOX.Sent"
@@ -819,7 +820,7 @@
         mu4e-headers-leave-behavior 'apply
         mu4e-html2text-command (if (featurep 'ns-win)
                                    "textutil -stdin -format html -convert txt -stdout"
-                                 "html2markdown | grep -v '&nbsp_place_holder;'")
+                                 'mu4e-shr2text)
         ;; html2text -utf8 -width 72
         message-kill-buffer-on-exit t)
   (add-hook 'message-mode-hook
