@@ -27,6 +27,18 @@
   (add-hook 'window-setup-hook 'setup-my-fringe)
   (add-hook 'after-make-frame-functions 'setup-my-fringe))
 
+(defconst *osx* (eq system-type 'darwin))
+(defconst *linux* (eq system-type 'gnu/linux))
+(defconst *windows* (eq system-type 'windows-nt))
+
+(defconst *kelly* (or (string= system-name "typhoon.autokelly.local")
+                      (string= system-name "idev02")
+                      (string= system-name "idev02.autokelly.local")
+                      (string= system-name "idev03")
+                      (string= system-name "idev03.autokelly.local")
+                      (string= system-name "idev05")
+                      (string= system-name "idev05.autokelly.local")))
+
 (setq inhibit-startup-message t
       initial-scratch-message nil)
 
@@ -89,18 +101,10 @@
 (when use-rtags
   (add-to-list 'load-path "~/rtags/src"))
 
-(defun kelly? ()
-  (or (string= system-name "typhoon.autokelly.local")
-      (string= system-name "idev02")
-      (string= system-name "idev02.autokelly.local")
-      (string= system-name "idev03")
-      (string= system-name "idev03.autokelly.local")
-      (string= system-name "idev05")
-      (string= system-name "idev05.autokelly.local")))
 
 (set-language-environment "czech")
 (setq default-input-method "czech-qwerty")
-(if (kelly?)
+(if *kelly*
     (progn
       (prefer-coding-system 'iso-latin-2-unix)
       (set-terminal-coding-system 'iso-latin-2-unix)
@@ -213,8 +217,7 @@
 (require 'recentf)
 (add-to-list 'recentf-exclude "bookmarks")
 
-;; ; check if we're on OSX
-(when (featurep 'ns-win)
+(when *osx*
   ;; (setq mac-command-modifier 'meta)
   ;; (setq mac-option-modifier nil)
   (setq mac-option-modifier 'nil)
@@ -222,10 +225,10 @@
   (setq ns-function-modifier 'hyper)
   (set-frame-font "mononoki-16"))
 
-(when (equal system-type 'windows-nt)
+(when *windows*
   (set-frame-font "mononoki-10"))
 
-(when (and (display-graphic-p) (equal system-type 'gnu/linux))
+(when (and (display-graphic-p) *linux*)
   (set-frame-font "hack 11"))
 
 (require 'unkillable-scratch)
@@ -234,8 +237,7 @@
 (require 'goto-chg)
 (global-set-key "\C-x\C-\\" 'goto-last-change)
 
-(when (or (equal system-type 'darwin)
-          (equal system-type 'gnu/linux))
+(when (or *osx* *linux*)
   (exec-path-from-shell-initialize))
 
 (setq python-shell-completion-native-enable nil)
@@ -269,7 +271,7 @@
 (helm-projectile-on)
 (setq helm-projectile-fuzzy-match nil)
 
-(if (equal system-type 'windows-nt)
+(if *windows*
     (global-set-key (kbd "M-g")
                     (lambda () (interactive) (helm-grep-do-git-grep "")))
   (global-set-key (kbd "M-g") (lambda ()
@@ -286,7 +288,7 @@
 ;; - spustit helm-grep z isearch
 ;; - helm-ag (volano z helm-projectile-ag) ma v gr pro "args flags 0" neprazdny vysledek, zatimco helm-grep-ag nic nenajde
 
-(if (equal system-type 'windows-nt)
+(if *windows*
     (global-set-key (kbd "M-G") 'helm-grep-do-git-grep)
   (global-set-key (kbd "M-G")
                   (lambda ()
@@ -364,7 +366,7 @@
 
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(when (kelly?)
+(when *kelly*
   (add-to-list 'auto-mode-alist '("\\.tem?\\'" . web-mode)))
 
 (require 'super-save)
@@ -559,7 +561,7 @@
 (require 'company)
 (diminish 'company-mode)
 (setq company-idle-delay nil)  ;; 0.1)
-(when (equal system-type 'windows-nt)
+(when *windows*
   (delete 'company-clang company-backends))
 (define-key company-active-map (kbd "\C-n") 'company-select-next)
 (define-key company-active-map (kbd "\C-p") 'company-select-previous)
@@ -642,7 +644,7 @@
   (pop-to-buffer-same-window "*scheme*"))
 
 (setq pulse-delay .06)
-;; (when (equal system-type 'gnu/linux)
+;; (when *linux*
 ;;   (progn
 ;;     (require 'pulse)
 ;;     (setq pulse-flag nil)))
@@ -675,9 +677,7 @@
   (lambda ()
     (interactive)
     (compilation-set-skip-threshold (mod (1+ compilation-skip-threshold) 3))))
-(setq compile-command (cond ((kelly?) "make -k -j 8")
-                            ((equal system-type 'windows-nt) "scons")
-                            (t "scons")))
+(setq compile-command "ninja")
 
 (defun my-c-mode-common-hook ()
   (setq-local fill-column 90)
@@ -686,7 +686,7 @@
   ;; (setq rtags-show-containing-function t)
   ;; (setq-local eldoc-documentation-function #'rtags-eldoc-function)
   ;; (eldoc-mode 1)
-  ;; (when (not (kelly?))
+  ;; (when (not *kelly*)
   ;;  (setq rtags-autostart-diagnostics t)))
   )
 
@@ -728,7 +728,7 @@
              (setq-local eldoc-mode nil)))
 
 (with-eval-after-load 'python
-  (if (equal system-type 'windows-nt)
+  (if *windows*
       (progn
         (setq python-shell-interpreter "python.exe"))
     (progn
@@ -738,7 +738,7 @@
       (setq elpy-eldoc-show-current-function nil)
       (elpy-enable)
       (remove-hook 'elpy-modules 'elpy-module-yasnippet)
-      (when (kelly?)
+      (when *kelly*
         (remove-hook 'elpy-modules 'elpy-module-flymake)))))
 
 ;; (require 'geiser)
@@ -787,7 +787,7 @@
                                                     'compile))))
 ;; (global-set-key (kbd "M-o") 'other-window)
 
-(when (not (equal system-type 'windows-nt))
+(when (not *windows*)
   (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
   (require 'mu4e)
   (require 'mu4e-contrib)
@@ -812,7 +812,7 @@
         mu4e-view-show-addresses t
         mu4e-completing-read-function 'completing-read
         mu4e-headers-leave-behavior 'apply
-        mu4e-html2text-command (if (featurep 'ns-win)
+        mu4e-html2text-command (if *osx*
                                    "textutil -stdin -format html -convert txt -stdout"
                                  "html2text -utf8 -width 72")
         message-kill-buffer-on-exit t)
