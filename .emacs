@@ -814,9 +814,9 @@
         mu4e-headers-leave-behavior 'apply
         mu4e-html2text-command (if (featurep 'ns-win)
                                    "textutil -stdin -format html -convert txt -stdout"
-                                 'mu4e-shr2text)
-        ;; html2text -utf8 -width 72
+                                 "html2text -utf8 -width 72")
         message-kill-buffer-on-exit t)
+  (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
   (add-hook 'message-mode-hook
             '(lambda ()
                (my-non-special-modes-setup)
