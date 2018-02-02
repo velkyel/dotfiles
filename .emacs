@@ -44,6 +44,7 @@
 
 (setq package-list '(packed
                      auto-package-update
+                     bind-key
                      auto-compile
                      diminish
                      exec-path-from-shell
@@ -186,10 +187,9 @@
 (require 'crux)
 
 (setenv "PAGER" (executable-find "cat"))
-(global-set-key (kbd "C-c t")
-                (lambda ()
-                  (interactive)
-                  (crux-start-or-switch-to 'shell "*shell*")))
+(bind-key "C-c t" '(lambda ()
+                     (interactive)
+                     (crux-start-or-switch-to 'shell "*shell*")))
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -235,7 +235,7 @@
 (unkillable-scratch 1)
 
 (require 'goto-chg)
-(global-set-key "\C-x\C-\\" 'goto-last-change)
+(bind-key "C-x C-\\" 'goto-last-change)
 
 (when (or *osx* *linux*)
   (exec-path-from-shell-initialize))
@@ -259,9 +259,10 @@
 (setq helm-buffer-max-length 32)
 (setq helm-display-header-line nil)
 ;; (helm-push-mark-mode 1)
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-z") 'helm-select-action)
+(bind-keys :map helm-map
+           ("<tab>" . helm-execute-persistent-action)
+           ("C-i" . helm-execute-persistent-action)
+           ("C-z" . helm-select-action))
 
 (add-hook 'helm-grep-mode-hook 'grep-mode)
 (setq helm-grep-save-buffer-name-no-confirm 1)
@@ -271,29 +272,26 @@
 (helm-projectile-on)
 (setq helm-projectile-fuzzy-match nil)
 
-(if *windows*
-    (global-set-key (kbd "M-g")
-                    (lambda () (interactive) (helm-grep-do-git-grep "")))
-  (global-set-key (kbd "M-g") (lambda ()
-                                (interactive)
-                                (helm-grep-ag (projectile-project-root) nil))))
+(bind-key "M-g" '(lambda ()
+                   (interactive)
+                   (if *windows* (helm-grep-do-git-grep "")
+                     (helm-grep-ag (projectile-project-root) nil))))
 
 ;; ;; helm-ag
 ;; (setq helm-ag-insert-at-point t)
 ;; (setq helm-ag--action-save-buffer #'helm-grep-save-results
-;; (global-set-key (kbd "M-g") #'helm-projectile-ag)
+;; (bind-key "M-g" 'helm-projectile-ag)
 
 ;; TODO:
 ;; - thing-at-point
 ;; - spustit helm-grep z isearch
 ;; - helm-ag (volano z helm-projectile-ag) ma v gr pro "args flags 0" neprazdny vysledek, zatimco helm-grep-ag nic nenajde
 
-(if *windows*
-    (global-set-key (kbd "M-G") 'helm-grep-do-git-grep)
-  (global-set-key (kbd "M-G")
-                  (lambda ()
-                    (interactive)
-                    (helm-grep-ag (helm-current-directory) nil))))    ;; nebo expand-file-name default-directory ?
+(bind-key* "M-G"     ;; overrides any mode-specific bindings
+           (if *windows* 'helm-grep-do-git-grep
+             '(lambda ()
+                (interactive)
+                (helm-grep-ag (helm-current-directory) nil))))    ;; nebo expand-file-name default-directory ?
 
 (require 'helm-for-files)    ;; helm-source-recentf
 
@@ -311,25 +309,25 @@
         :keymap helm-buffer-map
         :truncate-lines helm-buffers-truncate-lines))
 
-(global-set-key [remap list-buffers] 'my-helm-projectile-buffers-list)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x b") 'my-helm-projectile-buffers-list)
-(global-set-key (kbd "C-h a") 'helm-apropos)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-c h") 'helm-command-prefix)
-(global-set-key (kbd "C-c <SPC>") 'helm-all-mark-rings)
-(global-set-key (kbd "C-c C-r") 'helm-resume)
+(bind-keys ([remap list-buffers] . my-helm-projectile-buffers-list)
+           ("M-x" . helm-M-x)
+           ("C-x b" . my-helm-projectile-buffers-list)
+           ("C-h a" . helm-apropos)
+           ("C-x C-f" . helm-find-files)
+           ("M-y" . helm-show-kill-ring)
+           ("C-c h" . helm-command-prefix)
+           ("C-c <SPC>" . helm-all-mark-rings)
+           ("C-c C-r" . helm-resume))
 
 (require 'helpful)
-(global-set-key (kbd "C-h f") 'helpful-function)
-(global-set-key (kbd "C-h v") 'helpful-variable)
-(global-set-key (kbd "C-h F") 'helpful-command)
-(global-set-key (kbd "C-h M") 'helpful-macro)
+(bind-keys ("C-h f" . helpful-function)
+           ("C-h v" . helpful-variable)
+           ("C-h F" . helpful-command)
+           ("C-h M" . helpful-macro))
 
 (require 'smart-hungry-delete)
-(global-set-key (kbd "<backspace>") 'smart-hungry-delete-backward-char)
-(global-set-key (kbd "C-d") 'smart-hungry-delete-forward-char)
+(bind-keys ("<backspace>" . smart-hungry-delete-backward-char)
+           ("C-d" . smart-hungry-delete-forward-char))
 
 (require 'shackle)
 (setq shackle-rules
@@ -379,9 +377,9 @@
 
 (require 'avy)
 (setq avy-background t)
-(global-set-key (kbd "C-;") 'avy-goto-word-or-subword-1)
-(global-set-key (kbd "M-m") 'avy-goto-char-timer)
-(define-key isearch-mode-map (kbd "C-;") 'avy-isearch)
+(bind-keys ("C-;" . avy-goto-word-or-subword-1)
+           ("M-m" . avy-goto-char-timer))
+(bind-key "C-;" 'avy-isearch isearch-mode-map)
 
 (require 'key-seq)
 (key-seq-define-global "jj" 'avy-goto-word-or-subword-1)
@@ -392,11 +390,11 @@
 (key-chord-mode +1)
 
 ;; (require 'jump-char)
-;; (global-set-key (kbd "M-m") #'jump-char-forward)
-;; (global-set-key (kbd "M-M") #'jump-char-backward)
+;; (bind-key "M-m" 'jump-char-forward)
+;; (bind-key "M-M" 'jump-char-backward)
 
 (require 'unfill)
-(global-set-key [remap fill-paragraph] #'unfill-toggle)
+(bind-key [remap fill-paragraph] 'unfill-toggle)
 
 (require 'dired)
 (require 'dired-collapse)
@@ -411,11 +409,11 @@
   (end-of-buffer)
   (dired-next-line -1))
 
-(define-key dired-mode-map (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)
-(define-key dired-mode-map (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
+(bind-key (vector 'remap 'beginning-of-buffer) 'dired-back-to-top dired-mode-map)
+(bind-key (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom dired-mode-map)
 
 (put 'dired-find-alternate-file 'disabled nil)
-(define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+(bind-key "RET" 'dired-find-alternate-file dired-mode-map)
 
 (add-hook 'dired-mode-hook #'dired-collapse-mode)
 
@@ -450,12 +448,17 @@
 (require 'vc-darcs)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
+(require 'dumb-jump)
+(setq dumb-jump-selector 'helm
+      dumb-jump-prefer-searcher 'ag)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
+
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (setq js-indent-level 2)
-(define-key js2-mode-map (kbd "M-.") 'dumb-jump-go)
-(define-key js2-mode-map (kbd "M-,") 'dumb-jump-back)
-;; (define-key js2-mode-map (kbd "C-.") 'imenu)
+(bind-keys :map js2-mode-map
+           ("M-." . dumb-jump-go)
+           ("M-," . dumb-jump-back)
+           ("C-." . imenu))
 
 (quelpa '(inf-js :fetcher github :repo "velkyel/inf-js"))
 (require 'inf-js)
@@ -477,20 +480,20 @@
   (add-to-list 'load-path "~/ctrifle/misc")
   (require 'trifle-mode))
 
-(global-set-key (kbd "C-x g") 'magit-status)
-(global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
+(bind-key "C-x g" 'magit-status)
+(bind-key "C-x M-g" 'magit-dispatch-popup)
 
 ;; (with-eval-after-load 'magit
 ;;   (setq magit-completing-read-function 'ivy-completing-read))
 
-(global-set-key (kbd "C-w") (lambda ()
-                              (interactive)
-                              (if (use-region-p)
-                                  (call-interactively 'kill-region)
-                                (crux-kill-whole-line))))
+(bind-key "C-w" '(lambda ()
+                   (interactive)
+                   (if (use-region-p)
+                       (call-interactively 'kill-region)
+                     (crux-kill-whole-line))))
 
-(global-set-key (kbd "C-a") 'crux-move-beginning-of-line)
-(global-set-key (kbd "C-c d") 'crux-duplicate-current-line-or-region)
+(bind-key "C-a" 'crux-move-beginning-of-line)
+(bind-key "C-c d" 'crux-duplicate-current-line-or-region)
 
 (require 'whitespace)
 (diminish 'whitespace-mode)
@@ -498,13 +501,13 @@
       whitespace-style '(face trailing newline))
 
 (require 'shrink-whitespace)
-(global-set-key (kbd "M-\\") 'shrink-whitespace)
+(bind-key "M-\\" 'shrink-whitespace)
 
 (require 'expand-region)
-(global-set-key (kbd "C-=") 'er/expand-region)
+(bind-key "C-=" 'er/expand-region)
 
 (require 'visual-regexp)
-(global-set-key (kbd "C-c r") 'vr/replace)
+(bind-key "C-c r" 'vr/replace)
 
 (diminish 'eldoc-mode)
 (setq eldoc-idle-delay 0.2)
@@ -563,19 +566,17 @@
 (setq company-idle-delay nil)  ;; 0.1)
 (when *windows*
   (delete 'company-clang company-backends))
-(define-key company-active-map (kbd "\C-n") 'company-select-next)
-(define-key company-active-map (kbd "\C-p") 'company-select-previous)
-(define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
-(define-key company-active-map (kbd "M-.") 'company-show-location)
-
-(require 'dumb-jump)
-(setq dumb-jump-selector 'helm
-      dumb-jump-prefer-searcher 'ag)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
+(bind-keys :map company-active-map
+           ("C-n" . company-select-next)
+           ("\C-p" . company-select-previous)
+           ("\C-d" . company-show-doc-buffer)
+           ("M-." . company-show-location))
 
 (require 'flymake)
 (defvar flymake-mode-map (make-sparse-keymap))
-(define-key flymake-mode-map (kbd "C-M-n") 'flymake-goto-next-error)
-(define-key flymake-mode-map (kbd "C-M-p") 'flymake-goto-prev-error)
+(bind-keys :map flymake-mode-map
+           ("C-M-n" . flymake-goto-next-error)
+           ("C-M-p" . flymake-goto-prev-error))
 
 (or (assoc 'flymake-mode minor-mode-map-alist)
     (setq minor-mode-map-alist
@@ -588,9 +589,10 @@
 (setq flymake-luac-program "luac5.3")
 (add-hook 'lua-mode-hook 'flymake-lua-load)
 (setq lua-default-application '("localhost" . 5555))
-(define-key lua-mode-map (kbd "C-M-x") 'lua-send-proc)
-(define-key lua-mode-map (kbd "M-.") 'dumb-jump-go)
-(define-key lua-mode-map (kbd "M-,") 'dumb-jump-back)
+(bind-keys :map lua-mode-map
+           ("C-M-x" . lua-send-proc)
+           ("M-." . dumb-jump-go)
+           ("M-," . 'dumb-jump-back))
 
 (when use-rtags
   (require 'rtags)
@@ -618,8 +620,9 @@
   (company-mode)
   ;; (semantic-mode 1)
   ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
-  (define-key prog-mode-map (kbd "<C-tab>") 'company-complete)
-  (define-key prog-mode-map (kbd "C-.") 'my-imenu))
+  (bind-keys :map prog-mode-map
+             ("<C-tab>" . company-complete)
+             ("C-." . my-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -673,10 +676,11 @@
               major-mode)))))
 
 (require 'compile)
-(define-key compilation-mode-map (kbd "C-c C-t")
-  (lambda ()
-    (interactive)
-    (compilation-set-skip-threshold (mod (1+ compilation-skip-threshold) 3))))
+(bind-key "C-c C-t"
+          '(lambda ()
+             (interactive)
+             (compilation-set-skip-threshold (mod (1+ compilation-skip-threshold) 3)))
+          compilation-mode-map)
 (setq compile-command "ninja")
 
 (defun my-c-mode-common-hook ()
@@ -708,14 +712,16 @@
 
 (with-eval-after-load 'cc-mode
   (fset 'c-indent-region 'clang-format-region)
-  (define-key c-mode-base-map (kbd "<C-tab>") 'company-complete)
-  (define-key c-mode-base-map (kbd "M-.") 'my-goto-symbol)
-  (define-key c-mode-base-map (kbd "M-,") 'xref-pop-marker-stack)
-  (define-key c-mode-base-map (kbd "C-M-\\") 'clang-format-region)
-  (when use-rtags (define-key c-mode-base-map (kbd "M-?") 'rtags-display-summary))
-  (define-key c-mode-base-map (kbd "C-i") 'clang-format)
-  (define-key c-mode-base-map (kbd "C-.") 'my-imenu)
-  (define-key c-mode-base-map (kbd "M-o") 'cff-find-other-file))
+  (bind-keys :map c-mode-base-map
+             ("<C-tab>" . company-complete)
+             ("M-." . my-goto-symbol)
+             ("M-," . xref-pop-marker-stack)
+             ("C-M-\\" . clang-format-region)
+             ("C-i" . clang-format)
+             ("C-." . my-imenu)
+             ("M-o" . cff-find-other-file))
+  (when use-rtags
+    (bind-key "M-?" 'rtags-display-summary c-mode-base-map)))
 
 (setq inf-clojure-program '("localhost" . 9999))   ;; "planck"
 (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode)
@@ -761,15 +767,15 @@
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
 
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)  ;; symbol-at-point)
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
-(global-set-key (kbd "C-M-s") 'isearch-forward)
-(global-set-key (kbd "C-M-r") 'isearch-backward)
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
+(bind-keys ("C-s" . isearch-forward-regexp) ;; symbol-at-point)
+           ("C-r" . isearch-backward-regexp)
+           ("C-M-s" . isearch-forward)
+           ("C-M-r" . isearch-backward)
+           ("C-x k" . kill-this-buffer))
 
 ;; suspend-frame:
-(global-unset-key (kbd "C-z"))
-(global-unset-key (kbd "C-x C-z"))
+(unbind-key "C-z")
+(unbind-key "C-x C-z")
 
 (define-key function-key-map "\e[$" (kbd "C-$"))
 (define-key function-key-map "\e[%" (kbd "C-%"))
@@ -778,14 +784,14 @@
 (define-key function-key-map "\e[=" (kbd "C-="))
 (define-key function-key-map "\e[." (kbd "C-."))
 
-(global-set-key (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "S-RET") 'crux-smart-open-line)
-(global-set-key (kbd "M-r") (lambda ()
-                              (interactive)
-                              (call-interactively (if (get-buffer "*compilation*")
-                                                      'recompile
-                                                    'compile))))
-;; (global-set-key (kbd "M-o") 'other-window)
+(bind-key "RET" 'newline-and-indent)
+(bind-key "S-RET" 'crux-smart-open-line)
+(bind-key "M-r" '(lambda ()
+                   (interactive)
+                   (call-interactively (if (get-buffer "*compilation*")
+                                           'recompile
+                                         'compile))))
+;; (bind-key "M-o" 'other-window)
 
 (when (not *windows*)
   (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
@@ -821,7 +827,7 @@
             '(lambda ()
                (my-non-special-modes-setup)
                (flyspell-mode t)))
-  (global-set-key (kbd "C-c m") 'mu4e)
+  (bind-key "C-c m" 'mu4e)
 
   (require 'mu4e-alert)
   (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/INBOX")
