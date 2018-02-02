@@ -40,7 +40,6 @@
                      haskell-mode
                      restart-emacs
                      helm
-                     helm-swoop
                      projectile
                      helm-projectile
                      super-save
@@ -319,11 +318,6 @@
 (global-set-key (kbd "C-c h") 'helm-command-prefix)
 (global-set-key (kbd "C-c <SPC>") 'helm-all-mark-rings)
 (global-set-key (kbd "C-c C-r") 'helm-resume)
-
-(require 'helm-swoop)
-(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-(global-set-key (kbd "M-i") 'helm-swoop)
 
 (require 'helpful)
 (global-set-key (kbd "C-h f") 'helpful-function)
