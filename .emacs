@@ -808,7 +808,8 @@
   (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
   (require 'mu4e)
   (require 'mu4e-contrib)
-  (setq mu4e-maildir (expand-file-name "~/Maildir")
+  (setq mail-user-agent 'mu4e-user-agent
+        mu4e-maildir (expand-file-name "~/Maildir")
         mu4e-drafts-folder "/INBOX.Drafts"
         mu4e-sent-folder "/INBOX.Sent"
         mu4e-trash-folder "/INBOX.Trash"
