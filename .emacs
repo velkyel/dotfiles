@@ -821,6 +821,7 @@
           ("/INBOX.Trash" . ?t)
           ("/INBOX.Archive" . ?a))
         mu4e-get-mail-command "offlineimap -o"
+        mu4e-update-interval 300
         mu4e-headers-skip-duplicates t
         mu4e-confirm-quit nil
         mu4e-date-format-long "%d.%m.%Y"
@@ -844,11 +845,6 @@
   (require 'mu4e-alert)
   (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/INBOX")
   (mu4e-alert-enable-mode-line-display)
-  (defun my-refresh-mu4e-alert-mode-line ()
-    (interactive)
-    (mu4e~proc-kill)
-    (mu4e-alert-enable-mode-line-display))
-  (run-with-timer 0 60 'my-refresh-mu4e-alert-mode-line)
 
   (require 'smtpmail)
   (setq smtpmail-auth-credentials (expand-file-name "~/.authinfo")
