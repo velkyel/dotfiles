@@ -424,7 +424,7 @@
   "Media files.")
 
 (defconst my-dired-image-files-extensions
-  '("png" "jpg" "jpeg" "tga" "bmp")
+  '("png" "jpg" "jpeg" "tga" "bmp" "dds")
   "Image files.")
 
 (dired-rainbow-define html "#4e9a06" ("htm" "html" "xhtml"))
