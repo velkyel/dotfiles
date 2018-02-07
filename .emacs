@@ -101,15 +101,9 @@
 
 (set-language-environment "czech")
 (setq default-input-method "czech-qwerty")
-(if *kelly*
-    (progn
-      (prefer-coding-system 'iso-latin-2-unix)
-      (set-terminal-coding-system 'iso-latin-2-unix)
-      (set-keyboard-coding-system 'iso-latin-2-unix))
-  (progn
-    (prefer-coding-system 'utf-8)
-    (set-terminal-coding-system 'utf-8)
-    (set-keyboard-coding-system 'utf-8)))
+(prefer-coding-system 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
 
 (unless package-archive-contents
   (package-refresh-contents))
