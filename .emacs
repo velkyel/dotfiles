@@ -239,6 +239,7 @@
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
 (add-to-list 'projectile-globally-ignored-directories ".build")
 (add-to-list 'projectile-globally-ignored-directories "build")
+(add-to-list 'projectile-globally-ignored-directories ".cquery_cached_index")
 
 (require 'helm)
 (require 'helm-config)
