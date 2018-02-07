@@ -95,13 +95,9 @@
                      dired-collapse
                      dired-rainbow
                      mu4e-alert
+                     lsp-mode
+                     cquery
                      ))
-
-(setq use-rtags (file-exists-p "~/rtags/src"))
-
-(when use-rtags
-  (add-to-list 'load-path "~/rtags/src"))
-
 
 (set-language-environment "czech")
 (setq default-input-method "czech-qwerty")
@@ -594,17 +590,6 @@
            ("M-." . dumb-jump-go)
            ("M-," . 'dumb-jump-back))
 
-(when use-rtags
-  (require 'rtags)
-  (setq rtags-display-result-backend 'helm)
-  (setq rtags-imenu-syntax-highlighting t))
-
-(defun my-imenu ()
-  (interactive)
-  (if (and use-rtags (rtags-is-indexed))
-      (rtags-imenu)
-    (helm-imenu-in-all-buffers)))    ;; semantic-or-imenu nil
-
 (defun my-non-special-modes-setup ()
   (setq indicate-empty-lines t)
   (whitespace-mode)
@@ -620,9 +605,7 @@
   (company-mode)
   ;; (semantic-mode 1)
   ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
-  (bind-keys :map prog-mode-map
-             ("<C-tab>" . company-complete)
-             ("C-." . my-imenu)))
+  )
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -662,19 +645,6 @@
      (point-min) (point-max) nil)
     (buffer-string)))
 
-(defun rtags-eldoc-function ()
-  (if (rtags-is-indexed)
-      (let ((summary (rtags-get-summary-text)))
-        (and summary
-             (fontify-string
-              (replace-regexp-in-string
-               "{[^}]*$" ""
-               (mapconcat
-                (lambda (str) (if (= 0 (length str)) "//" (string-trim str)))
-                (split-string summary "\r?\n")
-                ""))
-              major-mode)))))
-
 (require 'compile)
 (bind-key "C-c C-t"
           '(lambda ()
@@ -684,15 +654,7 @@
 (setq compile-command "ninja")
 
 (defun my-c-mode-common-hook ()
-  (setq-local fill-column 90)
-  (when use-rtags
-    (add-to-list 'company-backends 'company-rtags))
-  ;; (setq rtags-show-containing-function t)
-  ;; (setq-local eldoc-documentation-function #'rtags-eldoc-function)
-  ;; (eldoc-mode 1)
-  ;; (when (not *kelly*)
-  ;;  (setq rtags-autostart-diagnostics t)))
-  )
+  (setq-local fill-column 90))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
@@ -700,28 +662,31 @@
 (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
 (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
 
-(defun my-goto-symbol ()
-  (interactive)
-  (save-buffer)
-  (deactivate-mark)
-  (xref-push-marker-stack)
-  (or (and use-rtags
-           (rtags-is-indexed)
-           (rtags-find-symbol-at-point))
-      (dumb-jump-go)))
+(require 'cquery)
+(setq cquery-executable (expand-file-name "~/cquery/build/release/bin/cquery"))   ;; https://github.com/cquery-project/cquery/wiki/Getting-started
+(setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
+(setq cquery-sem-highlight-method nil)   ;; 'font-lock)
 
-(with-eval-after-load 'cc-mode
-  (fset 'c-indent-region 'clang-format-region)
-  (bind-keys :map c-mode-base-map
-             ("<C-tab>" . company-complete)
-             ("M-." . my-goto-symbol)
-             ("M-," . xref-pop-marker-stack)
-             ("C-M-\\" . clang-format-region)
-             ("C-i" . clang-format)
-             ("C-." . my-imenu)
-             ("M-o" . cff-find-other-file))
-  (when use-rtags
-    (bind-key "M-?" 'rtags-display-summary c-mode-base-map)))
+(require 'lsp-mode)
+(setq lsp-highlight-symbol-at-point nil
+      lsp-enable-flycheck nil
+      lsp-enable-indentation nil
+      lsp-enable-eldoc nil)
+
+(add-hook 'c-mode-hook #'lsp-cquery-enable)
+(add-hook 'c++-mode-hook #'lsp-cquery-enable)
+
+(require 'lsp-imenu)
+(add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
+
+(fset 'c-indent-region 'clang-format-region)
+
+(bind-keys :map c-mode-base-map
+           ("<C-tab>" . company-complete)
+           ("C-M-\\" . clang-format-region)
+           ("C-i" . clang-format)
+           ("C-." . helm-imenu)
+           ("M-o" . cff-find-other-file))
 
 (setq inf-clojure-program '("localhost" . 9999))   ;; "planck"
 (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode)
@@ -865,11 +830,6 @@
 (set-face-attribute 'default
                     nil
                     :background "gray85")   ;; terminal
-
-(when use-rtags
-  (set-face-attribute 'rtags-skippedline nil :background "gray70")
-  (set-face-attribute 'rtags-warnline nil :background "#ccccff")
-  (set-face-attribute 'rtags-errline nil :background "#eeb0b0"))
 
 (set-face-attribute 'js2-external-variable
                     nil
