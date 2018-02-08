@@ -525,33 +525,6 @@
 (add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\|sc\\)\\'" . glsl-mode))
 ;; ...usf = unreal engine, sc = bgfx
 
-(setq clang-format-style (concat "{BasedOnStyle: Google,"
-                                 " BreakBeforeBraces: Mozilla,"
-                                 " BinPackParameters: true,"
-                                 " BreakBeforeBinaryOperators: NonAssignment,"
-                                 " IndentWidth: 2,"
-                                 " ColumnLimit: 90,"
-                                 " AlwaysBreakBeforeMultilineStrings: false,"
-                                 " SpacesBeforeTrailingComments: 4,"
-                                 " AccessModifierOffset: -2,"
-                                 " AllowShortFunctionsOnASingleLine: Inline,"
-                                 " NamespaceIndentation: All,"
-                                 " UseTab: Never,"
-                                 " ConstructorInitializerIndentWidth: 2,"
-                                 " ContinuationIndentWidth: 2,"
-                                 " PointerAlignment: Left,"
-                                 " DerivePointerAlignment: false,"
-                                 " Standard: Cpp11,"
-                                 " SortIncludes: false}"))
-
-(setq clang-format-executable
-      (if (executable-find "clang-format") "clang-format"
-        (if (executable-find "clang-format-3.8") "clang-format-3.8"
-          (if (executable-find "clang-format-3.7") "clang-format-3.7"
-            (if (executable-find "clang-format37") "clang-format37"
-              (if (executable-find "clang-format-3.6") "clang-format-3.6"
-                (warn "install clang-format!")))))))
-
 (require 'company)
 (diminish 'company-mode)
 (setq company-idle-delay nil)  ;; 0.1)
@@ -658,7 +631,8 @@
 (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
 
 (require 'cquery)
-(setq cquery-executable (expand-file-name "~/cquery/build/release/bin/cquery"))   ;; https://github.com/cquery-project/cquery/wiki/Getting-started
+;; https://github.com/cquery-project/cquery/wiki/Getting-started
+(setq cquery-executable (expand-file-name "~/cquery/build/release/bin/cquery"))
 (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
 (setq cquery-sem-highlight-method nil)   ;; 'font-lock)
 
@@ -674,6 +648,28 @@
 (require 'lsp-imenu)
 (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
 
+(setq clang-format-style (concat "{BasedOnStyle: Google,"
+                                 " BreakBeforeBraces: Mozilla,"
+                                 " BinPackParameters: true,"
+                                 " BreakBeforeBinaryOperators: NonAssignment,"
+                                 " IndentWidth: 2,"
+                                 " ColumnLimit: 90,"
+                                 " AlwaysBreakBeforeMultilineStrings: false,"
+                                 " SpacesBeforeTrailingComments: 4,"
+                                 " AccessModifierOffset: -2,"
+                                 " AllowShortFunctionsOnASingleLine: Inline,"
+                                 " NamespaceIndentation: All,"
+                                 " UseTab: Never,"
+                                 " ConstructorInitializerIndentWidth: 2,"
+                                 " ContinuationIndentWidth: 2,"
+                                 " PointerAlignment: Left,"
+                                 " DerivePointerAlignment: false,"
+                                 " Standard: Cpp11,"
+                                 " SortIncludes: false}"))
+
+(setq clang-format-executable "clang-format")   ;; ev symlink in ~/bin
+
+(require 'clang-format)
 (fset 'c-indent-region 'clang-format-region)
 
 (bind-keys :map c-mode-base-map
