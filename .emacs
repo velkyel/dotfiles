@@ -764,7 +764,8 @@
 ;; (bind-key "M-o" 'other-window)
 
 (when (not *windows*)
-  (add-to-list 'load-path "/usr/share/emacs/site-lisp/mu4e")
+  (add-to-list 'load-path (if *osx* "/usr/local/share/emacs/site-lisp/mu/mu4e"
+                            "/usr/share/emacs/site-lisp/mu4e"))
   (require 'mu4e)
   (require 'mu4e-contrib)
   (setq mail-user-agent 'mu4e-user-agent
