@@ -205,8 +205,8 @@
 (setq global-auto-revert-non-file-buffers t)
 (global-auto-revert-mode 1)
 
-(require 'recentf)
-(add-to-list 'recentf-exclude "bookmarks")
+;; (require 'recentf)
+;; (add-to-list 'recentf-exclude "bookmarks")
 
 (when *osx*
   ;; (setq mac-command-modifier 'meta)
@@ -250,6 +250,7 @@
 (setq helm-candidate-number-limit 100)
 (setq helm-buffer-max-length 32)
 (setq helm-display-header-line nil)
+(setq helm-fuzzy-match t)
 ;; (helm-push-mark-mode 1)
 (bind-keys :map helm-map
            ("<tab>" . helm-execute-persistent-action)
@@ -262,7 +263,6 @@
 
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
-(setq helm-projectile-fuzzy-match nil)
 
 (bind-key "M-g" '(lambda ()
                    (interactive)
@@ -285,7 +285,10 @@
                 (interactive)
                 (helm-grep-ag (helm-current-directory) nil))))    ;; nebo expand-file-name default-directory ?
 
-(require 'helm-for-files)    ;; helm-source-recentf
+(bind-key "M-i" 'helm-occur-from-isearch isearch-mode-map)
+
+;; (require 'helm-for-files)    ;; helm-source-recentf
+;;(setq helm-M-x t)
 
 (defun my-helm-projectile-buffers-list ()
   (interactive)
@@ -293,9 +296,7 @@
     (setq helm-source-buffers-list
           (helm-make-source "Buffers" 'helm-source-buffers)))
   (helm :sources '(helm-source-buffers-list
-                   helm-source-projectile-recentf-list
                    helm-source-projectile-files-list
-                   helm-source-recentf
                    helm-source-buffer-not-found)
         :buffer "*helm buffers*"
         :keymap helm-buffer-map
@@ -307,6 +308,7 @@
            ("C-h a" . helm-apropos)
            ("C-x C-f" . helm-find-files)
            ("M-y" . helm-show-kill-ring)
+           ("M-i" . helm-occur)
            ("C-c h" . helm-command-prefix)
            ("C-c <SPC>" . helm-all-mark-rings)
            ("C-c C-r" . helm-resume))
