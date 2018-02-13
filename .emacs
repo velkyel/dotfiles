@@ -97,6 +97,7 @@
                      mu4e-alert
                      lsp-mode
                      cquery
+                     elm-mode
                      ))
 
 (set-language-environment "czech")
