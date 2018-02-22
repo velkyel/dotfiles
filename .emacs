@@ -95,10 +95,13 @@
                      dired-collapse
                      dired-rainbow
                      mu4e-alert
-                     lsp-mode
-                     cquery
+                     ;; lsp-mode
+                     ;; cquery
                      elm-mode
                      ))
+
+(setq *rtags* (file-exists-p "~/rtags/src"))
+(when *rtags* (add-to-list 'load-path "~/rtags/src"))
 
 (set-language-environment "czech")
 (setq default-input-method "czech-qwerty")
@@ -561,6 +564,17 @@
            ("M-." . dumb-jump-go)
            ("M-," . 'dumb-jump-back))
 
+(when *rtags*
+  (require 'rtags)
+  (setq rtags-display-result-backend 'helm)
+  (setq rtags-imenu-syntax-highlighting t))
+
+(defun my-imenu ()
+  (interactive)
+  (if (and *rtags* (rtags-is-indexed))
+      (rtags-imenu)
+    (helm-imenu-in-all-buffers)))
+
 (defun my-non-special-modes-setup ()
   (setq indicate-empty-lines t)
   (whitespace-mode)
@@ -576,7 +590,9 @@
   (company-mode)
   ;; (semantic-mode 1)
   ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
-  )
+  (bind-keys :map prog-mode-map
+             ("<C-tab>" . company-complete)
+             ("C-." . my-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -625,6 +641,8 @@
 (setq compile-command "ninja")
 
 (defun my-c-mode-common-hook ()
+  (when *rtags*
+    (add-to-list 'company-backends 'company-rtags))
   (setq-local fill-column 90))
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
@@ -633,23 +651,23 @@
 (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
 (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
 
-(require 'cquery)
-;; https://github.com/cquery-project/cquery/wiki/Getting-started
-(setq cquery-executable (expand-file-name "~/cquery/build/release/bin/cquery"))
-(setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
-(setq cquery-sem-highlight-method nil)   ;; 'font-lock)
+;; (require 'cquery)
+;; ;; https://github.com/cquery-project/cquery/wiki/Getting-started
+;; (setq cquery-executable (expand-file-name "~/cquery/build/release/bin/cquery"))
+;; (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
+;; (setq cquery-sem-highlight-method nil)   ;; 'font-lock)
 
-(require 'lsp-mode)
-(setq lsp-highlight-symbol-at-point nil
-      lsp-enable-flycheck nil
-      lsp-enable-indentation nil
-      lsp-enable-eldoc nil)
+;; (require 'lsp-mode)
+;; (setq lsp-highlight-symbol-at-point nil
+;;       lsp-enable-flycheck nil
+;;       lsp-enable-indentation nil
+;;       lsp-enable-eldoc nil)
 
-(add-hook 'c-mode-hook #'lsp-cquery-enable)
-(add-hook 'c++-mode-hook #'lsp-cquery-enable)
+;; (add-hook 'c-mode-hook #'lsp-cquery-enable)
+;; (add-hook 'c++-mode-hook #'lsp-cquery-enable)
 
-(require 'lsp-imenu)
-(add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
+;; (require 'lsp-imenu)
+;; (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
 
 (setq clang-format-style (concat "{BasedOnStyle: Google,"
                                  " BreakBeforeBraces: Mozilla,"
@@ -675,12 +693,27 @@
 (require 'clang-format)
 (fset 'c-indent-region 'clang-format-region)
 
+(defun my-goto-symbol ()
+  (interactive)
+  (save-buffer)
+  (deactivate-mark)
+  (xref-push-marker-stack)
+  (or (and *rtags*
+           (rtags-is-indexed)
+           (rtags-find-symbol-at-point))
+      (dumb-jump-go)))
+
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format)
-           ("C-." . helm-imenu)
+           ("C-." . my-imenu)
+           ("M-." . my-goto-symbol)
+           ("M-," . xref-pop-marker-stack)
            ("M-o" . cff-find-other-file))
+
+(when *rtags*
+  (bind-key "M-?" 'rtags-display-summary c-mode-base-map))
 
 (setq inf-clojure-program '("localhost" . 9999))   ;; "planck"
 (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode)
@@ -814,6 +847,8 @@
         smtpmail-default-smtp-server "mail.messagingengine.com"
         smtpmail-smtp-server "mail.messagingengine.com"
         smtpmail-smtp-service 587))
+
+(require 'org)
 
 (defun what-face (pos) ;; under cursor
   (interactive "d")
