@@ -94,7 +94,7 @@
                      helpful
                      dired-collapse
                      dired-rainbow
-                     mu4e-alert
+                     ;; mu4e-alert
                      ;; lsp-mode
                      ;; cquery
                      elm-mode
@@ -145,6 +145,7 @@
       search-highlight t
       isearch-allow-scroll t
       eval-expression-print-level nil
+      mail-user-agent 'gnus-user-agent
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Čapák"
       scroll-conservatively 101
@@ -796,57 +797,116 @@
                                          'compile))))
 ;; (bind-key "M-o" 'other-window)
 
-(when (not *windows*)
-  (add-to-list 'load-path (if *osx* "/usr/local/share/emacs/site-lisp/mu/mu4e"
-                            "/usr/share/emacs/site-lisp/mu4e"))
-  (require 'mu4e)
-  (require 'mu4e-contrib)
-  (setq mail-user-agent 'mu4e-user-agent
-        mu4e-maildir (expand-file-name "~/Maildir")
-        mu4e-drafts-folder "/INBOX.Drafts"
-        mu4e-sent-folder "/INBOX.Sent"
-        mu4e-trash-folder "/INBOX.Trash"
-        ;;mu4e-refile-folder . "/INBOX.Archive"
-        ;; mu4e-sent-message-behavior 'delete
-        mu4e-maildir-shortcuts
-        '(("/INBOX" . ?i)
-          ("/INBOX.Sent" . ?s)
-          ("/INBOX.Trash" . ?t)
-          ("/INBOX.Archive" . ?a))
-        mu4e-get-mail-command "offlineimap -o"
-        mu4e-update-interval 300
-        mu4e-headers-skip-duplicates t
-        mu4e-confirm-quit nil
-        mu4e-date-format-long "%d.%m.%Y"
-        mu4e-headers-date-format "%d.%m.%y"
-        mu4e-view-show-images t
-        mu4e-hide-index-messages t
-        mu4e-view-show-addresses t
-        mu4e-completing-read-function 'completing-read
-        mu4e-headers-leave-behavior 'apply
-        mu4e-html2text-command (if *osx*
-                                   "textutil -stdin -format html -convert txt -stdout"
-                                 "html2text -utf8 -width 72")
-        message-kill-buffer-on-exit t)
-  (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-  (add-hook 'message-mode-hook
-            '(lambda ()
-               (my-non-special-modes-setup)
-               (flyspell-mode t)))
-  (bind-key "C-c m" 'mu4e)
+(setq message-send-mail-function 'smtpmail-send-it
+      smtpmail-auth-credentials "~/.authinfo"
+      ;;smtpmail-stream-type 'ssl
+      starttls-use-gnutls t
+      smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
+      smtpmail-auth-credentials '(("mail.messagingengine.com" 587 "capak@inputwish.com" nil))
+      smtpmail-default-smtp-server "mail.messagingengine.com"
+      smtpmail-smtp-server "mail.messagingengine.com"
+      smtpmail-smtp-service 587)
 
-  (require 'mu4e-alert)
-  (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/INBOX")
-  (mu4e-alert-enable-mode-line-display)
+(autoload 'gnus "gnus" "Read network news." t)
+(global-set-key (kbd "C-c m") 'gnus)
 
-  (require 'smtpmail)
-  (setq smtpmail-auth-credentials (expand-file-name "~/.authinfo")
-        message-send-mail-function 'smtpmail-send-it
-        starttls-use-gnutls t
-        smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
-        smtpmail-default-smtp-server "mail.messagingengine.com"
-        smtpmail-smtp-server "mail.messagingengine.com"
-        smtpmail-smtp-service 587))
+(setq gnus-select-method '(nnimap "fastmail"
+                                  (nnimap-address "mail.messagingengine.com")
+                                  (nnimap-server-port 993)
+                                  (nnimap-stream ssl)
+                                  (nnir-search-engine imap)
+                                  ;; press E to expire mail
+                                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
+      gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
+      gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
+      gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
+      gnus-thread-sort-functions '(gnus-thread-sort-by-most-recent-date)  ;; gnus-thread-sort-by-date))
+      gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
+      gnus-gcc-mark-as-read t
+      gnus-use-cache t
+      gnus-cacheable-groups "^nnimap"
+      gnus-sum-thread-tree-false-root ""
+      gnus-sum-thread-tree-indent " "
+      gnus-sum-thread-tree-leaf-with-other "├► "
+      gnus-sum-thread-tree-root ""
+      gnus-sum-thread-tree-single-leaf "╰► "
+      gnus-sum-thread-tree-vertical "│"
+      gnus-interactive-exit nil
+      message-kill-buffer-on-exit t
+      gnus-large-newsgroup nil
+      gnus-read-active-file 'some
+      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
+      mm-discouraged-alternatives '("text/html" "text/richtext")
+      gnus-inhibit-startup-message t
+      gnus-agent-expire-days 4
+      gnus-parameters
+      '((".*"
+         (display . all))))
+
+(setq nnmail-expiry-wait-function
+      (lambda (group)
+        (cond ((string= group "INBOX") 'immediate)
+              (t 'never))))
+
+;; (defun fastmail-archive ()
+;;   (interactive)
+;;   (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
+
+;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
+
+
+;; (when (not *windows*)
+;;   (add-to-list 'load-path (if *osx* "/usr/local/share/emacs/site-lisp/mu/mu4e"
+;;                             "/usr/share/emacs/site-lisp/mu4e"))
+;;   (require 'mu4e)
+;;   (require 'mu4e-contrib)
+;;   (setq mail-user-agent 'mu4e-user-agent
+;;         mu4e-maildir (expand-file-name "~/Maildir")
+;;         mu4e-drafts-folder "/INBOX.Drafts"
+;;         mu4e-sent-folder "/INBOX.Sent"
+;;         mu4e-trash-folder "/INBOX.Trash"
+;;         ;;mu4e-refile-folder . "/INBOX.Archive"
+;;         ;; mu4e-sent-message-behavior 'delete
+;;         mu4e-maildir-shortcuts
+;;         '(("/INBOX" . ?i)
+;;           ("/INBOX.Sent" . ?s)
+;;           ("/INBOX.Trash" . ?t)
+;;           ("/INBOX.Archive" . ?a))
+;;         mu4e-get-mail-command "offlineimap -o"
+;;         mu4e-update-interval 300
+;;         mu4e-headers-skip-duplicates t
+;;         mu4e-confirm-quit nil
+;;         mu4e-date-format-long "%d.%m.%Y"
+;;         mu4e-headers-date-format "%d.%m.%y"
+;;         mu4e-view-show-images t
+;;         mu4e-hide-index-messages t
+;;         mu4e-view-show-addresses t
+;;         mu4e-completing-read-function 'completing-read
+;;         mu4e-headers-leave-behavior 'apply
+;;         mu4e-html2text-command (if *osx*
+;;                                    "textutil -stdin -format html -convert txt -stdout"
+;;                                  "html2text -utf8 -width 72")
+;;         message-kill-buffer-on-exit t)
+;;   (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
+;;   (add-hook 'message-mode-hook
+;;             '(lambda ()
+;;                (my-non-special-modes-setup)
+;;                (flyspell-mode t)))
+;;   (bind-key "C-c m" 'mu4e)
+
+;;   (require 'mu4e-alert)
+;;   (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/INBOX")
+;;   (mu4e-alert-enable-mode-line-display)
+
+;;   (require 'smtpmail)
+;;   (setq smtpmail-auth-credentials (expand-file-name "~/.authinfo")
+;;         message-send-mail-function 'smtpmail-send-it
+;;         starttls-use-gnutls t
+;;         smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
+;;         smtpmail-default-smtp-server "mail.messagingengine.com"
+;;         smtpmail-smtp-server "mail.messagingengine.com"
+;;         smtpmail-smtp-service 587))
 
 (require 'org)
 
