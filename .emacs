@@ -839,6 +839,7 @@
       mm-discouraged-alternatives '("text/html" "text/richtext")
       gnus-inhibit-startup-message t
       gnus-agent-expire-days 4
+      gnus-use-scoring nil
       gnus-parameters
       '((".*"
          (display . all))))
@@ -854,7 +855,6 @@
 
 ;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 ;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
-
 
 ;; (when (not *windows*)
 ;;   (add-to-list 'load-path (if *osx* "/usr/local/share/emacs/site-lisp/mu/mu4e"
