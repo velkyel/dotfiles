@@ -221,7 +221,7 @@
   (set-frame-font "mononoki-16"))
 
 (when *windows*
-  (set-frame-font "mononoki-10"))
+  (set-frame-font "mononoki-10.4"))
 
 (when (and (display-graphic-p) *linux*)
   (set-frame-font "hack 11"))
