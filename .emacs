@@ -97,8 +97,8 @@
                      ;; mu4e-alert
                      ;; lsp-mode
                      ;; cquery
-                     elm-mode
-                     ))
+                     parinfer
+                     elm-mode))
 
 (setq *rtags* (file-exists-p "~/rtags/src"))
 (when *rtags* (add-to-list 'load-path "~/rtags/src"))
@@ -184,7 +184,7 @@
 (setenv "PAGER" (executable-find "cat"))
 (bind-key "C-c t" '(lambda ()
                      (interactive)
-                     (crux-start-or-switch-to 'shell "*shell*")))
+                     (crux-start-or-switch-to 'eshell "*eshell*")))
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -254,7 +254,9 @@
 (setq helm-candidate-number-limit 100)
 (setq helm-buffer-max-length 32)
 (setq helm-display-header-line nil)
-(setq helm-fuzzy-match t)
+(setq helm-mode-fuzzy-match t)
+(setq helm-completion-in-region-fuzzy-match t)
+
 ;; (helm-push-mark-mode 1)
 (bind-keys :map helm-map
            ("<tab>" . helm-execute-persistent-action)
@@ -539,8 +541,8 @@
   (delete 'company-clang company-backends))
 (bind-keys :map company-active-map
            ("C-n" . company-select-next)
-           ("\C-p" . company-select-previous)
-           ("\C-d" . company-show-doc-buffer)
+           ("C-p" . company-select-previous)
+           ("C-d" . company-show-doc-buffer)
            ("M-." . company-show-location))
 
 (require 'flymake)
@@ -604,6 +606,12 @@
 (require 'helm-xref)
 (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
+(require 'parinfer)
+(add-hook 'clojure-mode-hook #'parinfer-mode)
+(add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
+(add-hook 'scheme-mode-hook #'parinfer-mode)
+(add-hook 'lisp-mode-hook #'parinfer-mode)
+
 (require 'scheme)
 
 (defun run-s7 ()
@@ -612,8 +620,8 @@
   (setq scheme-program-name "s7")
   (if (not (comint-check-proc "*scheme*"))
       (let ((cmdlist (list '("localhost" . 5555))))
-	    (set-buffer (apply 'make-comint "scheme" (car cmdlist) nil nil))
-	    (inferior-scheme-mode)))
+        (set-buffer (apply 'make-comint "scheme" (car cmdlist) nil nil))
+        (inferior-scheme-mode)))
   (setq scheme-buffer "*scheme*")
   (pop-to-buffer-same-window "*scheme*"))
 
