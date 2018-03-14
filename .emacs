@@ -78,7 +78,6 @@
                      highlight-symbol
                      company
                      elpy
-                     unkillable-scratch
                      slime
                      slime-company
                      cff
@@ -232,9 +231,6 @@
 
 (when (and (display-graphic-p) *linux*)
   (set-frame-font "hack 11"))
-
-(require 'unkillable-scratch)
-(unkillable-scratch 1)
 
 (require 'goto-chg)
 (bind-key "C-x C-\\" 'goto-last-change)
