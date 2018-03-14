@@ -511,7 +511,7 @@
 (bind-key "M-\\" 'shrink-whitespace)
 
 (require 'expand-region)
-(bind-key "C-=" 'er/expand-region)
+(bind-key "M-=" 'er/expand-region)
 
 (require 'visual-regexp)
 (bind-key "C-c r" 'vr/replace)
