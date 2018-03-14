@@ -1,5 +1,8 @@
 (setq my-gc-threshold (* 64 1024 1024))
 
+(setq max-lisp-eval-depth 50000)
+(setq max-specpdl-size 5000)
+
 (setq gc-cons-threshold most-positive-fixnum)
 
 (add-hook 'emacs-startup-hook
