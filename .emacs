@@ -189,6 +189,10 @@
                      (interactive)
                      (crux-start-or-switch-to 'eshell "*eshell*")))
 
+(add-hook 'eshell-mode-hook
+          (lambda ()
+            (bind-key "<tab>" 'completion-at-point eshell-mode-map)))
+
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 (vhl/ext/etags/off)
