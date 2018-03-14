@@ -148,7 +148,7 @@
       mail-user-agent 'gnus-user-agent
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Čapák"
-      scroll-conservatively 101
+      ;; scroll-conservatively 101
       ;;scroll-preserve-screen-position 'always
       google-translate-default-source-language "en"
       google-translate-default-target-language "cs")
