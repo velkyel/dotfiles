@@ -56,6 +56,7 @@
                      haskell-mode
                      restart-emacs
                      helm
+                     helm-ext
                      projectile
                      helm-projectile
                      super-save
@@ -321,6 +322,9 @@
            ("C-c h" . helm-command-prefix)
            ("C-c <SPC>" . helm-all-mark-rings)
            ("C-c C-r" . helm-resume))
+
+(require 'helm-ext)
+(helm-ext-ff-enable-auto-path-expansion t)
 
 (require 'helpful)
 (bind-keys ("C-h f" . helpful-function)
