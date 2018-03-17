@@ -151,10 +151,9 @@
       mail-user-agent 'gnus-user-agent
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Čapák"
-      ;; scroll-conservatively 101
       ;;scroll-preserve-screen-position 'always
-      google-translate-default-source-language "en"
-      google-translate-default-target-language "cs")
+      ;;scroll-margin 3
+      scroll-conservatively 101)
 
 (setq-default indent-tabs-mode nil
               line-spacing nil
@@ -540,6 +539,10 @@
 (add-to-list 'auto-mode-alist '("\\.mm$" . objc-mode))
 (add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\|sc\\)\\'" . glsl-mode))
 ;; ...usf = unreal engine, sc = bgfx
+
+(require 'google-translate)
+(setq google-translate-default-source-language "en"
+      google-translate-default-target-language "cs")
 
 (require 'company)
 (diminish 'company-mode)
