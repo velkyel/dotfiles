@@ -97,9 +97,8 @@
                      helpful
                      dired-collapse
                      dired-rainbow
-                     ;; lsp-mode
-                     ;; cquery
-                     parinfer
+                     markdown-mode
+                     smartparens
                      elm-mode))
 
 (setq *rtags* (file-exists-p "~/rtags/src"))
@@ -617,11 +616,13 @@
 (require 'helm-xref)
 (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
-(require 'parinfer)
-(add-hook 'clojure-mode-hook #'parinfer-mode)
-(add-hook 'emacs-lisp-mode-hook #'parinfer-mode)
-(add-hook 'scheme-mode-hook #'parinfer-mode)
-(add-hook 'lisp-mode-hook #'parinfer-mode)
+(require 'smartparens-config)
+;;(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+
+(add-hook 'clojure-mode-hook #'smartparens-mode)
+(add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
+(add-hook 'scheme-mode-hook #'smartparens-mode)
+(add-hook 'lisp-mode-hook #'smartparens-mode)
 
 (require 'scheme)
 
