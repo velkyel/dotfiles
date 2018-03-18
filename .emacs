@@ -404,6 +404,8 @@
 (require 'dired)
 (require 'dired-collapse)
 
+(setq dired-dwim-target t)
+
 (defun dired-back-to-top ()
   (interactive)
   (beginning-of-buffer)
