@@ -97,7 +97,6 @@
                      helpful
                      dired-collapse
                      dired-rainbow
-                     ;; mu4e-alert
                      ;; lsp-mode
                      ;; cquery
                      parinfer
@@ -873,58 +872,6 @@
 
 ;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 ;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
-
-;; (when (not *windows*)
-;;   (add-to-list 'load-path (if *osx* "/usr/local/share/emacs/site-lisp/mu/mu4e"
-;;                             "/usr/share/emacs/site-lisp/mu4e"))
-;;   (require 'mu4e)
-;;   (require 'mu4e-contrib)
-;;   (setq mail-user-agent 'mu4e-user-agent
-;;         mu4e-maildir (expand-file-name "~/Maildir")
-;;         mu4e-drafts-folder "/INBOX.Drafts"
-;;         mu4e-sent-folder "/INBOX.Sent"
-;;         mu4e-trash-folder "/INBOX.Trash"
-;;         ;;mu4e-refile-folder . "/INBOX.Archive"
-;;         ;; mu4e-sent-message-behavior 'delete
-;;         mu4e-maildir-shortcuts
-;;         '(("/INBOX" . ?i)
-;;           ("/INBOX.Sent" . ?s)
-;;           ("/INBOX.Trash" . ?t)
-;;           ("/INBOX.Archive" . ?a))
-;;         mu4e-get-mail-command "offlineimap -o"
-;;         mu4e-update-interval 300
-;;         mu4e-headers-skip-duplicates t
-;;         mu4e-confirm-quit nil
-;;         mu4e-date-format-long "%d.%m.%Y"
-;;         mu4e-headers-date-format "%d.%m.%y"
-;;         mu4e-view-show-images t
-;;         mu4e-hide-index-messages t
-;;         mu4e-view-show-addresses t
-;;         mu4e-completing-read-function 'completing-read
-;;         mu4e-headers-leave-behavior 'apply
-;;         mu4e-html2text-command (if *osx*
-;;                                    "textutil -stdin -format html -convert txt -stdout"
-;;                                  "html2text -utf8 -width 72")
-;;         message-kill-buffer-on-exit t)
-;;   (add-to-list 'mu4e-view-actions '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-;;   (add-hook 'message-mode-hook
-;;             '(lambda ()
-;;                (my-non-special-modes-setup)
-;;                (flyspell-mode t)))
-;;   (bind-key "C-c m" 'mu4e)
-
-;;   (require 'mu4e-alert)
-;;   (setq mu4e-alert-interesting-mail-query "flag:unread maildir:/INBOX")
-;;   (mu4e-alert-enable-mode-line-display)
-
-;;   (require 'smtpmail)
-;;   (setq smtpmail-auth-credentials (expand-file-name "~/.authinfo")
-;;         message-send-mail-function 'smtpmail-send-it
-;;         starttls-use-gnutls t
-;;         smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
-;;         smtpmail-default-smtp-server "mail.messagingengine.com"
-;;         smtpmail-smtp-server "mail.messagingengine.com"
-;;         smtpmail-smtp-service 587))
 
 (require 'org)
 
