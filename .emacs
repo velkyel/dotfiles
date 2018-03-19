@@ -253,11 +253,12 @@
 (require 'helm-grep)
 (helm-mode 1)   ;; completion-read etc..
 (diminish 'helm-mode)
-(setq helm-candidate-number-limit 100)
-(setq helm-buffer-max-length 32)
-(setq helm-display-header-line nil)
-(setq helm-mode-fuzzy-match t)
-(setq helm-completion-in-region-fuzzy-match t)
+(setq helm-candidate-number-limit 100
+      helm-buffer-max-length 32
+      helm-display-header-line nil
+      helm-mode-fuzzy-match t
+      helm-completion-in-region-fuzzy-match t
+      helm-find-files-ignore-thing-at-point t)
 
 ;; (helm-push-mark-mode 1)
 (bind-keys :map helm-map
