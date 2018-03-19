@@ -98,6 +98,7 @@
                      dired-collapse
                      dired-rainbow
                      markdown-mode
+                     org-bullets
                      smartparens
                      elm-mode))
 
@@ -877,6 +878,8 @@
 ;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
 
 (require 'org)
+(require 'org-bullets)
+(add-hook 'org-mode-hook 'org-bullets-mode)
 
 (defun what-face (pos) ;; under cursor
   (interactive "d")
