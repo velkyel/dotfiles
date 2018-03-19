@@ -258,6 +258,7 @@
       helm-display-header-line nil
       helm-mode-fuzzy-match t
       helm-completion-in-region-fuzzy-match t
+      helm-imenu-fuzzy-match t
       helm-find-files-ignore-thing-at-point t)
 
 ;; (helm-push-mark-mode 1)
