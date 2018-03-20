@@ -489,8 +489,8 @@
   (add-to-list 'load-path "~/ctrifle/misc")
   (require 'trifle-mode))
 
-(bind-key "C-x g" 'magit-status)
-(bind-key "C-x M-g" 'magit-dispatch-popup)
+(bind-key "C-c g" 'magit)
+;; (bind-key "C-x M-g" 'magit-dispatch-popup)
 
 ;; (with-eval-after-load 'magit
 ;;   (setq magit-completing-read-function 'ivy-completing-read))
