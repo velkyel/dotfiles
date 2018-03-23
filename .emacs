@@ -305,9 +305,12 @@
   (unless helm-source-buffers-list
     (setq helm-source-buffers-list
           (helm-make-source "Buffers" 'helm-source-buffers)))
-  (helm :sources '(helm-source-buffers-list
-                   helm-source-projectile-files-list
-                   helm-source-buffer-not-found)
+  (helm :sources (if (projectile-project-p)
+                     '(helm-source-buffers-list
+                       helm-source-projectile-files-list
+                       helm-source-buffer-not-found)
+                   '(helm-source-buffers-list
+                     helm-source-buffer-not-found))
         :buffer "*helm buffers*"
         :keymap helm-buffer-map
         :truncate-lines helm-buffers-truncate-lines))
@@ -393,6 +396,7 @@
 (key-seq-define-global "jl" 'goto-line)
 (key-seq-define-global "jk" 'avy-goto-char-timer)
 ;; (key-seq-define-global "JJ" 'crux-switch-to-previous-buffer)
+
 ;; (key-seq-define-global "bb" 'my-helm-projectile-buffers-list)
 (key-chord-mode +1)
 
