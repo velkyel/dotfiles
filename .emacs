@@ -489,15 +489,8 @@
 ;; (setq inf-femtolisp-program '("localhost" . 5555))
 ;; (add-hook 'scheme-mode-hook 'inf-femtolisp-minor-mode)
 
-(when (file-exists-p "~/ctrifle/misc")
-  (add-to-list 'load-path "~/ctrifle/misc")
-  (require 'trifle-mode))
-
-(bind-key "C-c g" 'magit)
+(bind-key "C-c g" 'magit-status)
 ;; (bind-key "C-x M-g" 'magit-dispatch-popup)
-
-;; (with-eval-after-load 'magit
-;;   (setq magit-completing-read-function 'ivy-completing-read))
 
 (bind-key "C-w" '(lambda ()
                    (interactive)
