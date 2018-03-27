@@ -143,7 +143,6 @@
       shift-select-mode nil
       uniquify-buffer-name-style 'forward
       ediff-window-setup-function 'ediff-setup-windows-plain
-      vc-diff-switches "-u"
       search-highlight t
       isearch-allow-scroll t
       eval-expression-print-level nil
@@ -456,7 +455,6 @@
 (setq quelpa-update-melpa-p nil)
 
 (quelpa '(vc-darcs :fetcher github :repo "velkyel/vc-darcs"))
-(setq vc-disable-async-diff nil)                ;; hotfix
 (add-to-list 'vc-handled-backends 'DARCS t)
 (require 'vc-darcs)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
