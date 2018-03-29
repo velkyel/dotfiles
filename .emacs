@@ -759,9 +759,6 @@
       (when *kelly*
         (remove-hook 'elpy-modules 'elpy-module-flymake)))))
 
-;; (require 'geiser)
-(setq geiser-active-implementations '(racket))
-
 (require 'slime-autoloads)
 (setq slime-lisp-implementations '((sbcl ("sbcl" "--noinform") :coding-system utf-8-unix))
       slime-default-lisp 'sbcl
