@@ -529,7 +529,6 @@
 (diminish 'highlight-symbol-mode)
 (setq highlight-symbol-idle-delay 0.5)
 (set-face-background 'highlight-symbol-face "gray78")
-;; (set-face-attribute 'highlight-symbol-face nil :underline t :background "gray85")
 
 (require 'smart-mark)
 (smart-mark-mode)
@@ -546,8 +545,7 @@
 (require 'company)
 (diminish 'company-mode)
 (setq company-idle-delay nil)  ;; 0.1)
-(when *windows*
-  (delete 'company-clang company-backends))
+(when *windows* (delete 'company-clang company-backends))
 (bind-keys :map company-active-map
            ("C-n" . company-select-next)
            ("C-p" . company-select-previous)
