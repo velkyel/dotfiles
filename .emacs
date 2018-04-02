@@ -658,6 +658,11 @@
           compilation-mode-map)
 (setq compile-command "ninja")
 
+;; Avoid matching "from file:line:column:" as a warning.  For details
+;; see
+;; http://stackoverflow.com/questions/15489319/how-can-i-skip-in-file-included-from-in-emacs-c-compilation-mode
+(setf (nth 5 (assoc 'gcc-include compilation-error-regexp-alist-alist)) 0)
+
 (defun my-c-mode-common-hook ()
   (when *rtags*
     (add-to-list 'company-backends 'company-rtags))
