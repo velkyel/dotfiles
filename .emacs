@@ -69,6 +69,7 @@
                      ninja-mode
                      clojure-mode
                      inf-clojure
+                     lua-mode
                      shrink-whitespace
                      expand-region
                      visual-regexp
@@ -563,7 +564,6 @@
           (cons (cons 'flymake-mode flymake-mode-map)
                 minor-mode-map-alist)))
 
-(quelpa '(lua-mode :fetcher github :repo "velkyel/lua-mode"))
 (require 'lua-mode)
 (require 'flymake-lua)
 (setq flymake-luac-program "luac5.3")
