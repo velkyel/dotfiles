@@ -16,8 +16,8 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-(when (< emacs-major-version 27)
-  (package-initialize))
+;;(when (< emacs-major-version 27)
+(package-initialize)
 
 (menu-bar-mode -1)
 
@@ -56,12 +56,14 @@
                      flymake-lua
                      haskell-mode
                      restart-emacs
-                     helm
-                     helm-ext
                      projectile
-                     helm-projectile
                      super-save
                      anzu
+                     ivy
+                     ivy-hydra
+                     smex
+                     counsel
+                     counsel-projectile
                      avy
                      goto-chg
                      unfill
@@ -90,7 +92,6 @@
                      key-seq
                      dumb-jump
                      shackle
-                     helm-xref
                      crux
                      web-mode
                      js2-mode
@@ -240,95 +241,47 @@
 
 (setq python-shell-completion-native-enable nil)
 
+(require 'ivy)
+(ivy-mode 1)
+(diminish 'ivy-mode)
+
+(setq ivy-initial-inputs-alist nil   ;; no regexp by default
+      ivy-re-builders-alist '((t . ivy--regex-ignore-order))   ;; allow input not in order
+      ivy-use-virtual-buffers t   ;; add recentf-mode and bookmarks to ivy-switch-buffer
+      ivy-height 15
+      swiper-action-recenter t)
+
+;; (bind-key "M-i" 'helm-occur-from-isearch isearch-mode-map)
+
+(require 'counsel)
+(bind-keys ("M-x" . counsel-M-x)
+           ("C-x C-f" . counsel-find-file)
+           ("C-h a" . counsel-apropos)
+           ("M-y" . counsel-yank-pop))
+
+(bind-key "C-l" 'counsel-up-directory counsel-find-file-map)
+(bind-key "M-i" '(lambda ()
+                   (interactive)
+                   (swiper (thing-at-point 'symbol t))))
+
+(bind-key "M-G" '(lambda ()
+                   (interactive)
+                   (counsel-ag (thing-at-point 'symbol t) default-directory)))
+
 (require 'projectile)
 (setq projectile-enable-caching t)
 (projectile-global-mode)
+(setq projectile-completion-system 'ivy)
 (diminish 'projectile-mode)
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
 (add-to-list 'projectile-globally-ignored-directories ".build")
 (add-to-list 'projectile-globally-ignored-directories "build")
 (add-to-list 'projectile-globally-ignored-directories ".cquery_cached_index")
 
-(require 'helm)
-(require 'helm-config)
-(require 'helm-grep)
-(helm-mode 1)   ;; completion-read etc..
-(diminish 'helm-mode)
-(setq helm-candidate-number-limit 100
-      helm-buffer-max-length 32
-      helm-display-header-line nil
-      helm-mode-fuzzy-match t
-      helm-completion-in-region-fuzzy-match t
-      helm-imenu-fuzzy-match t
-      helm-find-files-ignore-thing-at-point t)
-
-;; (helm-push-mark-mode 1)
-(bind-keys :map helm-map
-           ("<tab>" . helm-execute-persistent-action)
-           ("C-i" . helm-execute-persistent-action)
-           ("C-z" . helm-select-action))
-
-(add-hook 'helm-grep-mode-hook 'grep-mode)
-(setq helm-grep-save-buffer-name-no-confirm 1)
-(setq helm-grep-file-path-style 'relative)
-
-(setq projectile-completion-system 'helm)
-(helm-projectile-on)
-
-(bind-key "M-g" '(lambda ()
-                   (interactive)
-                   (if *windows* (helm-grep-do-git-grep "")
-                     (helm-grep-ag (projectile-project-root) nil))))
-
-;; ;; helm-ag
-;; (setq helm-ag-insert-at-point t)
-;; (setq helm-ag--action-save-buffer #'helm-grep-save-results
-;; (bind-key "M-g" 'helm-projectile-ag)
-
-;; TODO:
-;; - thing-at-point
-;; - spustit helm-grep z isearch
-;; - helm-ag (volano z helm-projectile-ag) ma v gr pro "args flags 0" neprazdny vysledek, zatimco helm-grep-ag nic nenajde
-
-(bind-key* "M-G"     ;; overrides any mode-specific bindings
-           (if *windows* 'helm-grep-do-git-grep
-             '(lambda ()
-                (interactive)
-                (helm-grep-ag (helm-current-directory) nil))))    ;; nebo expand-file-name default-directory ?
-
-(bind-key "M-i" 'helm-occur-from-isearch isearch-mode-map)
-
-;; (require 'helm-for-files)    ;; helm-source-recentf
-;;(setq helm-M-x t)
-
-(defun my-helm-projectile-buffers-list ()
-  (interactive)
-  (unless helm-source-buffers-list
-    (setq helm-source-buffers-list
-          (helm-make-source "Buffers" 'helm-source-buffers)))
-  (helm :sources (if (projectile-project-p)
-                     '(helm-source-buffers-list
-                       helm-source-projectile-files-list
-                       helm-source-buffer-not-found)
-                   '(helm-source-buffers-list
-                     helm-source-buffer-not-found))
-        :buffer "*helm buffers*"
-        :keymap helm-buffer-map
-        :truncate-lines helm-buffers-truncate-lines))
-
-(bind-keys ([remap list-buffers] . my-helm-projectile-buffers-list)
-           ("M-x" . helm-M-x)
-           ("C-x b" . my-helm-projectile-buffers-list)
-           ("C-h a" . helm-apropos)
-           ("C-x C-f" . helm-find-files)
-           ("M-y" . helm-show-kill-ring)
-           ("M-i" . helm-occur)
-           ("C-c h" . helm-command-prefix)
-           ("C-c <SPC>" . helm-all-mark-rings)
-           ("C-c C-r" . helm-resume))
-
-(require 'helm-ext)
-(helm-ext-ff-enable-auto-path-expansion t)
+(require 'counsel-projectile)
+(counsel-projectile-mode)
+(setq counsel-projectile-ag-initial-input '(projectile-symbol-or-selection-at-point))
+(bind-key "M-g" 'counsel-projectile-ag)
 
 (require 'helpful)
 (bind-keys ("C-h f" . helpful-function)
@@ -462,7 +415,7 @@
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
 (require 'dumb-jump)
-(setq dumb-jump-selector 'helm
+(setq dumb-jump-selector 'ivy
       dumb-jump-prefer-searcher 'ag)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
 
 (require 'js2-mode)
@@ -489,6 +442,7 @@
 ;; (setq inf-femtolisp-program '("localhost" . 5555))
 ;; (add-hook 'scheme-mode-hook 'inf-femtolisp-minor-mode)
 
+(require 'magit)
 (bind-key "C-c g" 'magit-status)
 ;; (bind-key "C-x M-g" 'magit-dispatch-popup)
 
@@ -536,7 +490,7 @@
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.mm$" . objc-mode))
-(add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|usf\\|sc\\)\\'" . glsl-mode))
+(add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|ush\\|usf\\|sc\\)\\'" . glsl-mode))
 ;; ...usf = unreal engine, sc = bgfx
 
 (require 'google-translate)
@@ -576,14 +530,14 @@
 
 (when *rtags*
   (require 'rtags)
-  (setq rtags-display-result-backend 'helm)
+  (setq rtags-display-result-backend 'ivy)
   (setq rtags-imenu-syntax-highlighting t))
 
 (defun my-imenu ()
   (interactive)
   (if (and *rtags* (rtags-is-indexed))
       (rtags-imenu)
-    (helm-imenu-in-all-buffers)))
+    (imenu)))     ;; TODO: counsel-imenu-in-all-buffers -> imenu-anywhere (ivy)
 
 (defun my-non-special-modes-setup ()
   (setq indicate-empty-lines t)
@@ -609,9 +563,6 @@
 (add-hook 'diff-mode-hook 'my-non-special-modes-setup)
 
 (add-hook 'prog-mode-hook 'my-prog-modes-hook)
-
-(require 'helm-xref)
-(setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
 (require 'smartparens-config)
 ;;(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
@@ -897,22 +848,6 @@
 (set-face-attribute 'avy-background-face
                     nil
                     :foreground "gray50")
-
-(set-face-attribute 'helm-ff-executable
-                    nil
-                    :foreground "#228b22")
-
-(set-face-attribute 'helm-selection
-                    nil
-                    :background "#a5e8be")
-
-(set-face-attribute 'helm-visible-mark
-                    nil
-                    :background "#f1c40f")
-
-(set-face-attribute 'helm-source-header
-                    nil
-                    :height 0.9)
 
 (set-face-attribute 'font-lock-comment-face
                     nil
