@@ -20,6 +20,7 @@
 (package-initialize)
 
 (menu-bar-mode -1)
+(blink-cursor-mode 1)
 
 (defun setup-my-fringe ()
   (fringe-mode '(8 . 0)))
