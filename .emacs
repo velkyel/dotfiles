@@ -102,6 +102,7 @@
                      dired-rainbow
                      markdown-mode
                      org-bullets
+                     gnus-summary-ext
                      smartparens
                      elm-mode))
 
