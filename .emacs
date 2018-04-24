@@ -42,7 +42,9 @@
                       (string= system-name "idev03")
                       (string= system-name "idev03.autokelly.local")
                       (string= system-name "idev05")
-                      (string= system-name "idev05.autokelly.local")))
+                      (string= system-name "idev05.autokelly.local")
+                      (string= system-name "idev06")
+                      (string= system-name "idev06.autokelly.local")))
 
 (setq inhibit-startup-message t
       initial-scratch-message nil)
@@ -190,11 +192,11 @@
 (setenv "PAGER" (executable-find "cat"))
 (bind-key "C-c t" '(lambda ()
                      (interactive)
-                     (crux-start-or-switch-to 'eshell "*eshell*")))
+                     (crux-start-or-switch-to 'shell "*shell*")))
 
-(add-hook 'eshell-mode-hook
-          (lambda ()
-            (bind-key "<tab>" 'completion-at-point eshell-mode-map)))
+;; (add-hook 'eshell-mode-hook
+;;           (lambda ()
+;;             (bind-key "<tab>" 'completion-at-point eshell-mode-map)))
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -646,24 +648,25 @@
 ;; (require 'lsp-imenu)
 ;; (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
 
-(setq clang-format-style (concat "{BasedOnStyle: Google,"
-                                 " BreakBeforeBraces: Mozilla,"
-                                 " BinPackParameters: true,"
-                                 " BreakBeforeBinaryOperators: NonAssignment,"
-                                 " IndentWidth: 2,"
-                                 " ColumnLimit: 90,"
-                                 " AlwaysBreakBeforeMultilineStrings: false,"
-                                 " SpacesBeforeTrailingComments: 4,"
-                                 " AccessModifierOffset: -2,"
-                                 " AllowShortFunctionsOnASingleLine: Inline,"
-                                 " NamespaceIndentation: All,"
-                                 " UseTab: Never,"
-                                 " ConstructorInitializerIndentWidth: 2,"
-                                 " ContinuationIndentWidth: 2,"
-                                 " PointerAlignment: Left,"
-                                 " DerivePointerAlignment: false,"
-                                 " Standard: Cpp11,"
-                                 " SortIncludes: false}"))
+(when (not *kelly*)
+  (setq clang-format-style (concat "{BasedOnStyle: Google,"
+                                   " BreakBeforeBraces: Mozilla,"
+                                   " BinPackParameters: true,"
+                                   " BreakBeforeBinaryOperators: NonAssignment,"
+                                   " IndentWidth: 2,"
+                                   " ColumnLimit: 90,"
+                                   " AlwaysBreakBeforeMultilineStrings: false,"
+                                   " SpacesBeforeTrailingComments: 4,"
+                                   " AccessModifierOffset: -2,"
+                                   " AllowShortFunctionsOnASingleLine: Inline,"
+                                   " NamespaceIndentation: All,"
+                                   " UseTab: Never,"
+                                   " ConstructorInitializerIndentWidth: 2,"
+                                   " ContinuationIndentWidth: 2,"
+                                   " PointerAlignment: Left,"
+                                   " DerivePointerAlignment: false,"
+                                   " Standard: Cpp11,"
+                                   " SortIncludes: false}")))
 
 (setq clang-format-executable "clang-format")   ;; ev symlink in ~/bin
 
