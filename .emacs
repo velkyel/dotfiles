@@ -64,6 +64,7 @@
                      anzu
                      ivy
                      ivy-hydra
+                     flx
                      smex
                      counsel
                      counsel-projectile
@@ -243,6 +244,7 @@
 (ivy-mode 1)
 (diminish 'ivy-mode)
 
+;; (require 'flx)
 (setq ivy-initial-inputs-alist nil   ;; no regexp by default
       ivy-re-builders-alist '((t . ivy--regex-ignore-order))   ;; allow input not in order
       ivy-use-virtual-buffers t   ;; add recentf-mode and bookmarks to ivy-switch-buffer
@@ -642,6 +644,7 @@
            ("<C-tab>" . company-complete)
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format)
+           ("C-." . counsel-semantic-or-imenu)
            ("M-." . dumb-jump-go)
            ("M-," . dumb-jump-back)
            ("M-o" . cff-find-other-file))
