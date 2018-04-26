@@ -596,16 +596,6 @@
 ;;     (require 'pulse)
 ;;     (setq pulse-flag nil)))
 
-(defun fontify-string (str mode)
-  "Return STR fontified according to MODE."
-  (with-temp-buffer
-    (insert str)
-    (delay-mode-hooks (funcall mode))
-    (font-lock-default-function mode)
-    (font-lock-default-fontify-region
-     (point-min) (point-max) nil)
-    (buffer-string)))
-
 (require 'compile)
 (bind-key "C-c C-t"
           '(lambda ()
