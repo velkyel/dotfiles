@@ -109,9 +109,6 @@
                      smartparens
                      elm-mode))
 
-(setq *rtags* (file-exists-p "~/rtags/src"))
-(when *rtags* (add-to-list 'load-path "~/rtags/src"))
-
 (set-language-environment "czech")
 (setq default-input-method "czech-qwerty")
 (prefer-coding-system 'utf-8)
@@ -193,10 +190,6 @@
 (bind-key "C-c t" '(lambda ()
                      (interactive)
                      (crux-start-or-switch-to 'shell "*shell*")))
-
-;; (add-hook 'eshell-mode-hook
-;;           (lambda ()
-;;             (bind-key "<tab>" 'completion-at-point eshell-mode-map)))
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -428,8 +421,7 @@
 (setq js-indent-level 2)
 (bind-keys :map js2-mode-map
            ("M-." . dumb-jump-go)
-           ("M-," . dumb-jump-back)
-           ("C-." . imenu))
+           ("M-," . dumb-jump-back))
 
 (quelpa '(inf-js :fetcher github :repo "velkyel/inf-js"))
 (require 'inf-js)
@@ -533,17 +525,6 @@
            ("M-." . dumb-jump-go)
            ("M-," . 'dumb-jump-back))
 
-(when *rtags*
-  (require 'rtags)
-  (setq rtags-display-result-backend 'ivy)
-  (setq rtags-imenu-syntax-highlighting t))
-
-(defun my-imenu ()
-  (interactive)
-  (if (and *rtags* (rtags-is-indexed))
-      (rtags-imenu)
-    (imenu)))     ;; TODO: counsel-imenu-in-all-buffers -> imenu-anywhere (ivy)
-
 (defun my-non-special-modes-setup ()
   (setq indicate-empty-lines t)
   (whitespace-mode)
@@ -561,7 +542,7 @@
   ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
   (bind-keys :map prog-mode-map
              ("<C-tab>" . company-complete)
-             ("C-." . my-imenu)))
+             ("C-." . counsel-semantic-or-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -608,13 +589,6 @@
 ;; see
 ;; http://stackoverflow.com/questions/15489319/how-can-i-skip-in-file-included-from-in-emacs-c-compilation-mode
 (setf (nth 5 (assoc 'gcc-include compilation-error-regexp-alist-alist)) 0)
-
-(defun my-c-mode-common-hook ()
-  (when *rtags*
-    (add-to-list 'company-backends 'company-rtags))
-  (setq-local fill-column 90))
-
-(add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 (require 'cff)
 (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
@@ -663,27 +637,13 @@
 (require 'clang-format)
 (fset 'c-indent-region 'clang-format-region)
 
-(defun my-goto-symbol ()
-  (interactive)
-  (save-buffer)
-  (deactivate-mark)
-  (xref-push-marker-stack)
-  (or (and *rtags*
-           (rtags-is-indexed)
-           (rtags-find-symbol-at-point))
-      (dumb-jump-go)))
-
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format)
-           ("C-." . my-imenu)
-           ("M-." . my-goto-symbol)
-           ("M-," . xref-pop-marker-stack)
+           ("M-." . dumb-jump-go)
+           ("M-," . dumb-jump-back)
            ("M-o" . cff-find-other-file))
-
-(when *rtags*
-  (bind-key "M-?" 'rtags-display-summary c-mode-base-map))
 
 (setq inf-clojure-program '("localhost" . 9999))   ;; "planck"
 (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode)
