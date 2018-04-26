@@ -255,7 +255,8 @@
 (bind-keys ("M-x" . counsel-M-x)
            ("C-x C-f" . counsel-find-file)
            ("C-h a" . counsel-apropos)
-           ("M-y" . counsel-yank-pop))
+           ("M-y" . counsel-yank-pop)
+           ("C-c <SPC>" . counsel-mark-ring))
 
 (bind-key "C-l" 'counsel-up-directory counsel-find-file-map)
 (bind-key "M-i" '(lambda ()
