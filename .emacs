@@ -17,7 +17,7 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 ;;(when (< emacs-major-version 27)
-(package-initialize)
+;; (package-initialize)
 
 (menu-bar-mode -1)
 (blink-cursor-mode 1)
@@ -79,7 +79,7 @@
                      shrink-whitespace
                      expand-region
                      visual-regexp
-                     rainbow-mode
+                     ;; rainbow-mode
                      smart-mark
                      google-translate
                      glsl-mode
@@ -283,6 +283,7 @@
 (counsel-projectile-mode)
 (setq counsel-projectile-ag-initial-input '(projectile-symbol-or-selection-at-point))
 (bind-key "M-g" 'counsel-projectile-ag)
+(bind-key "C-x C-p" 'counsel-projectile)
 
 (require 'helpful)
 (bind-keys ("C-h f" . helpful-function)
@@ -475,10 +476,10 @@
 (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
 (add-hook 'ielm-mode-hook 'eldoc-mode)
 
-(require 'rainbow-mode)
-(diminish 'rainbow-mode)
-(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-(add-hook 'js2-mode-hook 'rainbow-mode)
+;;(require 'rainbow-mode)
+;;(diminish 'rainbow-mode)
+;;(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+;;(add-hook 'js2-mode-hook 'rainbow-mode)
 
 (require 'highlight-symbol)
 (diminish 'highlight-symbol-mode)
