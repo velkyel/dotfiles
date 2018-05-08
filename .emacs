@@ -750,7 +750,7 @@
                                   (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
       gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
       gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
-      gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M"))
+      gnus-user-date-format-alist '((t . "%d-%m-%Y %H:%M"))
       gnus-thread-sort-functions '(gnus-thread-sort-by-most-recent-date)  ;; gnus-thread-sort-by-date))
       gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
       gnus-gcc-mark-as-read t
