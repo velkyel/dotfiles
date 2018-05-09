@@ -16,8 +16,8 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-;;(when (< emacs-major-version 27)
-;; (package-initialize)
+(when (< emacs-major-version 27)
+  (package-initialize))
 
 (menu-bar-mode -1)
 (blink-cursor-mode 1)
