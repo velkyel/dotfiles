@@ -267,7 +267,7 @@
 
 (bind-key "M-G" '(lambda ()
                    (interactive)
-                   (counsel-ag (thing-at-point 'symbol t) default-directory)))
+                   (counsel-rg (thing-at-point 'symbol t) default-directory)))
 
 (require 'projectile)
 (setq projectile-enable-caching t)
@@ -282,7 +282,7 @@
 (require 'counsel-projectile)
 (counsel-projectile-mode)
 (setq counsel-projectile-ag-initial-input '(projectile-symbol-or-selection-at-point))
-(bind-key "M-g" 'counsel-projectile-ag)
+(bind-key "M-g" 'counsel-projectile-rg)
 (bind-key "C-x C-p" 'counsel-projectile)
 
 (require 'helpful)
