@@ -19,9 +19,10 @@ main = xmonad $ gnomeConfig {
   terminal = "urxvtc",
   borderWidth = 4,
   focusFollowsMouse = False,
-  -- manageHook = composeOne
-  --             [ className =? "bgfx" -?> doFloat
-  --             , isFullscreen -?> doFullFloat ],
+  manageHook = composeOne
+              [ className =? "grDebug" -?> doFloat
+              , className =? "grRelease" -?> doFloat
+              , isFullscreen -?> doFullFloat ],
   startupHook = startup
   }
   `removeKeysP`
