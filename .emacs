@@ -418,7 +418,7 @@
 
 (require 'dumb-jump)
 (setq dumb-jump-selector 'ivy
-      dumb-jump-prefer-searcher 'ag)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
+      dumb-jump-prefer-searcher 'rg)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
 
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
