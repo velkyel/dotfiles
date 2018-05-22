@@ -63,9 +63,6 @@
                      super-save
                      anzu
                      ivy
-                     ivy-hydra
-                     flx
-                     smex
                      counsel
                      counsel-projectile
                      avy
@@ -79,7 +76,7 @@
                      shrink-whitespace
                      expand-region
                      visual-regexp
-                     ;; rainbow-mode
+                     rainbow-mode
                      smart-mark
                      google-translate
                      glsl-mode
@@ -244,7 +241,6 @@
 (ivy-mode 1)
 (diminish 'ivy-mode)
 
-;; (require 'flx)
 (setq ivy-initial-inputs-alist nil   ;; no regexp by default
       ivy-re-builders-alist '((t . ivy--regex-ignore-order))   ;; allow input not in order
       ivy-use-virtual-buffers t   ;; add recentf-mode and bookmarks to ivy-switch-buffer
@@ -355,10 +351,6 @@
 
 ;; (key-seq-define-global "bb" 'my-helm-projectile-buffers-list)
 (key-chord-mode +1)
-
-;; (require 'jump-char)
-;; (bind-key "M-m" 'jump-char-forward)
-;; (bind-key "M-M" 'jump-char-backward)
 
 (require 'unfill)
 (bind-key [remap fill-paragraph] 'unfill-toggle)
@@ -476,10 +468,10 @@
 (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
 (add-hook 'ielm-mode-hook 'eldoc-mode)
 
-;;(require 'rainbow-mode)
-;;(diminish 'rainbow-mode)
-;;(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-;;(add-hook 'js2-mode-hook 'rainbow-mode)
+(require 'rainbow-mode)
+(diminish 'rainbow-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
+(add-hook 'js2-mode-hook 'rainbow-mode)
 
 (require 'highlight-symbol)
 (diminish 'highlight-symbol-mode)
