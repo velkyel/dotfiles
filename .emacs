@@ -65,6 +65,7 @@
                      ivy
                      counsel
                      counsel-projectile
+                     smex
                      avy
                      goto-chg
                      unfill
