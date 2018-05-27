@@ -63,6 +63,7 @@
                      super-save
                      anzu
                      ivy
+                     ivy-xref
                      counsel
                      counsel-projectile
                      smex
@@ -247,6 +248,9 @@
       ivy-use-virtual-buffers t   ;; add recentf-mode and bookmarks to ivy-switch-buffer
       ivy-height 15
       swiper-action-recenter t)
+
+(require 'ivy-xref)
+(setq xref-show-xrefs-function 'ivy-xref-show-xrefs)
 
 ;; (bind-key "M-i" 'helm-occur-from-isearch isearch-mode-map)
 
