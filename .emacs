@@ -535,6 +535,7 @@
   (my-non-special-modes-setup)
   (make-local-variable 'comment-auto-fill-only-comments)
   (setq comment-auto-fill-only-comments t)
+  (setq fill-column 90)
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (goto-address-prog-mode)
