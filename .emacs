@@ -266,7 +266,9 @@
                    (interactive)
                    (swiper (thing-at-point 'symbol t))))
 
-(bind-key "M-G" 'counsel-rg)
+(bind-key "M-G" '(lambda ()
+                   (interactive)
+                   (counsel-rg nil default-directory)))
 
 (require 'projectile)
 (setq projectile-enable-caching t)
