@@ -789,6 +789,10 @@
 (require 'org)
 (require 'org-bullets)
 (add-hook 'org-mode-hook 'org-bullets-mode)
+(setq org-clock-into-drawer "CLOCKING")
+
+(require 'tramp)
+(setq tramp-default-method "ssh")
 
 (defun what-face (pos) ;; under cursor
   (interactive "d")
