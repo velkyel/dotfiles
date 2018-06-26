@@ -1,1 +1,8 @@
 keycode 94 = grave asciitilde
+keycode 232 = F1
+keycode 233 = F2
+keycode 128 = F3
+keycode 212 = F4
+keycode 237 = F5
+keycode 172 = F8
+keycode 122 = F11
