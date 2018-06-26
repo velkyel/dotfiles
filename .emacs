@@ -489,7 +489,6 @@
 (require 'smart-mark)
 (smart-mark-mode)
 
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 (add-to-list 'auto-mode-alist '("\\.mm$" . objc-mode))
 (add-to-list 'auto-mode-alist '("\\.\\(glsl\\|vert\\|frag\\|vsh\\|fsh\\|ush\\|usf\\|sc\\)\\'" . glsl-mode))
 ;; ...usf = unreal engine, sc = bgfx
@@ -640,16 +639,18 @@
 (setq clang-format-executable "clang-format")   ;; ev symlink in ~/bin
 
 (require 'clang-format)
-(fset 'c-indent-region 'clang-format-region)
+;; (fset 'c-indent-region 'clang-format-region)
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-M-\\" . clang-format-region)
-           ("C-i" . clang-format)
            ("C-." . counsel-semantic-or-imenu)
            ("M-." . dumb-jump-go)
            ("M-," . dumb-jump-back)
            ("M-o" . cff-find-other-file))
+
+(bind-keys :map c++-mode-map
+           ("C-M-\\" . clang-format-region)
+           ("C-i" . clang-format))
 
 (setq inf-clojure-program '("localhost" . 9999))   ;; "planck"
 (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode)
