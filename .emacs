@@ -268,9 +268,7 @@
 
 (bind-key "M-G" '(lambda ()
                    (interactive)
-                   (if *windows*
-                       (counsel-ag nil default-directory)
-                     (counsel-rg nil default-directory))))
+                   (counsel-rg nil default-directory)))
 
 (require 'projectile)
 (setq projectile-enable-caching t)
@@ -285,7 +283,7 @@
 (require 'counsel-projectile)
 (counsel-projectile-mode)
 (setq counsel-projectile-ag-initial-input '(projectile-symbol-or-selection-at-point))
-(bind-key "M-g" (if *windows* 'counsel-projectile-ag 'counsel-projectile-rg))
+(bind-key "M-g" 'counsel-projectile-rg)
 (bind-key "C-x C-p" 'counsel-projectile)
 
 (require 'helpful)
@@ -417,7 +415,7 @@
 
 (require 'dumb-jump)
 (setq dumb-jump-selector 'ivy
-      dumb-jump-prefer-searcher (if *windows* 'ag 'rg))
+      dumb-jump-prefer-searcher 'rg)
 ;; because https://github.com/jacktasia/dumb-jump/issues/129
 
 (require 'js2-mode)
