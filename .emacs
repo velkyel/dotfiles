@@ -19,6 +19,8 @@
 (when (< emacs-major-version 27)
   (package-initialize))
 
+;; (package-initialize)
+
 (menu-bar-mode -1)
 (blink-cursor-mode 1)
 
@@ -59,14 +61,13 @@
                      flymake-lua
                      haskell-mode
                      restart-emacs
+                     helm
+                     helm-ext
+                     helm-xref
                      projectile
+                     helm-projectile
                      super-save
                      anzu
-                     ivy
-                     ivy-xref
-                     counsel
-                     counsel-projectile
-                     smex
                      avy
                      goto-chg
                      unfill
@@ -86,6 +87,7 @@
                      highlight-symbol
                      company
                      elpy
+                     geiser
                      slime
                      slime-company
                      cff
@@ -107,7 +109,11 @@
                      org-bullets
                      gnus-summary-ext
                      smartparens
-                     elm-mode))
+                     elm-mode
+                     ;; experimental:
+                     cquery
+                     lsp-mode
+                     ))
 
 (set-language-environment "czech")
 (setq default-input-method "czech-qwerty")
@@ -239,52 +245,80 @@
 
 (setq python-shell-completion-native-enable nil)
 
-(require 'ivy)
-(ivy-mode 1)
-(diminish 'ivy-mode)
+(require 'helm)
+(require 'helm-config)
+(require 'helm-grep)
+(helm-mode 1)       ;; completion-read etc..
+(diminish 'helm-mode)
+(setq helm-buffer-max-length 32
+      ;;helm-candidate-number-limit 100
+      helm-display-header-line nil
+      helm-mode-fuzzy-match t
+      helm-completion-in-region-fuzzy-match t
+      helm-find-files-ignore-thing-at-point t)
 
-(setq ivy-initial-inputs-alist nil   ;; no regexp by default
-      ivy-re-builders-alist '((t . ivy--regex-ignore-order))   ;; allow input not in order
-      ivy-use-virtual-buffers t   ;; add recentf-mode and bookmarks to ivy-switch-buffer
-      ivy-height 15
-      swiper-action-recenter t)
+;; (helm-push-mark-mode 1)
+(bind-keys :map helm-map
+           ("<tab>" . helm-execute-persistent-action)
+           ("C-i" . helm-execute-persistent-action)
+           ("C-z" . helm-selection-action))
 
-(require 'ivy-xref)
-(setq xref-show-xrefs-function 'ivy-xref-show-xrefs)
-
-;; (bind-key "M-i" 'helm-occur-from-isearch isearch-mode-map)
-
-(require 'counsel)
-(bind-keys ("M-x" . counsel-M-x)
-           ("C-x C-f" . counsel-find-file)
-           ("C-h a" . counsel-apropos)
-           ("M-y" . counsel-yank-pop)
-           ("C-c <SPC>" . counsel-mark-ring))
-
-(bind-key "C-l" 'counsel-up-directory counsel-find-file-map)
-(bind-key "M-i" '(lambda ()
-                   (interactive)
-                   (swiper (thing-at-point 'symbol t))))
-
-(bind-key "M-G" '(lambda ()
-                   (interactive)
-                   (counsel-rg nil default-directory)))
+(add-hook 'helm-grep-mode-hook 'grep-mode)
+(setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number %s %s %s")
+(setq helm-grep-save-buffer-name-no-confirm 1)
+(setq helm-grep-file-path-style 'relative)
 
 (require 'projectile)
 (setq projectile-enable-caching t)
 (projectile-global-mode)
-(setq projectile-completion-system 'ivy)
+(setq projectile-completion-system 'helm)
+(helm-projectile-on)
+
 (diminish 'projectile-mode)
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
 (add-to-list 'projectile-globally-ignored-directories ".build")
 (add-to-list 'projectile-globally-ignored-directories "build")
 (add-to-list 'projectile-globally-ignored-directories ".cquery_cached_index")
 
-(require 'counsel-projectile)
-(counsel-projectile-mode)
-(setq counsel-projectile-ag-initial-input '(projectile-symbol-or-selection-at-point))
-(bind-key "M-g" 'counsel-projectile-rg)
-(bind-key "C-x C-p" 'counsel-projectile)
+(bind-key "M-g" '(lambda ()
+                   (interactive)
+                   (helm-grep-ag (projectile-project-root) nil)))
+
+(bind-key* "M-G"   ;; overrides any mode-specific bindings
+           '(lambda ()
+              (interactive)
+              (helm-grep-ag (helm-current-directory) nil)))
+
+(bind-key "M-i" 'helm-occur-from-isearch isearch-mode-map)
+
+(defun my-helm-projectile-buffers-list ()
+  (interactive)
+  (unless helm-source-buffers-list
+    (setq helm-source-buffers-list
+          (helm-make-source "Buffers" 'helm-source-buffers)))
+  (helm :sources (if (projectile-project-p)
+                     '(helm-source-buffers-list
+                       helm-source-projectile-files-list
+                       helm-source-buffer-not-found)
+                   '(helm-source-buffers-list
+                     helm-source-buffer-not-found))
+        :buffer "*helm buffers*"
+        :keymap helm-buffer-map
+        :truncate-lines helm-buffers-truncate-lines))
+
+(bind-keys ([remap list-buffers] . my-helm-projectile-buffers-list)
+           ("M-x" . helm-M-x)
+           ("C-x b" . my-helm-projectile-buffers-list)
+           ("C-h a" . helm-apropos)
+           ("C-x C-f" . helm-find-files)
+           ("M-y" . helm-show-kill-ring)
+           ("M-i" . helm-occur)
+           ("C-c h" . helm-command-prefix)
+           ("C-c <SPC>" . helm-all-mark-rings)
+           ("C-c C-r" . helm-resume))
+
+(require 'helm-ext)
+(helm-ext-ff-enable-auto-path-expansion t)
 
 (require 'helpful)
 (bind-keys ("C-h f" . helpful-function)
@@ -414,9 +448,8 @@
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
 (require 'dumb-jump)
-(setq dumb-jump-selector 'ivy
-      dumb-jump-prefer-searcher 'rg)
-;; because https://github.com/jacktasia/dumb-jump/issues/129
+(setq dumb-jump-selector 'helm
+      dumb-jump-prefer-searcher 'rg)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
 
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -521,10 +554,18 @@
 (setq flymake-luac-program "luac5.3")
 (add-hook 'lua-mode-hook 'flymake-lua-load)
 (setq lua-default-application '("localhost" . 5555))
+(setq lua-default-application "lua5.3")  ;; '("localhost" . 5555))
+
+(defun my-lua-switch-to-process-buffer ()
+  (interactive)
+  (when (lua-get-create-process)
+    (switch-to-buffer-other-window lua-process-buffer)))
+
 (bind-keys :map lua-mode-map
-           ("C-M-x" . lua-send-proc)
+           ("C-M-x" . lua-send-defun)
            ("M-." . dumb-jump-go)
-           ("M-," . 'dumb-jump-back))
+           ("M-," . dumb-jump-back)
+           ("C-c C-z" . my-lua-switch-to-process-buffer))
 
 (defun my-non-special-modes-setup ()
   (setq indicate-empty-lines t)
@@ -544,13 +585,16 @@
   ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
   (bind-keys :map prog-mode-map
              ("<C-tab>" . company-complete)
-             ("C-." . counsel-semantic-or-imenu)))
+             ("C-." . helm-imenu-in-all-buffers)))  ;; counsel-semantic-or-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
 (add-hook 'diff-mode-hook 'my-non-special-modes-setup)
 
 (add-hook 'prog-mode-hook 'my-prog-modes-hook)
+
+(require 'helm-xref)
+(setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
 (require 'smartparens-config)
 ;;(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
@@ -560,18 +604,22 @@
 (add-hook 'scheme-mode-hook #'smartparens-mode)
 (add-hook 'lisp-mode-hook #'smartparens-mode)
 
-(require 'scheme)
+(require 'geiser)
+(setq geiser-active-implementations '(chibi))
+(setq geiser-chibi-binary (expand-file-name "~/chibi-scheme/chibi-scheme"))
 
-(defun run-s7 ()
-  (interactive)
-  (require 'cmuscheme)
-  (setq scheme-program-name "s7")
-  (if (not (comint-check-proc "*scheme*"))
-      (let ((cmdlist (list '("localhost" . 5555))))
-        (set-buffer (apply 'make-comint "scheme" (car cmdlist) nil nil))
-        (inferior-scheme-mode)))
-  (setq scheme-buffer "*scheme*")
-  (pop-to-buffer-same-window "*scheme*"))
+;; (require 'scheme)
+
+;; (defun run-s7 ()
+;;   (interactive)
+;;   (require 'cmuscheme)
+;;   (setq scheme-program-name "s7")
+;;   (if (not (comint-check-proc "*scheme*"))
+;;       (let ((cmdlist (list '("localhost" . 5555))))
+;;         (set-buffer (apply 'make-comint "scheme" (car cmdlist) nil nil))
+;;         (inferior-scheme-mode)))
+;;   (setq scheme-buffer "*scheme*")
+;;   (pop-to-buffer-same-window "*scheme*"))
 
 (setq pulse-delay .06)
 ;; (when *linux*
@@ -596,21 +644,21 @@
 (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
 (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
 
-;; (require 'cquery)
-;; ;; https://github.com/cquery-project/cquery/wiki/Getting-started
-;; (setq cquery-executable (expand-file-name "~/cquery/build/release/bin/cquery"))
-;; (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
-;; (setq cquery-sem-highlight-method nil)   ;; 'font-lock)
+(require 'cquery)
+;; https://github.com/cquery-project/cquery/wiki/Getting-started
+(setq cquery-executable (expand-file-name "~/cquery/cquery"))
+(setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
+(setq cquery-sem-highlight-method nil)   ;; 'font-lock)
 
-;; (require 'lsp-mode)
-;; (setq lsp-highlight-symbol-at-point nil
-;;       lsp-enable-flycheck nil
-;;       lsp-enable-indentation nil
-;;       lsp-enable-eldoc nil)
+(require 'lsp-mode)
+(setq lsp-highlight-symbol-at-point nil
+      lsp-enable-indentation nil
+      lsp-enable-eldoc nil)
 
-;; (add-hook 'c-mode-hook #'lsp-cquery-enable)
-;; (add-hook 'c++-mode-hook #'lsp-cquery-enable)
+(add-hook 'c-mode-hook #'lsp-cquery-enable)
+(add-hook 'c++-mode-hook #'lsp-cquery-enable)
 
+;; broken:
 ;; (require 'lsp-imenu)
 ;; (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
 
@@ -641,9 +689,9 @@
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-." . counsel-semantic-or-imenu)
-           ("M-." . dumb-jump-go)
-           ("M-," . dumb-jump-back)
+           ("C-." . helm-imenu-in-all-buffers)
+           ;; ("M-." . dumb-jump-go)
+           ;; ("M-," . dumb-jump-back)
            ("M-o" . cff-find-other-file))
 
 (bind-keys :map c++-mode-map
@@ -674,19 +722,19 @@
       (when *kelly*
         (remove-hook 'elpy-modules 'elpy-module-flymake)))))
 
-(require 'slime-autoloads)
-(setq slime-lisp-implementations '((sbcl ("sbcl" "--noinform") :coding-system utf-8-unix))
-      slime-default-lisp 'sbcl
-      slime-repl-history-remove-duplicates t
-      slime-repl-history-trim-whitespaces t
-      slime-enable-evaluate-in-emacs t
-      slime-auto-start 'always
-      slime-contribs '(slime-fancy
-                       slime-asdf
-                       slime-sbcl-exts
-                       slime-compiler-notes-tree
-                       slime-company
-                       slime-repl))
+;; (require 'slime-autoloads)
+;; (setq slime-lisp-implementations '((sbcl ("sbcl" "--noinform") :coding-system utf-8-unix))
+;;       slime-default-lisp 'sbcl
+;;       slime-repl-history-remove-duplicates t
+;;       slime-repl-history-trim-whitespaces t
+;;       slime-enable-evaluate-in-emacs t
+;;       slime-auto-start 'always
+;;       slime-contribs '(slime-fancy
+;;                        slime-asdf
+;;                        slime-sbcl-exts
+;;                        slime-compiler-notes-tree
+;;                        slime-company
+;;                        slime-repl))
 
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
@@ -814,6 +862,22 @@
 (set-face-attribute 'avy-background-face
                     nil
                     :foreground "gray50")
+
+(set-face-attribute 'helm-ff-executable
+                    nil
+                    :foreground "#228b22")
+
+(set-face-attribute 'helm-selection
+                    nil
+                    :background "#a5e8be")
+
+(set-face-attribute 'helm-visible-mark
+                    nil
+                    :background "#f1c40f")
+
+(set-face-attribute 'helm-source-header
+                    nil
+                    :height 0.9)
 
 (set-face-attribute 'font-lock-comment-face
                     nil
