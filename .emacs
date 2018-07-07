@@ -87,7 +87,6 @@
                      highlight-symbol
                      company
                      elpy
-                     geiser
                      slime
                      slime-company
                      cff
@@ -604,9 +603,9 @@
 (add-hook 'scheme-mode-hook #'smartparens-mode)
 (add-hook 'lisp-mode-hook #'smartparens-mode)
 
-(require 'geiser)
-(setq geiser-active-implementations '(chibi))
-(setq geiser-chibi-binary (expand-file-name "~/chibi-scheme/chibi-scheme"))
+;; (require 'geiser)
+;; (setq geiser-active-implementations '(chibi))
+;; (setq geiser-chibi-binary (expand-file-name "~/chibi-scheme/chibi-scheme"))
 
 ;; (require 'scheme)
 
