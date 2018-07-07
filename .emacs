@@ -112,6 +112,7 @@
                      ;; experimental:
                      cquery
                      lsp-mode
+                     yafolding
                      ))
 
 (set-language-environment "czech")
@@ -340,9 +341,11 @@
 (shackle-mode)
 
 (require 'json-mode)    ;; C-c C-p show-path; C-c C-f beautify
+(require 'yafolding)
 (add-hook 'json-mode-hook (lambda ()
                             (make-local-variable 'js-indent-level)
-                            (setq js-indent-level 2)))
+                            (setq js-indent-level 2)
+                            (yafolding-mode)))
 
 (defun nxml-where ()
   "Display the hierarchy of XML elements the point is on as a path."
