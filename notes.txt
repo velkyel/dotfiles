@@ -6,3 +6,8 @@ $ echo options hid_apple swap_opt_cmd=1 | sudo tee -a /etc/modprobe.d/hid_apple.
 $ sudo update-initramfs -u -k all
 
 reboot
+
+-----------------------
+
+v mc options "Use internal view" -> off a nastavit VIEWER=eless
+
