@@ -449,6 +449,13 @@
 (require 'vc-darcs)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
+(if (file-exists-p "~/wren-mode.el")
+    (add-to-list 'load-path "~/wren-mode.el")
+  (quelpa '(wren-mode :fetcher github :repo "velkyel/wren-mode.el")))
+
+(require 'wren-mode)
+(setq wren-tab-width 2)
+
 (require 'dumb-jump)
 (setq dumb-jump-selector 'helm
       dumb-jump-prefer-searcher 'rg)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
