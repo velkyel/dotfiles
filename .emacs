@@ -639,7 +639,8 @@
 ;; (setq geiser-active-implementations '(chibi))
 ;; (setq geiser-chibi-binary (expand-file-name "~/chibi-scheme/chibi-scheme"))
 
-;; (require 'scheme)
+(require 'scheme)
+(setq scheme-program-name (expand-file-name "~/femtolisp/flisp"))
 
 ;; (defun run-s7 ()
 ;;   (interactive)
