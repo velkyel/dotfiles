@@ -680,11 +680,15 @@
 ;; https://github.com/cquery-project/cquery/wiki/Getting-started
 (setq cquery-executable (expand-file-name "~/cquery/cquery"))
 (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
-(setq cquery-sem-highlight-method nil)   ;; 'font-lock)
+(setq cquery-sem-highlight-method nil
+      cquery-enable-inactive-region nil)
 
 (require 'lsp-mode)
 (setq lsp-highlight-symbol-at-point nil
       lsp-enable-indentation nil
+      lsp-enable-codeaction nil
+      lsp-eldoc-render-all nil
+      lsp-before-save-edits nil
       lsp-enable-eldoc nil)
 
 (add-hook 'c-mode-hook #'lsp-cquery-enable)
