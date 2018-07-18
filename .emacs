@@ -109,9 +109,7 @@
                      gnus-summary-ext
                      smartparens
                      elm-mode
-                     ;; experimental:
-                     cquery
-                     lsp-mode
+                     ccls
                      yafolding
                      ))
 
@@ -278,7 +276,7 @@
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
 (add-to-list 'projectile-globally-ignored-directories ".build")
 (add-to-list 'projectile-globally-ignored-directories "build")
-(add-to-list 'projectile-globally-ignored-directories ".cquery_cached_index")
+(add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
 
 (bind-key "M-g" '(lambda ()
                    (interactive)
@@ -676,14 +674,12 @@
 (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
 (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
 
-(require 'cquery)
-;; https://github.com/cquery-project/cquery/wiki/Getting-started
-(setq cquery-executable (expand-file-name "~/cquery/cquery"))
-(setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
-(setq cquery-sem-highlight-method nil
-      cquery-enable-inactive-region nil)
+(require 'ccls)
+(setq ccls-executable (expand-file-name "~/ccls/Release/ccls"))
+(setq ccls-extra-init-params '(:index (:comments 2) :completion (:detailedLabel t) :cacheFormat "msgpack"))
+(setq ccls-sem-highlight-method nil)
 
-(require 'lsp-mode)
+;; (require 'lsp-clangd)
 (setq lsp-highlight-symbol-at-point nil
       lsp-enable-indentation nil
       lsp-enable-codeaction nil
@@ -691,8 +687,14 @@
       lsp-before-save-edits nil
       lsp-enable-eldoc nil)
 
-(add-hook 'c-mode-hook #'lsp-cquery-enable)
-(add-hook 'c++-mode-hook #'lsp-cquery-enable)
+(defun ccls//enable ()
+  (condition-case nil
+      (lsp-ccls-enable)
+    (user-error nil)))
+
+(add-hook 'c-mode--hook #'ccls//enable)
+(add-hook 'c++-mode-hook #'ccls//enable)
+(add-hook 'objc-mode-hook #'ccls//enable)
 
 ;; broken:
 ;; (require 'lsp-imenu)
