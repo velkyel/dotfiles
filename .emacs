@@ -111,6 +111,7 @@
                      elm-mode
                      cquery
                      yafolding
+                     vc-darcs
                      ))
 
 (set-language-environment "czech")
@@ -442,9 +443,8 @@
 
 (setq quelpa-update-melpa-p nil)
 
-(quelpa '(vc-darcs :fetcher github :repo "velkyel/vc-darcs"))
-(add-to-list 'vc-handled-backends 'DARCS t)
 (require 'vc-darcs)
+(add-to-list 'vc-handled-backends 'DARCS t)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
 (if (file-exists-p "~/wren-mode.el")
