@@ -277,7 +277,7 @@
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
 (add-to-list 'projectile-globally-ignored-directories ".build")
 (add-to-list 'projectile-globally-ignored-directories "build")
-(add-to-list 'projectile-globally-ignored-directories ".cquery_index_cache")
+(add-to-list 'projectile-globally-ignored-directories ".cquery_cached_index")
 
 (bind-key "M-g" '(lambda ()
                    (interactive)
