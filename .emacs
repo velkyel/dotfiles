@@ -112,6 +112,7 @@
                      cquery
                      yafolding
                      vc-darcs
+                     flycheck
                      ))
 
 (set-language-environment "czech")
