@@ -22,4 +22,4 @@ make -j4
 #make install
 
 cd $HOME
-emacs -u $(whoami) --eval '(auto-package-update-now)' --batch
+emacs -u $(whoami) --eval '(progn (auto-package-update-now) (quelpa-upgrade))' --batch
