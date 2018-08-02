@@ -161,7 +161,9 @@
       user-full-name  "Libor Capak"
       ;;scroll-preserve-screen-position 'always
       ;;scroll-margin 3
-      scroll-conservatively 101)
+      scroll-conservatively 101
+      font-lock-maximum-decoration '((c++-mode . 1)
+                                     (t . t)))
 
 (setq-default indent-tabs-mode nil
               line-spacing nil
