@@ -273,6 +273,9 @@
       helm-find-files-ignore-thing-at-point t)
 
 ;; (helm-push-mark-mode 1)
+(bind-keys :map helm-map
+           ("<tab>" . helm-execute-persistent-action)
+           ("C-z" . helm-select-action))
 
 (add-hook 'helm-grep-mode-hook 'grep-mode)
 (setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number %s %s %s")
