@@ -195,9 +195,14 @@
 (require 'crux)
 
 (setenv "PAGER" (executable-find "cat"))
+
 (bind-key "C-c t" '(lambda ()
                      (interactive)
                      (crux-start-or-switch-to 'shell "*shell*")))
+
+(bind-key "C-c e" '(lambda ()
+                     (interactive)
+                     (crux-start-or-switch-to 'eshell "*eshell*")))
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
