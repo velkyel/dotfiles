@@ -204,6 +204,14 @@
                      (interactive)
                      (crux-start-or-switch-to 'eshell "*eshell*")))
 
+(eval-after-load "em-alias"
+  '(progn
+     (eshell/alias "l" "ls")
+     (eshell/alias "la" "ls -a")
+     (eshell/alias "ll" "ls -lh")
+     (eshell/alias "e" "find-file $1")
+     (eshell/alias "ff" "find-file $1")))
+
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 (vhl/ext/etags/off)
