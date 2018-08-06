@@ -79,6 +79,7 @@
                      shrink-whitespace
                      expand-region
                      visual-regexp
+                     visual-regexp-steroids
                      rainbow-mode
                      smart-mark
                      google-translate
@@ -535,6 +536,7 @@
 (bind-key "M-=" 'er/expand-region)
 
 (require 'visual-regexp)
+(require 'visual-regexp-steroids)
 (bind-key "C-c r" 'vr/replace)
 
 (diminish 'eldoc-mode)
@@ -812,8 +814,8 @@
 
 (add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
 
-(bind-keys ("C-s" . isearch-forward-regexp) ;; symbol-at-point)
-           ("C-r" . isearch-backward-regexp)
+(bind-keys ("C-s" . vr/isearch-forward) ;; symbol-at-point)
+           ("C-r" . vr/isearch-backward)
            ("C-M-s" . isearch-forward)
            ("C-M-r" . isearch-backward)
            ("C-x k" . kill-this-buffer))
