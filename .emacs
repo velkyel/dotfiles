@@ -505,6 +505,9 @@
 (require 'hlsl-mode)
 (add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
 
+(quelpa '(metal-mode :fetcher github :repo "masfj/metal-mode"))
+(require 'metal-mode)
+
 ;; (quelpa '(inf-femtolisp :fetcher github :repo "velkyel/inf-femtolisp"))
 ;; (autoload 'inf-femtolisp "inf-femtolisp" "Run an inferior Femtolisp process" t)
 ;; (autoload 'inf-femtolisp-minor-mode "inf-femtolisp")
