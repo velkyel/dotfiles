@@ -817,8 +817,8 @@
 
 (add-hook 'isearch-mode-end-hook 'my-goto-match-beginning)
 
-(bind-keys ("C-s" . isearch-forward) ;; symbol-at-point)
-           ("C-r" . isearch-backward)
+(bind-keys ("C-s" . isearch-forward-regexp) ;; symbol-at-point)
+           ("C-r" . isearch-backward-regexp)
            ("C-M-s" . isearch-forward)
            ("C-M-r" . isearch-backward)
            ("C-x k" . kill-this-buffer))
