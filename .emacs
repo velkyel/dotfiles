@@ -259,6 +259,9 @@
 (when (or *osx* *linux*)
   (exec-path-from-shell-initialize))
 
+(when *windows*
+  (setq eww-download-directory "c:\\Users\\el\\Downloads"))
+
 (setq python-shell-completion-native-enable nil)
 
 (require 'helm)
