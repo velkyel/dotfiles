@@ -58,7 +58,6 @@
                      diminish
                      exec-path-from-shell
                      json-mode
-                     flymake-lua
                      haskell-mode
                      restart-emacs
                      helm
@@ -582,21 +581,8 @@
            ("C-d" . company-show-doc-buffer)
            ("M-." . company-show-location))
 
-(require 'flymake)
-(defvar flymake-mode-map (make-sparse-keymap))
-(bind-keys :map flymake-mode-map
-           ("C-M-n" . flymake-goto-next-error)
-           ("C-M-p" . flymake-goto-prev-error))
-
-(or (assoc 'flymake-mode minor-mode-map-alist)
-    (setq minor-mode-map-alist
-          (cons (cons 'flymake-mode flymake-mode-map)
-                minor-mode-map-alist)))
-
 (require 'lua-mode)
-(require 'flymake-lua)
-(setq flymake-luac-program "luac5.3")
-(add-hook 'lua-mode-hook 'flymake-lua-load)
+(add-hook 'lua-mode-hook 'flycheck-mode)
 (setq lua-default-application '("localhost" . 5555))
 (setq lua-default-application "lua5.3")  ;; '("localhost" . 5555))
 
@@ -789,8 +775,7 @@
       (setq elpy-eldoc-show-current-function nil)
       (elpy-enable)
       (remove-hook 'elpy-modules 'elpy-module-yasnippet)
-      (when *kelly*
-        (remove-hook 'elpy-modules 'elpy-module-flymake)))))
+      (remove-hook 'elpy-modules 'elpy-module-flymake))))
 
 ;; (require 'slime-autoloads)
 ;; (setq slime-lisp-implementations '((sbcl ("sbcl" "--noinform") :coding-system utf-8-unix))
