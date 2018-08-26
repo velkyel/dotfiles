@@ -299,12 +299,11 @@
 
 (bind-key "M-g" '(lambda ()
                    (interactive)
-                   (helm-grep-ag (projectile-project-root) nil)))
+                   (helm-grep-ag (projectile-project-root) current-prefix-arg)))
 
-(bind-key* "M-G"   ;; overrides any mode-specific bindings
-           '(lambda ()
-              (interactive)
-              (helm-grep-ag (helm-current-directory) nil)))
+(bind-key* "M-G" '(lambda ()
+                    (interactive)
+                    (helm-grep-ag (helm-current-directory) current-prefix-arg)))
 
 (bind-key "M-i" 'helm-occur-from-isearch isearch-mode-map)
 
