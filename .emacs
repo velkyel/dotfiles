@@ -109,7 +109,8 @@
                      gnus-summary-ext
                      smartparens
                      elm-mode
-                     cquery
+                     ccls
+                     ;; cquery
                      yafolding
                      vc-darcs
                      flycheck
@@ -296,6 +297,7 @@
 (add-to-list 'projectile-globally-ignored-directories ".build")
 (add-to-list 'projectile-globally-ignored-directories "build")
 (add-to-list 'projectile-globally-ignored-directories ".cquery_cached_index")
+(add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
 
 (bind-key "M-g" '(lambda ()
                    (interactive)
@@ -696,13 +698,13 @@
 (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
 (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
 
-(require 'cquery)
-(setq cquery-executable (expand-file-name "~/cquery/cquery"))
-(setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
-(setq cquery-sem-highlight-method nil
-      cquery-enable-inactive-region nil)
+;; (require 'cquery)
+;; (setq cquery-executable (expand-file-name "~/cquery/cquery"))
+;; (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
+;; (setq cquery-sem-highlight-method nil
+;;       cquery-enable-inactive-region nil)
 
-(require 'lsp-mode)
+;; (require 'lsp-mode)
 (setq lsp-highlight-symbol-at-point nil
       lsp-enable-indentation nil
       lsp-enable-codeaction nil
@@ -710,8 +712,13 @@
       lsp-before-save-edits nil
       lsp-enable-eldoc nil)
 
-(add-hook 'c-mode-hook #'lsp-cquery-enable)
-(add-hook 'c++-mode-hook #'lsp-cquery-enable)
+;; (add-hook 'c-mode-hook #'lsp-cquery-enable)
+;; (add-hook 'c++-mode-hook #'lsp-cquery-enable)
+
+(setq ccls-executable "~/ccls/Release/ccls")
+(add-hook 'c-mode-hook #'lsp-ccls-enable)
+(add-hook 'c++-mode-hook #'lsp-ccls-enable)
+(setq ccls-sem-highlight-method nil)
 
 ;; broken:
 ;; (require 'lsp-imenu)
