@@ -279,6 +279,7 @@
 ;; (helm-push-mark-mode 1)
 (bind-keys :map helm-map
            ("<tab>" . helm-execute-persistent-action)
+           ("TAB" . helm-execute-persistent-action)
            ("C-z" . helm-select-action))
 
 (add-hook 'helm-grep-mode-hook 'grep-mode)
