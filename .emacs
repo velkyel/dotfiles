@@ -699,32 +699,6 @@
 (add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
 (add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
 
-;; (require 'cquery)
-;; (setq cquery-executable (expand-file-name "~/cquery/cquery"))
-;; (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
-;; (setq cquery-sem-highlight-method nil
-;;       cquery-enable-inactive-region nil)
-
-;; (require 'lsp-mode)
-(setq lsp-highlight-symbol-at-point nil
-      lsp-enable-indentation nil
-      lsp-enable-codeaction nil
-      lsp-eldoc-render-all nil
-      lsp-before-save-edits nil
-      lsp-enable-eldoc nil)
-
-;; (add-hook 'c-mode-hook #'lsp-cquery-enable)
-;; (add-hook 'c++-mode-hook #'lsp-cquery-enable)
-
-(setq ccls-executable "~/ccls/Release/ccls")
-(add-hook 'c-mode-hook #'lsp-ccls-enable)
-(add-hook 'c++-mode-hook #'lsp-ccls-enable)
-(setq ccls-sem-highlight-method nil)
-
-;; broken:
-;; (require 'lsp-imenu)
-;; (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
-
 (when (not *kelly*)
   (setq clang-format-style (concat "{BasedOnStyle: Google,"
                                    " BreakBeforeBraces: Mozilla,"
@@ -753,9 +727,39 @@
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
            ("C-." . helm-imenu-in-all-buffers)
-           ;; ("M-." . dumb-jump-go)
-           ;; ("M-," . dumb-jump-back)
            ("M-o" . cff-find-other-file))
+
+(if *kelly*
+    (bind-keys :map c-mode-base-map
+               ("M-." . dumb-jump-go)
+               ("M-," . dumb-jump-back))
+  (progn
+    ;; (require 'cquery)
+    ;; (setq cquery-executable (expand-file-name "~/cquery/cquery"))
+    ;; (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
+    ;; (setq cquery-sem-highlight-method nil
+    ;;       cquery-enable-inactive-region nil)
+
+    (require 'lsp-mode)
+    (setq lsp-highlight-symbol-at-point nil
+          lsp-enable-indentation nil
+          lsp-enable-codeaction nil
+          lsp-eldoc-render-all nil
+          lsp-before-save-edits nil
+          lsp-enable-eldoc nil)
+
+    (add-hook 'c-mode-hook #'lsp-cquery-enable)
+    (add-hook 'c++-mode-hook #'lsp-cquery-enable)
+
+    (setq ccls-executable "~/ccls/Release/ccls")
+    (add-hook 'c-mode-hook #'lsp-ccls-enable)
+    (add-hook 'c++-mode-hook #'lsp-ccls-enable)
+    (setq ccls-sem-highlight-method nil)
+
+    ;; broken:
+    ;; (require 'lsp-imenu)
+    ;; (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
+    ))
 
 (bind-keys :map c++-mode-map
            ("C-M-\\" . clang-format-region)
