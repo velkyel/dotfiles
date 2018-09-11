@@ -748,8 +748,8 @@
           lsp-before-save-edits nil
           lsp-enable-eldoc nil)
 
-    (add-hook 'c-mode-hook #'lsp-cquery-enable)
-    (add-hook 'c++-mode-hook #'lsp-cquery-enable)
+    ;; (add-hook 'c-mode-hook #'lsp-cquery-enable)
+    ;; (add-hook 'c++-mode-hook #'lsp-cquery-enable)
 
     (setq ccls-executable "~/ccls/Release/ccls")
     (add-hook 'c-mode-hook #'lsp-ccls-enable)
