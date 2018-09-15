@@ -19,8 +19,6 @@
 (when (< emacs-major-version 27)
   (package-initialize))
 
-;; (package-initialize)
-
 (menu-bar-mode -1)
 (blink-cursor-mode 1)
 
@@ -123,6 +121,7 @@
 (set-keyboard-coding-system 'utf-8)
 
 (unless package-archive-contents
+  (package-initialize)
   (package-refresh-contents))
 (dolist (package package-list)
   (unless (package-installed-p package)
