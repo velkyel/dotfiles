@@ -5,7 +5,7 @@ git pull --rebase
 git submodule update
 cmake -H. -BRelease
 cmake --build Release
-make -j4
+# make -j4
 
 #cd $HOME/cquery
 #git pull --rebase
