@@ -109,7 +109,6 @@
                      elm-mode
                      ccls
                      ;; cquery
-                     yafolding
                      vc-darcs
                      flycheck
                      ))
@@ -359,11 +358,12 @@
 (shackle-mode)
 
 (require 'json-mode)    ;; C-c C-p show-path; C-c C-f beautify
-(require 'yafolding)
+(require 'hideshow)
 (add-hook 'json-mode-hook (lambda ()
                             (make-local-variable 'js-indent-level)
                             (setq js-indent-level 2)
-                            (yafolding-mode)))
+                            (hs-minor-mode 1)))
+(bind-key (kbd "<C-return>") 'hs-toggle-hiding json-mode-map)
 
 (defun nxml-where ()
   "Display the hierarchy of XML elements the point is on as a path."
