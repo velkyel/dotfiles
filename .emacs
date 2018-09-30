@@ -107,8 +107,9 @@
                      gnus-summary-ext
                      smartparens
                      elm-mode
-                     ccls
+                     ;;ccls
                      ;; cquery
+                     lsp-clangd
                      vc-darcs
                      flycheck
                      ))
@@ -750,10 +751,17 @@
     ;; (add-hook 'c-mode-hook #'lsp-cquery-enable)
     ;; (add-hook 'c++-mode-hook #'lsp-cquery-enable)
 
-    (setq ccls-executable "~/ccls/Release/ccls")
-    (add-hook 'c-mode-hook #'lsp-ccls-enable)
-    (add-hook 'c++-mode-hook #'lsp-ccls-enable)
-    (setq ccls-sem-highlight-method nil)
+    (require 'lsp-clangd)
+    (setq lsp-clangd-executable "clangd-8")
+
+    (add-hook 'c-mode-hook #'lsp-clangd-c-enable)
+    (add-hook 'c++-mode-hook #'lsp-clangd-c++-enable)
+    (add-hook 'objc-mode-hook #'lsp-clangd-objc-enable)
+
+    ;; (setq ccls-executable "~/ccls/Release/ccls")
+    ;; (add-hook 'c-mode-hook #'lsp-ccls-enable)
+    ;; (add-hook 'c++-mode-hook #'lsp-ccls-enable)
+    ;; (setq ccls-sem-highlight-method nil)
 
     ;; broken:
     ;; (require 'lsp-imenu)
