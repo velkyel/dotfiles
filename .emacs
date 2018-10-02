@@ -247,7 +247,7 @@
   (set-frame-font "mononoki-16"))
 
 (when *windows*
-  (set-frame-font "mononoki-10.4"))
+  (set-frame-font "mononoki-11"))
 
 (when (and (display-graphic-p) *linux*)
   (set-frame-font "hack 11"))
@@ -729,7 +729,7 @@
            ("C-." . helm-imenu-in-all-buffers)
            ("M-o" . cff-find-other-file))
 
-(if *kelly*
+(if (or *windows* *kelly*)
     (bind-keys :map c-mode-base-map
                ("M-." . dumb-jump-go)
                ("M-," . dumb-jump-back))
