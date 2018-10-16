@@ -982,5 +982,10 @@
                       nil
                       :background "gray90"))
 
+(with-eval-after-load 'helm-xref
+  (set-face-attribute 'helm-xref-file-name
+                      nil
+                      :foreground "red"))
+
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file :noerror)
