@@ -501,7 +501,7 @@
 
 (quelpa '(inf-js :fetcher github :repo "velkyel/inf-js"))
 (require 'inf-js)
-(setq inf-js-program '("localhost" . 5555))
+(setq inf-js-program '("localhost" . 4600))
 (add-hook 'js2-mode-hook 'inf-js-minor-mode)
 ;; (js2-imenu-extras-mode 1)
 
