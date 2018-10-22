@@ -923,7 +923,7 @@
                   (get-char-property (point) 'face))))
     (if face (message "Face: %s" face) (message "No face at %d" pos))))
 
-(set-background-color "gray85")
+(set-background-color "gray87")
 (set-face-attribute 'default
                     nil
                     :background "gray85")   ;; terminal
