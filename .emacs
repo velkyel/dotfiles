@@ -476,7 +476,10 @@
 (require 'wren-mode)
 (setq wren-tab-width 2)
 
-(quelpa '(lumen-mode :fetcher github :repo "larme/lumen-mode"))
+(if (file-exists-p "~/lumen-mode")
+    (add-to-list 'load-path "~/lumen-mode")
+  (quelpa '(lumen-mode :fetcher github :repo "larme/lumen-mode")))
+
 (require 'lumen-mode)
 
 (require 'flycheck)
