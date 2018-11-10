@@ -622,7 +622,7 @@
   ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
   (bind-keys :map prog-mode-map
              ("<C-tab>" . company-complete)
-             ("C-." . helm-imenu-in-all-buffers)))  ;; counsel-semantic-or-imenu)))
+             ("C-." . helm-semantic-or-imenu)))  ;; counsel-semantic-or-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -704,12 +704,30 @@
 (require 'clang-format)
 ;; (fset 'c-indent-region 'clang-format-region)
 
+(defun ciao-goto-symbol ()
+  (interactive)
+  (deactivate-mark)
+  (condition-case err
+      (progn
+        (ring-insert find-tag-marker-ring (point-marker))
+        (cl-flet ((always-no (&rest _) (signal (car err) (cdr err))))
+          (cl-letf (((symbol-function 'y-or-no-p) #'always-no)
+                    ((symbol-function 'yes-or-no-p) #'always-no))
+            (semantic-ia-fast-jump (point)))))
+    (error
+     (set-marker (ring-remove find-tag-marker-ring 0) nil nil)
+     (dumb-jump-go))))
+
+;; (require 'smart-jump)
+(semantic-mode 1)
+(require 'semantic/ia)
+
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-." . helm-imenu-in-all-buffers)
+           ("C-." . helm-semantic-or-imenu)
            ("M-o" . cff-find-other-file)
-           ("M-." . dumb-jump-go)
-           ("M-," . dumb-jump-back))
+           ("M-." . ciao-goto-symbol)   ;; dumb-jump-go
+           ("M-," . pop-tag-mark))      ;; dumb-jump-back
 
 (bind-keys :map c++-mode-map
            ("C-M-\\" . clang-format-region)
