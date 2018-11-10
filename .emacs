@@ -107,9 +107,6 @@
                      gnus-summary-ext
                      paredit
                      elm-mode
-                     ;;ccls
-                     ;; cquery
-                     lsp-clangd
                      vc-darcs
                      flycheck
                      ))
@@ -703,46 +700,9 @@
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
            ("C-." . helm-imenu-in-all-buffers)
-           ("M-o" . cff-find-other-file))
-
-(if (or *windows* *kelly*)
-    (bind-keys :map c-mode-base-map
-               ("M-." . dumb-jump-go)
-               ("M-," . dumb-jump-back))
-  (progn
-    ;; (require 'cquery)
-    ;; (setq cquery-executable (expand-file-name "~/cquery/cquery"))
-    ;; (setq cquery-extra-init-params '(:index (:comments 2) :cacheFormat "msgpack"))
-    ;; (setq cquery-sem-highlight-method nil
-    ;;       cquery-enable-inactive-region nil)
-
-    (require 'lsp-mode)
-    (setq lsp-highlight-symbol-at-point nil
-          lsp-enable-indentation nil
-          lsp-enable-codeaction nil
-          lsp-eldoc-render-all nil
-          lsp-before-save-edits nil
-          lsp-enable-eldoc nil)
-
-    ;; (add-hook 'c-mode-hook #'lsp-cquery-enable)
-    ;; (add-hook 'c++-mode-hook #'lsp-cquery-enable)
-
-    (require 'lsp-clangd)
-    (setq lsp-clangd-executable "clangd-8")
-
-    (add-hook 'c-mode-hook #'lsp-clangd-c-enable)
-    (add-hook 'c++-mode-hook #'lsp-clangd-c++-enable)
-    (add-hook 'objc-mode-hook #'lsp-clangd-objc-enable)
-
-    ;; (setq ccls-executable "~/ccls/Release/ccls")
-    ;; (add-hook 'c-mode-hook #'lsp-ccls-enable)
-    ;; (add-hook 'c++-mode-hook #'lsp-ccls-enable)
-    ;; (setq ccls-sem-highlight-method nil)
-
-    ;; broken:
-    ;; (require 'lsp-imenu)
-    ;; (add-hook 'lsp-after-open-hook 'lsp-enable-imenu)
-    ))
+           ("M-o" . cff-find-other-file)
+           ("M-." . dumb-jump-go)
+           ("M-," . dumb-jump-back))
 
 (bind-keys :map c++-mode-map
            ("C-M-\\" . clang-format-region)
