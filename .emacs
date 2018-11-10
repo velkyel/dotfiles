@@ -476,6 +476,9 @@
 (require 'wren-mode)
 (setq wren-tab-width 2)
 
+(quelpa '(lumen-mode :fetcher github :repo "larme/lumen-mode"))
+(require 'lumen-mode)
+
 (require 'flycheck)
 
 (flycheck-define-checker
