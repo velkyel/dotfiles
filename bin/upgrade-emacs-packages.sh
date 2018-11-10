@@ -1,10 +1,10 @@
 #!/bin/bash -ex
 
-cd $HOME/ccls
-git pull --rebase
-git submodule update
-cmake -H. -BRelease
-cmake --build Release
+#cd $HOME/ccls
+#git pull --rebase
+#git submodule update
+#cmake -H. -BRelease
+#cmake --build Release
 
 #cd $HOME/cquery
 #git pull --rebase
