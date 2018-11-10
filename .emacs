@@ -296,6 +296,7 @@
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
 (add-to-list 'projectile-globally-ignored-directories ".build")
 (add-to-list 'projectile-globally-ignored-directories "build")
+(add-to-list 'projectile-globally-ignored-directories "_darcs")
 (add-to-list 'projectile-globally-ignored-directories ".cquery_cached_index")
 (add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
 
