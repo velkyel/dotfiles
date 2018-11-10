@@ -748,6 +748,10 @@
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format))
 
+(bind-keys :map c-mode-map
+           ("C-M-\\" . clang-format-region)
+           ("C-i" . clang-format))
+
 (setq inf-clojure-program '("localhost" . 9999))   ;; "planck"
 (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode)
 (add-hook 'clojure-mode-hook 'eldoc-mode)
