@@ -481,6 +481,17 @@
   (quelpa '(lumen-mode :fetcher github :repo "larme/lumen-mode")))
 
 (require 'lumen-mode)
+(defun lumen-paredit-setup () 1)   ;; fix lumen-mode.el
+
+(if (file-exists-p "~/inf-lumen")
+    (add-to-list 'load-path "~/inf-lumen")
+  (quelpa '(inf-lumen :fetcher github :repo "velkyel/inf-lumen")))
+
+(autoload 'inf-lumen "inf-lumen" "Run an inferior Lumen process" t)
+(autoload 'inf-lumen-minor-mode "inf-lumen")
+;; (setq inf-lumen-program '("localhost" . 5555))
+(setq inf-lumen-program "lumen")
+(add-hook 'lumen-mode-hook 'inf-lumen-minor-mode)
 
 (require 'flycheck)
 
@@ -519,12 +530,6 @@
 
 (quelpa '(metal-mode :fetcher github :repo "masfj/metal-mode"))
 (require 'metal-mode)
-
-;; (quelpa '(inf-femtolisp :fetcher github :repo "velkyel/inf-femtolisp"))
-;; (autoload 'inf-femtolisp "inf-femtolisp" "Run an inferior Femtolisp process" t)
-;; (autoload 'inf-femtolisp-minor-mode "inf-femtolisp")
-;; (setq inf-femtolisp-program '("localhost" . 5555))
-;; (add-hook 'scheme-mode-hook 'inf-femtolisp-minor-mode)
 
 (require 'magit)
 (bind-key "C-c g" 'magit-status)
