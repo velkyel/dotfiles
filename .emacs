@@ -209,6 +209,10 @@
      (eshell/alias "e" "find-file $1")
      (eshell/alias "ff" "find-file $1")))
 
+(quelpa '(eshell-toggle :fetcher github :repo "4DA/eshell-toggle"))
+(require 'eshell-toggle)
+(bind-key "M-~" 'eshell-toggle)
+
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 (vhl/ext/etags/off)
