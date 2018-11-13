@@ -109,6 +109,7 @@
                      elm-mode
                      vc-darcs
                      flycheck
+                     persistent-scratch
                      ))
 
 (set-language-environment "czech")
@@ -188,6 +189,8 @@
 ;; (type-break-mode-line-message-mode 1)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (windmove-default-keybindings)
+
+(persistent-scratch-setup-default)
 
 (require 'crux)
 
