@@ -85,8 +85,6 @@
                      highlight-symbol
                      company
                      elpy
-                     slime
-                     slime-company
                      cff
                      popup
                      magit
@@ -104,7 +102,6 @@
                      dired-rainbow
                      markdown-mode
                      org-bullets
-                     gnus-summary-ext
                      paredit
                      elm-mode
                      vc-darcs
@@ -770,20 +767,6 @@
       (elpy-enable)
       (remove-hook 'elpy-modules 'elpy-module-yasnippet)
       (remove-hook 'elpy-modules 'elpy-module-flymake))))
-
-;; (require 'slime-autoloads)
-;; (setq slime-lisp-implementations '((sbcl ("sbcl" "--noinform") :coding-system utf-8-unix))
-;;       slime-default-lisp 'sbcl
-;;       slime-repl-history-remove-duplicates t
-;;       slime-repl-history-trim-whitespaces t
-;;       slime-enable-evaluate-in-emacs t
-;;       slime-auto-start 'always
-;;       slime-contribs '(slime-fancy
-;;                        slime-asdf
-;;                        slime-sbcl-exts
-;;                        slime-compiler-notes-tree
-;;                        slime-company
-;;                        slime-repl))
 
 (diminish 'abbrev-mode)
 (diminish 'isearch-mode)
