@@ -642,6 +642,15 @@
 (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
 (require 'smartparens-config)
+
+(defun my-wrap-with-parens (&optional arg)
+  (interactive "P")
+  (sp-wrap-with-pair "("))
+
+(defun my-wrap-with-double-quotes (&optional arg)
+  (interactive "P")
+  (sp-wrap-with-pair "\""))
+
 ;;(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (setq sp-navigate-reindent-after-up t)
 (bind-keys :map smartparens-mode-map
@@ -664,7 +673,10 @@
            ("C-k"   . sp-kill-hybrid-sexp)
            ("M-k"   . sp-backward-kill-sexp)
            ("C-M-w" . sp-copy-sexp)
-           ("C-M-d" . delete-sexp))
+           ("C-M-d" . delete-sexp)
+
+           ("C-c (" . my-wrap-with-parens)
+           ("C-c \"" . my-wrap-with-double-quotes))
 
 (add-hook 'clojure-mode-hook #'smartparens-mode)
 (add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
