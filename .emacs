@@ -102,7 +102,7 @@
                      dired-rainbow
                      markdown-mode
                      org-bullets
-                     paredit
+                     smartparens
                      elm-mode
                      vc-darcs
                      flycheck
@@ -641,10 +641,35 @@
 (require 'helm-xref)
 (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
-(add-hook 'clojure-mode-hook #'paredit-mode)
-(add-hook 'emacs-lisp-mode-hook #'paredit-mode)
-(add-hook 'scheme-mode-hook #'paredit-mode)
-(add-hook 'lisp-mode-hook #'paredit-mode)
+(require 'smartparens-config)
+;;(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
+(setq sp-navigate-reindent-after-up t)
+(bind-keys :map smartparens-mode-map
+           ("C-M-a" . sp-beginning-of-sexp)
+           ("C-M-e" . sp-end-of-sexp)
+
+           ("C-<down>" . sp-down-sexp)
+           ("C-<up>"   . sp-up-sexp)
+           ("M-<down>" . sp-backward-down-sexp)
+           ("M-<up>"   . sp-backward-up-sexp)
+
+           ("C-M-f" . sp-forward-sexp)
+           ("C-M-b" . sp-backward-sexp)
+
+           ("C-M-n" . sp-next-sexp)
+           ("C-M-p" . sp-previous-sexp)
+
+           ("C-M-t" . sp-transpose-sexp)
+           ("C-M-k" . sp-kill-sexp)
+           ("C-k"   . sp-kill-hybrid-sexp)
+           ("M-k"   . sp-backward-kill-sexp)
+           ("C-M-w" . sp-copy-sexp)
+           ("C-M-d" . delete-sexp))
+
+(add-hook 'clojure-mode-hook #'smartparens-mode)
+(add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
+(add-hook 'scheme-mode-hook #'smartparens-mode)
+(add-hook 'lisp-mode-hook #'smartparens-mode)
 
 ;; (require 'geiser)
 ;; (setq geiser-active-implementations '(chibi))
