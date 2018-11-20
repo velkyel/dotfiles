@@ -766,6 +766,7 @@
 ;; (require 'smart-jump)
 (semantic-mode 1)
 (require 'semantic/ia)
+(setq semantic-c-obey-conditional-section-parsing-flag nil)
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
