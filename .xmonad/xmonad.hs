@@ -1,5 +1,4 @@
 import XMonad
-import XMonad.Config.Gnome
 import XMonad.Layout.Minimize
 import XMonad.Layout.Fullscreen
 import XMonad.Layout.NoBorders
@@ -12,10 +11,11 @@ startup = do
     setWMName "LG3D"
     spawn "xrdb .Xresources"
     spawn "xsetroot -solid black"
+    spawn "unclutter"
     spawn "urxvtd --quiet --opendisplay --fork"
 
-main = xmonad $ gnomeConfig {
-  layoutHook = smartBorders $ layoutHook gnomeConfig,
+main = xmonad $ defaultConfig {
+  layoutHook = smartBorders $ layoutHook defaultConfig,
   terminal = "urxvtc",
   borderWidth = 4,
   focusFollowsMouse = False,
