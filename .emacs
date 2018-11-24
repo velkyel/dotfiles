@@ -657,10 +657,13 @@
            ("C-M-a" . sp-beginning-of-sexp)
            ("C-M-e" . sp-end-of-sexp)
 
-           ("C-<down>" . sp-down-sexp)
-           ("C-<up>"   . sp-up-sexp)
-           ("M-<down>" . sp-backward-down-sexp)
-           ("M-<up>"   . sp-backward-up-sexp)
+           ("M-<down>" . sp-down-sexp)
+           ("M-<up>"   . sp-up-sexp)
+           ;; ("M-<down>" . sp-backward-down-sexp)
+           ;; ("M-<up>"   . sp-backward-up-sexp)
+
+           ("M-]" . sp-forward-sexp)
+           ("M-[" . sp-backward-sexp)
 
            ("C-M-f" . sp-forward-sexp)
            ("C-M-b" . sp-backward-sexp)
