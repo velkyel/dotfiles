@@ -900,6 +900,7 @@
       gnus-sum-thread-tree-root ""
       gnus-sum-thread-tree-single-leaf "╰► "
       gnus-sum-thread-tree-vertical "│"
+      gnus-use-full-window nil
       gnus-interactive-exit nil
       message-kill-buffer-on-exit t
       gnus-large-newsgroup nil
