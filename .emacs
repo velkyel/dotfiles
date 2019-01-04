@@ -640,6 +640,9 @@
 
 (add-hook 'prog-mode-hook 'my-prog-modes-hook)
 
+;; (add-hook 'c-mode-hook 'electric-pair-local-mode)
+;; (add-hook 'c++-mode-hook 'electric-pair-local-mode)
+
 (require 'helm-xref)
 (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
