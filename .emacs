@@ -205,7 +205,7 @@
 
 (eval-after-load "em-alias"
   '(progn
-     (eshell/alias "l" "ls")
+     (eshell/alias "l" "ls -lcrt")
      (eshell/alias "la" "ls -a")
      (eshell/alias "ll" "ls -lh")
      (eshell/alias "e" "find-file $1")
