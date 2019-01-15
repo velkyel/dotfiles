@@ -64,7 +64,6 @@
                      projectile
                      helm-projectile
                      super-save
-                     anzu
                      avy
                      goto-chg
                      unfill
@@ -396,10 +395,6 @@
 (require 'super-save)
 (super-save-mode 1)
 (diminish 'super-save-mode)
-
-(require 'anzu)
-(global-anzu-mode 1)
-(diminish 'anzu-mode)
 
 (require 'avy)
 (setq avy-background t)
