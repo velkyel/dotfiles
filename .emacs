@@ -907,15 +907,15 @@
       mm-discouraged-alternatives '("text/html" "text/richtext")
       gnus-inhibit-startup-message t
       gnus-agent-expire-days 4
-      gnus-use-scoring nil
+      ;; gnus-use-scoring nil
       gnus-parameters
       '((".*"
          (display . all))))
 
-(setq nnmail-expiry-wait-function
-      (lambda (group)
-        (cond ((string= group "INBOX") 'immediate)
-              (t 'never))))
+;; (setq nnmail-expiry-wait-function
+;;       (lambda (group)
+;;         (cond ((string= group "INBOX") 'immediate)
+;;               (t 'never))))
 
 ;; (defun fastmail-archive ()
 ;;   (interactive)
