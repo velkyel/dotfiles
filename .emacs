@@ -912,6 +912,15 @@
       '((".*"
          (display . all))))
 
+(defun exit-gnus-on-exit ()
+  (if (and (fboundp 'gnus-group-exit)
+           (gnus-alive-p))
+      (with-current-buffer (get-buffer "*Group*")
+        (let (gnus-interactive-exit)
+          (gnus-group-exit)))))
+
+(add-hook 'kill-emacs-hook 'exit-gnus-on-exit)
+
 ;; (setq nnmail-expiry-wait-function
 ;;       (lambda (group)
 ;;         (cond ((string= group "INBOX") 'immediate)
