@@ -573,6 +573,25 @@
 (setq highlight-symbol-idle-delay 0.5)
 (set-face-background 'highlight-symbol-face "gray78")
 
+(defun symbol-replace (arg)    ;; C-u limit scope to current defun (defined by narrow-to-defun)
+  (interactive "P")
+  (save-excursion
+    (let* ((oldsymbol (or (thing-at-point 'symbol)
+                          (error "No symbol at point")))
+           (newsymbol (query-replace-read-to
+                       oldsymbol (format "%sReplace" (if arg "[function] " "")) nil))
+           (counter 0))
+      (if arg (goto-char (save-excursion (beginning-of-defun) (point)))
+        ;; go to the beginning of the buffer..
+        (goto-char (point-min)))
+      (while (search-forward
+              oldsymbol (if arg (save-excursion (end-of-defun) (point)) nil) t nil)
+        (replace-match newsymbol nil t)
+        (cl-incf counter 1))
+      (message "Replaced %d matches" counter))))
+
+(bind-key "M-'" 'symbol-replace)
+
 (require 'smart-mark)
 (smart-mark-mode)
 
