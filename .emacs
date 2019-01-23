@@ -624,7 +624,6 @@
   (goto-address-prog-mode)
   (company-mode)
   ;; (semantic-mode 1)
-  ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
   (bind-keys :map prog-mode-map
              ("<C-tab>" . company-complete)
              ("C-." . helm-semantic-or-imenu)))  ;; counsel-semantic-or-imenu)))
@@ -690,19 +689,19 @@
 ;; (setq geiser-active-implementations '(chibi))
 ;; (setq geiser-chibi-binary (expand-file-name "~/chibi-scheme/chibi-scheme"))
 
-(require 'scheme)
-(setq scheme-program-name (expand-file-name "~/femtolisp/flisp"))
+;; (require 'scheme)
+;; (setq scheme-program-name (expand-file-name "~/femtolisp/flisp"))
 
-;; (defun run-s7 ()
-;;   (interactive)
-;;   (require 'cmuscheme)
-;;   (setq scheme-program-name "s7")
-;;   (if (not (comint-check-proc "*scheme*"))
-;;       (let ((cmdlist (list '("localhost" . 5555))))
-;;         (set-buffer (apply 'make-comint "scheme" (car cmdlist) nil nil))
-;;         (inferior-scheme-mode)))
-;;   (setq scheme-buffer "*scheme*")
-;;   (pop-to-buffer-same-window "*scheme*"))
+(defun run-s7 ()
+  (interactive)
+  (require 'cmuscheme)
+  (setq scheme-program-name "s7")
+  (if (not (comint-check-proc "*scheme*"))
+      (let ((cmdlist (list '("localhost" . 5555))))
+        (set-buffer (apply 'make-comint "scheme" (car cmdlist) nil nil))
+        (inferior-scheme-mode)))
+  (setq scheme-buffer "*scheme*")
+  (pop-to-buffer-same-window "*scheme*"))
 
 (setq pulse-delay .06)
 ;; (when *linux*
@@ -770,6 +769,7 @@
 (semantic-mode 1)
 (require 'semantic/ia)
 (setq semantic-c-obey-conditional-section-parsing-flag nil)
+(delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
