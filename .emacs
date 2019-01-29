@@ -701,10 +701,10 @@
            ("C-c (" . my-wrap-with-parens)
            ("C-c \"" . my-wrap-with-double-quotes))
 
-(add-hook 'clojure-mode-hook #'smartparens-mode)
-(add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
-(add-hook 'scheme-mode-hook #'smartparens-mode)
-(add-hook 'lisp-mode-hook #'smartparens-mode)
+(add-hook 'clojure-mode-hook #'smartparens-strict-mode)
+(add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
+(add-hook 'scheme-mode-hook #'smartparens-strict-mode)
+(add-hook 'lisp-mode-hook #'smartparens-strict-mode)
 
 ;; (require 'geiser)
 ;; (setq geiser-active-implementations '(chibi))
@@ -810,7 +810,6 @@
 (setq inf-clojure-program '("localhost" . 9999))   ;; "planck"
 (add-hook 'clojure-mode-hook 'inf-clojure-minor-mode)
 (add-hook 'clojure-mode-hook 'eldoc-mode)
-;; (add-hook 'clojure-mode-hook 'smartparens-mode)
 (add-hook 'inf-clojure-mode-hook 'eldoc-mode)
 
 (add-hook 'python-mode-hook
