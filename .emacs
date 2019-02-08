@@ -675,7 +675,6 @@
   (interactive "P")
   (sp-wrap-with-pair "\""))
 
-;;(add-hook 'prog-mode-hook 'turn-on-smartparens-strict-mode)
 (setq sp-navigate-reindent-after-up t)
 (bind-keys :map smartparens-mode-map
            ("C-M-a" . sp-beginning-of-sexp)
@@ -705,10 +704,10 @@
            ("C-c (" . my-wrap-with-parens)
            ("C-c \"" . my-wrap-with-double-quotes))
 
-(add-hook 'clojure-mode-hook #'smartparens-strict-mode)
-(add-hook 'emacs-lisp-mode-hook #'smartparens-strict-mode)
-(add-hook 'scheme-mode-hook #'smartparens-strict-mode)
-(add-hook 'lisp-mode-hook #'smartparens-strict-mode)
+(add-hook 'clojure-mode-hook #'smartparens-mode)
+(add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
+(add-hook 'scheme-mode-hook #'smartparens-mode)
+(add-hook 'lisp-mode-hook #'smartparens-mode)
 
 ;; (require 'geiser)
 ;; (setq geiser-active-implementations '(chibi))
