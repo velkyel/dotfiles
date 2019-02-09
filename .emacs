@@ -248,7 +248,6 @@
   (setq mac-option-modifier 'nil)
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
-  (setq dired-use-ls-dired nil)
   (set-frame-font "mononoki-16"))
 
 (when *windows*
@@ -460,8 +459,9 @@
 ;; highlight executable files, but not directories
 (dired-rainbow-define-chmod executable-unix "#228b22" "-[rw-]+x.*")
 
-(require 'dired-quick-sort)
+(require 'dired-quick-sort)   ;; on osx: brew install coreutils + path
 (dired-quick-sort-setup)      ;; binds "S" and invoke hydra
+;; (when *osx* (setq dired-use-ls-dired nil))
 
 (save-place-mode 1)
 ;; (desktop-save-mode 1)
