@@ -212,6 +212,11 @@
      (eshell/alias "e" "find-file $1")
      (eshell/alias "ff" "find-file $1")))
 
+(defun my-eshell-hook ()
+  (bind-key "M-r" 'helm-eshell-history eshell-mode-map))
+
+(add-hook 'eshell-mode-hook 'my-eshell-hook)
+
 (quelpa '(eshell-toggle :fetcher github :repo "4DA/eshell-toggle"))
 (require 'eshell-toggle)
 (bind-key "M-~" 'eshell-toggle)
