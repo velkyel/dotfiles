@@ -110,7 +110,6 @@
                      vc-darcs
                      flycheck
                      persistent-scratch
-                     discover
                      ))
 
 (set-language-environment "czech")
@@ -871,8 +870,6 @@
            ("C-M-s" . isearch-forward)
            ("C-M-r" . isearch-backward)
            ("C-x k" . kill-this-buffer))
-
-(global-discover-mode 1)
 
 ;; suspend-frame:
 (unbind-key "C-z")
