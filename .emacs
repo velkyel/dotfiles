@@ -110,6 +110,7 @@
                      vc-darcs
                      flycheck
                      persistent-scratch
+                     comment-or-uncomment-sexp
                      ))
 
 (set-language-environment "czech")
@@ -715,6 +716,8 @@
 (add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
 (add-hook 'scheme-mode-hook #'smartparens-mode)
 (add-hook 'lisp-mode-hook #'smartparens-mode)
+
+(bind-key "C-M-;" 'comment-or-uncomment-sexp)
 
 ;; (require 'geiser)
 ;; (setq geiser-active-implementations '(chibi))
