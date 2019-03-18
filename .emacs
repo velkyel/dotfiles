@@ -110,6 +110,7 @@
                      vc-darcs
                      flycheck
                      persistent-scratch
+                     unkillable-scratch
                      comment-or-uncomment-sexp
                      ))
 
@@ -192,6 +193,10 @@
 (windmove-default-keybindings)
 
 (persistent-scratch-setup-default)
+(require 'unkillable-scratch)
+(setq unkillable-scratch-behavior 'do-nothing
+      unkillable-scratch-do-not-reset-scratch-buffer t)
+(unkillable-scratch t)
 
 (require 'crux)
 
