@@ -57,6 +57,7 @@
                      exec-path-from-shell
                      json-mode
                      haskell-mode
+                     csharp-mode
                      restart-emacs
                      helm
                      helm-ext
