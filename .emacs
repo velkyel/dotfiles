@@ -90,6 +90,7 @@
                      cff
                      popup
                      magit
+                     git-timemachine
                      volatile-highlights
                      key-seq
                      dumb-jump
