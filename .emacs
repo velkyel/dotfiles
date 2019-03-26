@@ -108,7 +108,6 @@
                      markdown-mode
                      org-bullets
                      smartparens
-                     elm-mode
                      vc-darcs
                      flycheck
                      persistent-scratch
@@ -485,43 +484,7 @@
 (add-to-list 'vc-handled-backends 'DARCS t)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
-(if (file-exists-p "~/wren-mode.el")
-    (add-to-list 'load-path "~/wren-mode.el")
-  (quelpa '(wren-mode :fetcher github :repo "velkyel/wren-mode.el")))
-
-(require 'wren-mode)
-(setq wren-tab-width 2)
-
-(if (file-exists-p "~/lumen-mode")
-    (add-to-list 'load-path "~/lumen-mode")
-  (quelpa '(lumen-mode :fetcher github :repo "larme/lumen-mode")))
-
-(require 'lumen-mode)
-(defun lumen-paredit-setup () 1)   ;; fix lumen-mode.el
-
-(if (file-exists-p "~/inf-lumen")
-    (add-to-list 'load-path "~/inf-lumen")
-  (quelpa '(inf-lumen :fetcher github :repo "velkyel/inf-lumen")))
-
-(autoload 'inf-lumen "inf-lumen" "Run an inferior Lumen process" t)
-(autoload 'inf-lumen-minor-mode "inf-lumen")
-;; (setq inf-lumen-program '("localhost" . 5555))
-(setq inf-lumen-program "lumen")
-(add-hook 'lumen-mode-hook 'inf-lumen-minor-mode)
-
 (require 'flycheck)
-
-(flycheck-define-checker
- wren-lint
- "Wren syntax checker"
- :command ("wrenlint" source)
- :modes wren-mode
- :error-patterns ((error "WREN_ERROR_COMPILE in " (file-name) ":" line "> " (message) line-end)))
-
-(add-hook 'wren-mode-hook (lambda ()
-                            (message "activating wren-lint")
-                            (flycheck-select-checker 'wren-lint)
-                            (flycheck-mode)))
 
 (require 'dumb-jump)
 (setq dumb-jump-selector 'helm
