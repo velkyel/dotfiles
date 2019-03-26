@@ -162,7 +162,7 @@
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Capak"
       ;;scroll-preserve-screen-position 'always
-      ;;scroll-margin 3
+      scroll-margin 4
       scroll-conservatively 101
       font-lock-maximum-decoration '((c++-mode . 1)
                                      (t . t)))
