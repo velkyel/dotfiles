@@ -204,27 +204,6 @@
                      (interactive)
                      (crux-start-or-switch-to 'shell "*shell*")))
 
-(bind-key "C-c e" '(lambda ()
-                     (interactive)
-                     (crux-start-or-switch-to 'eshell "*eshell*")))
-
-(eval-after-load "em-alias"
-  '(progn
-     (eshell/alias "l" "ls -lcrt")
-     (eshell/alias "la" "ls -a")
-     (eshell/alias "ll" "ls -lh")
-     (eshell/alias "e" "find-file $1")
-     (eshell/alias "ff" "find-file $1")))
-
-(defun my-eshell-hook ()
-  (bind-key "M-r" 'helm-eshell-history eshell-mode-map))
-
-(add-hook 'eshell-mode-hook 'my-eshell-hook)
-
-(quelpa '(eshell-toggle :fetcher github :repo "4DA/eshell-toggle"))
-(require 'eshell-toggle)
-(bind-key "M-~" 'eshell-toggle)
-
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 (vhl/ext/etags/off)
