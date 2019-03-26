@@ -684,13 +684,6 @@
 
 (bind-key "C-M-;" 'comment-or-uncomment-sexp)
 
-;; (require 'geiser)
-;; (setq geiser-active-implementations '(chibi))
-;; (setq geiser-chibi-binary (expand-file-name "~/chibi-scheme/chibi-scheme"))
-
-;; (require 'scheme)
-;; (setq scheme-program-name (expand-file-name "~/femtolisp/flisp"))
-
 (defun run-s7 ()
   (interactive)
   (require 'cmuscheme)
@@ -917,9 +910,6 @@
 (require 'org-bullets)
 (add-hook 'org-mode-hook 'org-bullets-mode)
 (setq org-clock-into-drawer "CLOCKING")
-
-(require 'tramp)
-(setq tramp-default-method "ssh")
 
 (defun what-face (pos) ;; under cursor
   (interactive "d")
