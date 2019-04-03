@@ -765,7 +765,10 @@
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-." . helm-semantic-or-imenu)
+           ("C-." . (lambda ()
+                      (semantic-mode 1)
+                      (helm-semantic-or-imenu nil)
+                      (semantic-mode 0)))
            ("M-o" . cff-find-other-file)
            ("M-." . ciao-goto-symbol)   ;; dumb-jump-go
            ("M-," . pop-tag-mark))      ;; dumb-jump-back
