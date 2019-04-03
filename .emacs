@@ -763,12 +763,15 @@
 ;; (setq semantic-c-obey-conditional-section-parsing-flag nil)
 ;; (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
 
+(defun my-c-imenu ()
+  (interactive)
+  (semantic-mode 1)
+  (helm-semantic-or-imenu nil)
+  (semantic-mode 0))
+
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-." . (lambda ()
-                      (semantic-mode 1)
-                      (helm-semantic-or-imenu nil)
-                      (semantic-mode 0)))
+           ("C-." . my-c-imenu)
            ("M-o" . cff-find-other-file)
            ("M-." . ciao-goto-symbol)   ;; dumb-jump-go
            ("M-," . pop-tag-mark))      ;; dumb-jump-back
