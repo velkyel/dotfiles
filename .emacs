@@ -870,6 +870,8 @@
       gnus-gcc-mark-as-read t
       gnus-use-cache t
       gnus-use-header-prefetch t
+      gnus-cache-enter-articles '(ticked dormant read unread)
+      gnus-cache-remove-articles nil
       gnus-cacheable-groups "^nnimap"
       gnus-sum-thread-tree-false-root ""
       gnus-sum-thread-tree-indent " "
