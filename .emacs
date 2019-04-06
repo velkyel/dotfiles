@@ -741,7 +741,7 @@
 (setq clang-format-executable "clang-format")   ;; ev symlink in ~/bin
 
 (require 'clang-format)
-;; (fset 'c-indent-region 'clang-format-region)
+(fset 'c-indent-region 'clang-format-region)
 
 (defun ciao-goto-symbol ()
   (interactive)
