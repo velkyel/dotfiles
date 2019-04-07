@@ -869,7 +869,6 @@
       gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
       gnus-gcc-mark-as-read t
       gnus-use-cache t
-      gnus-use-header-prefetch t
       gnus-cache-enter-articles '(ticked dormant read unread)
       gnus-cache-remove-articles nil
       gnus-cacheable-groups "^nnimap"
@@ -884,10 +883,9 @@
       message-kill-buffer-on-exit t
       gnus-large-newsgroup nil
       gnus-read-active-file 'some
-      gnus-summary-thread-gathering-function 'gnus-gather-threads-by-subject
       mm-discouraged-alternatives '("text/html" "text/richtext")
       gnus-inhibit-startup-message t
-      gnus-agent-expire-days 4
+      gnus-agent nil
       ;; gnus-use-scoring nil
       gnus-parameters
       '((".*"
