@@ -224,8 +224,8 @@
      (list (line-beginning-position)
            (line-beginning-position 2)))))
 
-(setq global-auto-revert-non-file-buffers t)
-(global-auto-revert-mode 1)
+;; (setq global-auto-revert-non-file-buffers t)
+;; (global-auto-revert-mode 1)
 
 ;; (require 'recentf)
 ;; (add-to-list 'recentf-exclude "bookmarks")
