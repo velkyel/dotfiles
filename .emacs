@@ -857,7 +857,9 @@
 (quelpa '(gnus-harvest :fetcher github :repo "jwiegley/gnus-harvest"))
 (eval-after-load "gnus"
   '(progn (require 'gnus-harvest)
-          (gnus-harvest-install)))   ;; (gnus-harvest-find-address)
+          (gnus-harvest-install)
+          (bind-keys :map message-mode-map
+                     ("<C-tab>" . gnus-harvest-find-address))))
 
 (setq gnus-select-method '(nnimap "fastmail"
                                   (nnimap-address "mail.messagingengine.com")
