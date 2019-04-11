@@ -854,6 +854,11 @@
 (autoload 'gnus "gnus" "Read network news." t)
 (global-set-key (kbd "C-c m") 'gnus)
 
+(quelpa '(gnus-harvest :fetcher github :repo "jwiegley/gnus-harvest"))
+(eval-after-load "gnus"
+  '(progn (require 'gnus-harvest)
+          (gnus-harvest-install)))   ;; (gnus-harvest-find-address)
+
 (setq gnus-select-method '(nnimap "fastmail"
                                   (nnimap-address "mail.messagingengine.com")
                                   (nnimap-server-port 993)
