@@ -265,8 +265,9 @@
       ivy-re-builders-alist '((t . ivy--regex-ignore-order))   ;; allow input not in order
       ivy-height 15
       ivy-count-format "(%d/%d) "
-      swiper-action-recenter t
-      )
+      swiper-action-recenter t)
+
+(bind-key "C-x C-s" 'ivy-occur ivy-minibuffer-map)
 
 (require 'counsel)
 (bind-keys ("M-x" . counsel-M-x)
@@ -281,8 +282,6 @@
 (bind-key "M-i" '(lambda ()
                    (interactive)
                    (swiper (thing-at-point 'symbol t))))
-
-;; TODO: pohledat obdobu helm-grep-save-buffer
 
 (require 'projectile)
 (setq projectile-enable-caching t)
