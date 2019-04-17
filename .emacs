@@ -642,9 +642,23 @@
 
 (bind-key "C-M-;" 'comment-or-uncomment-sexp)
 
+(require 'cmuscheme)
+
+(defun scheme-send-buffer ()
+  (interactive)
+  (scheme-send-region (point-min) (point-max)))
+
+(defun scheme-send-buffer-and-go ()
+  (interactive)
+  (scheme-send-buffer)
+  (switch-to-buffer-other-window "*scheme*"))
+
+(bind-keys :map scheme-mode-map
+           ("C-c b" . scheme-send-buffer)
+           ("C-c B" . scheme-send-buffer-and-go))
+
 (defun run-s7 ()
   (interactive)
-  (require 'cmuscheme)
   (setq scheme-program-name "s7")
   (if (not (comint-check-proc "*scheme*"))
       (let ((cmdlist (list '("localhost" . 5555))))
