@@ -162,7 +162,8 @@
       scroll-margin 4
       scroll-conservatively 101
       font-lock-maximum-decoration '((c++-mode . 1)
-                                     (t . t)))
+                                     (t . t))
+      enable-local-eval t)
 
 (setq-default indent-tabs-mode nil
               line-spacing nil
