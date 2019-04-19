@@ -102,7 +102,7 @@
                      smart-hungry-delete
                      dired-collapse
                      dired-rainbow
-                     dired-quick-sort
+                     ;; dired-quick-sort
                      markdown-mode
                      org-bullets
                      smartparens
@@ -424,9 +424,9 @@
 ;; highlight executable files, but not directories
 (dired-rainbow-define-chmod executable-unix "#228b22" "-[rw-]+x.*")
 
-(require 'dired-quick-sort)   ;; on osx: brew install coreutils + path
-(dired-quick-sort-setup)      ;; binds "S" and invoke hydra
-;; (when *osx* (setq dired-use-ls-dired nil))
+;; (require 'dired-quick-sort)   ;; on osx: brew install coreutils + path
+;; (dired-quick-sort-setup)      ;; binds "S" and invoke hydra
+;; ;; (when *osx* (setq dired-use-ls-dired nil))
 
 (save-place-mode 1)
 ;; (desktop-save-mode 1)
