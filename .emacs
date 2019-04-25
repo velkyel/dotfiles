@@ -229,7 +229,8 @@
 ;; (setq global-auto-revert-non-file-buffers t)
 ;; (global-auto-revert-mode 1)
 
-;; (require 'recentf)
+(require 'recentf)
+(setq recentf-max-saved-items 150)
 ;; (add-to-list 'recentf-exclude "bookmarks")
 
 (when *osx*
