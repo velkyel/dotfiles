@@ -468,7 +468,8 @@
 (require 'metal-mode)
 
 (require 'shader-mode)
-(add-to-list 'auto-mode-alist '("\\.cginc$" . shader-mode))
+(add-to-list 'auto-mode-alist '("\\.cginc$" . shader-mode))   ;; unity3d
+(add-to-list 'auto-mode-alist '("\\.pix$" . shader-mode))     ;; g3d
 
 (require 'magit)
 (bind-key "C-c g" 'magit-status)
