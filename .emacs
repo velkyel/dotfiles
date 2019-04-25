@@ -111,6 +111,7 @@
                      persistent-scratch
                      unkillable-scratch
                      comment-or-uncomment-sexp
+                     shader-mode
                      ))
 
 (set-language-environment "czech")
@@ -465,6 +466,9 @@
 
 (quelpa '(metal-mode :fetcher github :repo "masfj/metal-mode"))
 (require 'metal-mode)
+
+(require 'shader-mode)
+(add-to-list 'auto-mode-alist '("\\.cginc$" . shader-mode))
 
 (require 'magit)
 (bind-key "C-c g" 'magit-status)
