@@ -847,6 +847,15 @@
           (bind-keys :map message-mode-map
                      ("<C-tab>" . gnus-harvest-find-address))))
 
+(quelpa '(gnus-article-treat-patch :fetcher github :repo "velkyel/gnus-article-treat-patch"))
+(require 'gnus-article-treat-patch)
+(setq ft/gnus-article-patch-conditions '( "^@@ -[0-9]+,[0-9]+ \\+[0-9]+,[0-9]+ @@" ))
+(set-face-attribute 'ft/gnus-commit-message nil :foreground "black")
+(set-face-attribute 'ft/gnus-diff-stat-file nil :foreground "black")
+(set-face-attribute 'ft/gnus-diff-stat-bar nil :foreground "black")
+(set-face-attribute 'ft/gnus-diff-stat-num nil :foreground "black")
+(set-face-attribute 'ft/gnus-diff-misc nil :foreground "black")
+
 (setq gnus-select-method '(nnimap "fastmail"
                                   (nnimap-address "mail.messagingengine.com")
                                   (nnimap-server-port 993)
