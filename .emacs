@@ -87,7 +87,6 @@
                      highlight-symbol
                      company
                      elpy
-                     cff
                      popup
                      magit
                      git-timemachine
@@ -706,9 +705,10 @@
 ;; http://stackoverflow.com/questions/15489319/how-can-i-skip-in-file-included-from-in-emacs-c-compilation-mode
 ;; (setf (nth 5 (assoc 'gcc-include compilation-error-regexp-alist-alist)) 0)
 
-(require 'cff)
-(add-to-list 'cff-source-regexps '("\\.m$" . (lambda (base) (concat base ".m"))))
-(add-to-list 'cff-source-regexps '("\\.mm$" . (lambda (base) (concat base ".mm"))))
+(require 'find-file)
+(nconc (cadr (assoc "\\.h\\'" cc-other-file-alist)) '(".m" ".mm"))
+(add-to-list 'cc-other-file-alist '("\\.m\\'" (".h")))
+(add-to-list 'cc-other-file-alist '("\\.mm\\'" (".h")))
 
 (when (not *kelly*)
   (setq clang-format-style (concat "{BasedOnStyle: Google,"
@@ -758,7 +758,7 @@
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
            ("C-." . counsel-semantic-or-imenu)
-           ("M-o" . cff-find-other-file)
+           ("M-o" . ff-find-other-file)
            ("M-." . ciao-goto-symbol)   ;; dumb-jump-go
            ("M-," . pop-tag-mark))      ;; dumb-jump-back
 
