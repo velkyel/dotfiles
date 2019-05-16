@@ -301,12 +301,14 @@
 
 (bind-key "M-g" '(lambda ()
                    (interactive)
+                   (save-some-buffers t nil)
                    (counsel-rg (thing-at-point 'symbol t)
                                (projectile-project-root)
                                current-prefix-arg)))
 
 (bind-key* "M-G" '(lambda ()
                     (interactive)
+                    (save-some-buffers t nil)
                     (counsel-rg (thing-at-point 'symbol t)
                                 default-directory
                                 current-prefix-arg)))
