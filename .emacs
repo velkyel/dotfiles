@@ -676,11 +676,15 @@
 (put 'sublet 'scheme-indent-function 1)
 (put 'varlet 'scheme-indent-function 1)
 
+(setq s7-host (if (string= (system-name) "Libors-Mac-mini.local")
+                  "192.168.0.220"
+                "localhost"))
+
 (defun run-s7 ()
   (interactive)
   (setq scheme-program-name "s7")
   (if (not (comint-check-proc "*scheme*"))
-      (let ((cmdlist (list '("localhost" . 5555))))
+      (let ((cmdlist (list `(,s7-host . 5555))))
         (set-buffer (apply 'make-comint "scheme" (car cmdlist) nil nil))
         (inferior-scheme-mode)))
   (setq scheme-buffer "*scheme*")
