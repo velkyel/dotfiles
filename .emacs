@@ -857,7 +857,7 @@
 (set-face-attribute 'ft/gnus-diff-stat-bar nil :foreground "black")
 (set-face-attribute 'ft/gnus-diff-stat-num nil :foreground "black")
 (set-face-attribute 'ft/gnus-diff-misc nil :foreground "black")
-(set-face-attribute 'ft/gnus-diff-hunk nil :inherit 'diff-hunk-header)
+(set-face-attribute 'ft/gnus-diff-hunk nil :inherit 'diff-hunk-header :foreground "black")
 
 (setq gnus-select-method '(nnimap "fastmail"
                                   (nnimap-address "mail.messagingengine.com")
