@@ -36,15 +36,13 @@
 (defconst *linux* (eq system-type 'gnu/linux))
 (defconst *windows* (eq system-type 'windows-nt))
 
-(defconst *kelly* (or (string= system-name "typhoon.autokelly.local")
-                      (string= system-name "idev02")
-                      (string= system-name "idev02.autokelly.local")
-                      (string= system-name "idev03")
-                      (string= system-name "idev03.autokelly.local")
-                      (string= system-name "idev05")
-                      (string= system-name "idev05.autokelly.local")
-                      (string= system-name "idev06")
-                      (string= system-name "idev06.autokelly.local")))
+(defconst *kelly* (let ((name (system-name)))
+                    (or (string= name "idev02")
+                        (string= name "idev02.autokelly.local")
+                        (string= name "idev03")
+                        (string= name "idev03.autokelly.local")
+                        (string= name "idev06")
+                        (string= name "idev06.autokelly.local"))))
 
 (setq inhibit-startup-message t
       initial-scratch-message nil)
