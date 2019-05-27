@@ -691,6 +691,8 @@
   (setq scheme-buffer "*scheme*")
   (pop-to-buffer-same-window "*scheme*"))
 
+(add-to-list 'auto-mode-alist '("\\.sld\\'" . scheme-mode))
+
 (setq pulse-delay .06)
 ;; (when *linux*
 ;;   (progn
