@@ -109,6 +109,7 @@
                      unkillable-scratch
                      comment-or-uncomment-sexp
                      shader-mode
+                     goto-last-point
                      ))
 
 (set-language-environment "czech")
@@ -247,6 +248,10 @@
 
 (require 'goto-chg)
 (bind-key "C-x C-\\" 'goto-last-change)
+
+(require 'goto-last-point)
+(goto-last-point-mode)
+(bind-key "C-<" 'goto-last-point)
 
 (when (or *osx* *linux*)
   (exec-path-from-shell-initialize))
