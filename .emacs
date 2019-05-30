@@ -464,6 +464,14 @@
 (add-hook 'js2-mode-hook 'inf-js-minor-mode)
 ;; (js2-imenu-extras-mode 1)
 
+;; (quelpa '(janet-mode :fetcher github :repo "Ruin0x11/janet-mode"))
+(quelpa '(janet-mode :fetcher github :repo "ALSchwalm/janet-mode"))
+(require 'janet-mode)
+(quelpa '(inf-janet :fetcher github :repo "velkyel/inf-janet"))
+(require 'inf-janet)
+(setq inf-janet-program '("192.168.0.220" . 5555))
+(add-hook 'janet-mode-hook 'inf-janet-minor-mode)
+
 (quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
 (require 'hlsl-mode)
 (add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
