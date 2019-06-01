@@ -251,6 +251,7 @@
 
 (require 'goto-last-point)
 (goto-last-point-mode)
+(diminish 'goto-last-point-mode)
 (bind-key "C-<" 'goto-last-point)
 
 (when (or *osx* *linux*)
