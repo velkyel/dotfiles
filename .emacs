@@ -110,6 +110,7 @@
                      comment-or-uncomment-sexp
                      shader-mode
                      goto-last-point
+                     janet-mode
                      ))
 
 (set-language-environment "czech")
@@ -465,8 +466,6 @@
 (add-hook 'js2-mode-hook 'inf-js-minor-mode)
 ;; (js2-imenu-extras-mode 1)
 
-;; (quelpa '(janet-mode :fetcher github :repo "Ruin0x11/janet-mode"))
-(quelpa '(janet-mode :fetcher github :repo "ALSchwalm/janet-mode"))
 (require 'janet-mode)
 (quelpa '(inf-janet :fetcher github :repo "velkyel/inf-janet"))
 (require 'inf-janet)
