@@ -145,6 +145,7 @@
       make-backup-files nil
       delete-auto-save-files t
       auto-save-default nil
+      create-lockfiles nil
       large-file-warning-threshold nil
       ;; imenu-auto-rescan t
       ;; echo-keystrokes 0.1
