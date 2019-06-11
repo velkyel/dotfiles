@@ -523,6 +523,7 @@
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 (add-hook 'js2-mode-hook 'rainbow-mode)
 (add-hook 'scheme-mode-hook 'rainbow-mode)
+(add-hook 'janet-mode-hook 'rainbow-mode)
 
 (require 'highlight-symbol)
 (diminish 'highlight-symbol-mode)
