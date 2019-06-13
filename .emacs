@@ -162,6 +162,7 @@
       ;;scroll-preserve-screen-position 'always
       scroll-margin 4
       scroll-conservatively 101
+      c-hungry-delete-key t
       font-lock-maximum-decoration '((c++-mode . 1)
                                      (t . t))
       enable-local-eval t)
