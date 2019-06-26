@@ -241,7 +241,7 @@
   (setq mac-option-modifier 'nil)
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
-  (set-frame-font "mononoki-15"))
+  (set-frame-font "hack 13"))
 
 (when *windows*
   (set-frame-font "mononoki-11"))
