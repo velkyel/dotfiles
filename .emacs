@@ -479,6 +479,7 @@
 (add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
 
 (quelpa '(metal-mode :fetcher github :repo "masfj/metal-mode"))
+(add-to-list 'auto-mode-alist '("\\.mtl\\'" . metal-mode))
 (require 'metal-mode)
 
 (require 'shader-mode)
