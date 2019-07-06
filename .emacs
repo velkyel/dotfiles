@@ -244,7 +244,7 @@
   (set-frame-font "hack 13"))
 
 (when *windows*
-  (set-frame-font "mononoki-11"))
+  (set-frame-font "hack 11"))
 
 (when (and (display-graphic-p) *linux*)
   (set-frame-font "hack 11"))
