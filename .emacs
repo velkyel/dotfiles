@@ -447,7 +447,24 @@
 (add-to-list 'vc-handled-backends 'DARCS t)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
+(if (file-exists-p "~/wren-mode.el")
+    (add-to-list 'load-path "~/wren-mode.el")
+  (quelpa '(wren-mode :fetcher github :repo "velkyel/wren-mode.el")))
+(require 'wren-mode)
+
 (require 'flycheck)
+
+(flycheck-define-checker
+ wren-lint
+ "Wren syntax checker"
+ :command ("wrenlint" source)
+ :modes wren-mode
+ :error-patterns ((error "WREN_ERROR_COMPILE in " (file-name) ":" line "> " (message) line-end)))
+
+(add-hook 'wren-mode-hook (lambda ()
+                            (message "activating wren-lint")
+                            (flycheck-select-checker 'wren-lint)
+                            (flycheck-mode)))
 
 (require 'dumb-jump)
 (setq dumb-jump-selector 'ivy
