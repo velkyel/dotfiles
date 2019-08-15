@@ -163,6 +163,7 @@
       scroll-margin 4
       scroll-conservatively 101
       c-hungry-delete-key t
+      vc-follow-symlinks t
       font-lock-maximum-decoration '((c++-mode . 1)
                                      (t . t))
       enable-local-eval t)
