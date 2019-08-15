@@ -98,7 +98,9 @@
                      rust-mode
                      smart-hungry-delete
                      dired-collapse
+                     dired-subtree
                      dired-rainbow
+                     peep-dired
                      ;; dired-quick-sort
                      markdown-mode
                      org-bullets
@@ -394,6 +396,25 @@
 
 (require 'dired)
 (require 'dired-collapse)
+(require 'dired-subtree)
+
+(bind-key "<tab>" 'dired-subtree-insert dired-mode-map)
+(bind-key "<deletechar>" 'dired-subtree-remove dired-mode-map)
+
+(setq dired-recursive-copies 'always
+      dired-recursive-deletes 'always
+      dired-isearch-filenames 'dwim)
+
+(add-hook 'dired-mode-hook 'dired-hide-details-mode)
+
+(require 'peep-dired)
+(bind-key "P" 'peep-dired dired-mode-map)
+(setq peep-dired-cleanup-on-disable t
+      peep-dired-ignore-extensions '("mkv" "webm" "mp4" "mp3" "ogg" "iso"))
+
+(require 'wdired)    ;; C-x C-q (C-c C-c finish)
+(setq wdired-allow-to-change-permissions t)
+(setq wdired-create-parent-directories t)
 
 (setq dired-dwim-target t)
 
