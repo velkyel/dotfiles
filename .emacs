@@ -818,10 +818,14 @@
 (setq semantic-c-obey-conditional-section-parsing-flag nil)
 (delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
 
+(defun my-find-other-file ()
+  (interactive)
+  (ff-find-other-file nil t))
+
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
            ("C-." . counsel-semantic-or-imenu)
-           ("M-o" . ff-find-other-file)
+           ("M-o" . my-find-other-file)
            ("M-." . ciao-goto-symbol)   ;; dumb-jump-go
            ("M-," . pop-tag-mark))      ;; dumb-jump-back
 
