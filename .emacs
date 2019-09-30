@@ -868,6 +868,9 @@
            ("C-M-r" . isearch-backward)
            ("C-x k" . kill-this-buffer))
 
+(when (>= emacs-major-version 27)
+  (setq isearch-lazy-count t))
+
 ;; suspend-frame:
 (unbind-key "C-z")
 (unbind-key "C-x C-z")
