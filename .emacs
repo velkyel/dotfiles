@@ -175,6 +175,10 @@
               tab-width 4
               py-indent-offset 4)
 
+(global-unset-key (kbd "S-<down-mouse-1>"))
+(global-unset-key (kbd "<mouse-3>"))
+(global-unset-key (kbd "S-<mouse-3>"))
+
 (defun dos2unix ()
   (interactive)
   (set-buffer-file-coding-system 'unix))
