@@ -51,7 +51,6 @@
                      auto-package-update
                      bind-key
                      auto-compile
-                     diminish
                      exec-path-from-shell
                      json-mode
                      haskell-mode
@@ -113,6 +112,7 @@
                      shader-mode
                      goto-last-point
                      janet-mode
+                     minions
                      ))
 
 (set-language-environment "czech")
@@ -134,7 +134,9 @@
 (auto-compile-on-save-mode 1)
 
 (require 'subr-x)    ;; string-trim
-(require 'diminish)
+
+(require 'minions)
+(minions-mode 1)
 
 (setq compilation-ask-about-save nil
       compilation-always-kill t
@@ -219,7 +221,6 @@
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
 (vhl/ext/etags/off)
-(diminish 'volatile-highlights-mode)
 
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
@@ -262,7 +263,6 @@
 
 (require 'goto-last-point)
 (goto-last-point-mode)
-(diminish 'goto-last-point-mode)
 (bind-key "C-<" 'goto-last-point)
 
 (when (or *osx* *linux*)
@@ -275,7 +275,6 @@
 
 (require 'ivy)
 (ivy-mode 1)
-(diminish 'ivy-mode)
 
 (setq ivy-use-virtual-buffers t   ;; add recentf-mode and bookmarks
       ivy-initial-inputs-alist nil   ;; no regexp by default
@@ -306,7 +305,6 @@
 (setq projectile-completion-system 'ivy)
 (bind-key "C-x C-p" 'counsel-projectile)
 
-(diminish 'projectile-mode)
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
 (add-to-list 'projectile-globally-ignored-directories ".build")
 (add-to-list 'projectile-globally-ignored-directories "build")
@@ -380,7 +378,6 @@
 
 (require 'super-save)
 (super-save-mode 1)
-(diminish 'super-save-mode)
 
 (require 'avy)
 (setq avy-background t)
@@ -544,7 +541,6 @@
 (bind-key "C-c d" 'crux-duplicate-current-line-or-region)
 
 (require 'whitespace)
-(diminish 'whitespace-mode)
 (setq whitespace-line-column 90
       whitespace-style '(face trailing newline))
 
@@ -558,21 +554,18 @@
 (require 'visual-regexp-steroids)
 (bind-key "C-c r" 'vr/replace)
 
-(diminish 'eldoc-mode)
 (setq eldoc-idle-delay 0.2)
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
 (add-hook 'ielm-mode-hook 'eldoc-mode)
 
 (require 'rainbow-mode)
-(diminish 'rainbow-mode)
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 (add-hook 'js2-mode-hook 'rainbow-mode)
 (add-hook 'scheme-mode-hook 'rainbow-mode)
 (add-hook 'janet-mode-hook 'rainbow-mode)
 
 (require 'highlight-symbol)
-(diminish 'highlight-symbol-mode)
 (setq highlight-symbol-idle-delay 0.5)
 (set-face-background 'highlight-symbol-face "gray78")
 
@@ -607,7 +600,6 @@
       google-translate-default-target-language "cs")
 
 (require 'company)
-(diminish 'company-mode)
 (setq company-idle-delay nil)  ;; 0.1)
 (when *windows* (delete 'company-clang company-backends))
 (bind-keys :map company-active-map
@@ -858,9 +850,6 @@
       (elpy-enable)
       (remove-hook 'elpy-modules 'elpy-module-yasnippet)
       (remove-hook 'elpy-modules 'elpy-module-flymake))))
-
-(diminish 'abbrev-mode)
-(diminish 'isearch-mode)
 
 (defun my-goto-match-beginning ()
   (when (and (not isearch-mode-end-hook-quit) isearch-forward isearch-other-end)
