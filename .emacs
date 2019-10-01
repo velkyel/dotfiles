@@ -305,7 +305,10 @@
 (setq projectile-completion-system 'ivy)
 (bind-key "C-x C-p" 'counsel-projectile)
 
+(setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s \"%s\"")
+
 (add-to-list 'projectile-globally-ignored-files ".DS_Store")
+(add-to-list 'projectile-globally-ignored-files "TAGS")
 (add-to-list 'projectile-globally-ignored-directories ".build")
 (add-to-list 'projectile-globally-ignored-directories "build")
 (add-to-list 'projectile-globally-ignored-directories "_darcs")
