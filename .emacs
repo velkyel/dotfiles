@@ -168,6 +168,7 @@
       scroll-conservatively 101
       c-hungry-delete-key t
       vc-follow-symlinks t
+      calendar-week-start-day 1
       font-lock-maximum-decoration '((c++-mode . 1)
                                      (t . t))
       enable-local-eval t)
