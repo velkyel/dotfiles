@@ -278,7 +278,6 @@
 (ivy-mode 1)
 
 (setq ivy-use-virtual-buffers t   ;; add recentf-mode and bookmarks
-      ivy-initial-inputs-alist nil   ;; no regexp by default
       ivy-re-builders-alist '((t . ivy--regex-ignore-order))   ;; allow input not in order
       ivy-height 15
       ivy-count-format "(%d/%d) "
@@ -334,6 +333,8 @@
 (ivy-rich-mode 1)
 (setq ivy-format-function #'ivy-format-function-line
       ivy-rich-path-style 'abbrev)
+
+(setq ivy-initial-inputs-alist nil)   ;; no regexp by default
 
 (require 'smart-hungry-delete)
 (bind-keys ("<backspace>" . smart-hungry-delete-backward-char)
