@@ -613,6 +613,8 @@
            ("C-d" . company-show-doc-buffer)
            ("M-." . company-show-location))
 
+(add-to-list 'auto-mode-alist '("\\.p8$" . lua-mode))
+
 ;; (require 'lua-mode)
 ;; (add-hook 'lua-mode-hook 'flycheck-mode)
 ;; (setq lua-default-application '("localhost" . 5555))
