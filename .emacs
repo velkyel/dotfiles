@@ -100,6 +100,8 @@
                      dired-subtree
                      dired-rainbow
                      peep-dired
+                     dired-recent
+                     dired-narrow
                      ;; dired-quick-sort
                      markdown-mode
                      org-bullets
@@ -462,6 +464,12 @@
 
 ;; highlight executable files, but not directories
 (dired-rainbow-define-chmod executable-unix "#228b22" "-[rw-]+x.*")
+
+(require 'dired-recent)
+(dired-recent-mode 1)      ;; C-x C-d
+
+(require 'dired-narrow)
+(bind-key "/" 'dired-narrow dired-mode-map)   ;; g resets the view
 
 ;; (require 'dired-quick-sort)   ;; on osx: brew install coreutils + path
 ;; (dired-quick-sort-setup)      ;; binds "S" and invoke hydra
