@@ -45,6 +45,7 @@
                         (string= name "idev06.autokelly.local"))))
 
 (setq inhibit-startup-message t
+      frame-inhibit-implied-resize t
       initial-scratch-message nil)
 
 (setq package-list '(packed
@@ -253,13 +254,13 @@
   (setq mac-option-modifier 'nil)
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
-  (set-frame-font "hack 13"))
+  (add-to-list 'default-frame-alist '(font . "hack 13")))
 
 (when *windows*
-  (set-frame-font "hack 11"))
+  (add-to-list 'default-frame-alist '(font . "hack 11")))
 
 (when (and (display-graphic-p) *linux*)
-  (set-frame-font "hack 11"))
+  (add-to-list 'default-frame-alist '(font . "hack 11")))
 
 (require 'goto-chg)
 (bind-key "C-x C-\\" 'goto-last-change)
