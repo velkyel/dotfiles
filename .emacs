@@ -96,14 +96,12 @@
                      web-mode
                      js2-mode
                      rust-mode
-                     smart-hungry-delete
                      dired-collapse
                      dired-subtree
                      dired-rainbow
                      peep-dired
                      dired-recent
                      dired-narrow
-                     ;; dired-quick-sort
                      markdown-mode
                      org-bullets
                      smartparens
@@ -338,10 +336,6 @@
       ivy-rich-path-style 'abbrev)
 
 (setq ivy-initial-inputs-alist nil)   ;; no regexp by default
-
-(require 'smart-hungry-delete)
-(bind-keys ("<backspace>" . smart-hungry-delete-backward-char)
-           ("C-d" . smart-hungry-delete-forward-char))
 
 (require 'shackle)
 (setq shackle-rules
