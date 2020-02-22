@@ -19,4 +19,4 @@
 #make install
 
 cd $HOME
-emacs -u $(whoami) --eval '(progn (auto-package-update-now) (quelpa-upgrade))' --batch
+emacs -u $(whoami) --eval '(progn (auto-package-update-now) (quelpa-upgrade-all))' --batch
