@@ -537,6 +537,7 @@
 
 (require 'magit)
 (bind-key "C-c g" 'magit-status)
+(add-to-list 'transient-values '(magit-pull "--rebase"))
 ;; (bind-key "C-x M-g" 'magit-dispatch-popup)
 
 (bind-key "C-w" '(lambda ()
