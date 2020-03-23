@@ -167,7 +167,7 @@
       ;;scroll-preserve-screen-position 'always
       scroll-margin 4
       scroll-conservatively 101
-      c-hungry-delete-key t
+      ;; c-hungry-delete-key t
       vc-follow-symlinks t
       calendar-week-start-day 1
       font-lock-maximum-decoration '((c++-mode . 1)
