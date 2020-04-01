@@ -13,6 +13,7 @@ startup = do
     spawn "xsetroot -solid black"
     spawn "unclutter"
     spawn "urxvtd --quiet --opendisplay --fork"
+    spawn "xrandr -s 0"
 
 main = xmonad $ defaultConfig {
   layoutHook = smartBorders $ layoutHook defaultConfig,
