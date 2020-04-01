@@ -900,6 +900,7 @@
                    (call-interactively (if (get-buffer "*compilation*")
                                            'recompile
                                          'compile))))
+(bind-key "M-R" 'shell-command)
 ;; (bind-key "M-o" 'other-window)
 
 (setq message-send-mail-function 'smtpmail-send-it
