@@ -28,7 +28,7 @@ main = xmonad $ defaultConfig {
   }
   `removeKeysP`
        [ "M-k", "M-n", "M-m", "M-w", "M-q", "M-e", "M-r",
-         "M-S-/", "M-S-w", "M-S-w", "M-S-e", "M-S-j", "M-S-k",
+         "M-S-/", "M-S-w", "M-S-r", "M-S-e", "M-S-j", "M-S-k",
          "M-q",     -- restart (xmonad --recompile && xmonad --restart)
          "M-p",     -- launch dmenu
          "M-S-p",   -- launch gmrun
