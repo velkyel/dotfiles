@@ -938,7 +938,7 @@
                                   (nnimap-server-port 993)
                                   (nnimap-stream ssl)
                                   (nnir-search-engine imap)
-                                  (nnmail-expiry-wait 3)
+                                  (nnmail-expiry-wait 0)
                                   ;; press E to expire mail
                                   (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
       gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
