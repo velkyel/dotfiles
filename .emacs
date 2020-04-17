@@ -99,7 +99,7 @@
                      dired-collapse
                      dired-subtree
                      dired-rainbow
-                     peep-dired
+                     ;; peep-dired
                      dired-recent
                      dired-narrow
                      markdown-mode
@@ -411,10 +411,10 @@
 
 (add-hook 'dired-mode-hook 'dired-hide-details-mode)
 
-(require 'peep-dired)
-(bind-key "P" 'peep-dired dired-mode-map)
-(setq peep-dired-cleanup-on-disable t
-      peep-dired-ignore-extensions '("mkv" "webm" "mp4" "mp3" "ogg" "iso"))
+;; (require 'peep-dired)
+;; (bind-key "P" 'peep-dired dired-mode-map)
+;; (setq peep-dired-cleanup-on-disable t
+;;       peep-dired-ignore-extensions '("mkv" "webm" "mp4" "mp3" "ogg" "iso"))
 
 (require 'wdired)    ;; C-x C-q (C-c C-c finish)
 (setq wdired-allow-to-change-permissions t)
@@ -939,7 +939,7 @@
                                   (nnimap-server-port 993)
                                   (nnimap-stream ssl)
                                   (nnir-search-engine imap)
-                                  (nnmail-expiry-wait 0)
+                                  (nnmail-expiry-wait 'immediate)
                                   ;; press E to expire mail
                                   (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
       gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
