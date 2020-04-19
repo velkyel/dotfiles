@@ -285,6 +285,7 @@
       swiper-action-recenter t)
 
 (bind-key "C-x C-s" 'ivy-occur ivy-minibuffer-map)
+(advice-add 'ivy-occur :after #'ivy-occur-grep-mode)
 
 (require 'counsel)
 (bind-keys ("M-x" . counsel-M-x)
