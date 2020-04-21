@@ -420,9 +420,10 @@
 ;; (setq peep-dired-cleanup-on-disable t
 ;;       peep-dired-ignore-extensions '("mkv" "webm" "mp4" "mp3" "ogg" "iso"))
 
-(require 'wdired)    ;; C-x C-q (C-c C-c finish)
+(require 'wdired)    ;; C-c C-q (C-c C-c finish)
 (setq wdired-allow-to-change-permissions t)
 (setq wdired-create-parent-directories t)
+(bind-key "C-c C-q" 'wdired-change-to-wdired-mode dired-mode-map)
 
 (setq dired-dwim-target t)
 
