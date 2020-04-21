@@ -60,6 +60,7 @@
                      ivy
                      ivy-rich
                      ivy-xref
+                     ivy-dired-history
                      smex
                      counsel
                      counsel-projectile
@@ -99,7 +100,6 @@
                      dired-collapse
                      dired-subtree
                      dired-rainbow
-                     ;; peep-dired
                      dired-recent
                      dired-narrow
                      markdown-mode
@@ -287,6 +287,8 @@
 (bind-key "C-x C-s" 'ivy-occur ivy-minibuffer-map)
 (advice-add 'ivy-occur :after #'ivy-occur-grep-mode)
 
+(add-to-list 'savehist-additional-variables 'ivy-dired-history-variable)
+
 (require 'counsel)
 (bind-keys ("M-x" . counsel-M-x)
            ("C-x C-f" . counsel-find-file)
@@ -402,6 +404,7 @@
 (require 'dired)
 (require 'dired-collapse)
 (require 'dired-subtree)
+(require 'ivy-dired-history)
 
 (bind-key "<tab>" 'dired-subtree-insert dired-mode-map)
 (bind-key "<deletechar>" 'dired-subtree-remove dired-mode-map)
