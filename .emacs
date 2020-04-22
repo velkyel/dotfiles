@@ -638,6 +638,7 @@
 (bind-keys :map lua-mode-map
            ("C-M-x" . lua-send-defun)
            ("C-c C-b" . lua-send-buffer)
+           ("C-c C-l" . lua-send-current-line)
            ("M-." . dumb-jump-go)
            ("M-," . dumb-jump-back)
            ("C-c C-z" . my-lua-switch-to-process-buffer))
