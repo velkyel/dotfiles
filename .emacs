@@ -929,7 +929,7 @@
   '(progn (require 'gnus-harvest)
           (gnus-harvest-install)
           (bind-keys :map message-mode-map
-                     ("<C-tab>" . gnus-harvest-find-address))))
+                     ("C-M-i" . gnus-harvest-find-address))))
 
 (quelpa '(gnus-article-treat-patch :fetcher github :repo "velkyel/gnus-article-treat-patch"))
 (require 'gnus-article-treat-patch)
