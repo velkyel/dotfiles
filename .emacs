@@ -415,6 +415,9 @@
 
 (add-hook 'dired-mode-hook 'dired-hide-details-mode)
 
+(eval-after-load "dired-aux"
+   '(add-to-list 'dired-compress-file-suffixes '("\\.zip\\'" ".zip" "unzip")))
+
 ;; (require 'peep-dired)
 ;; (bind-key "P" 'peep-dired dired-mode-map)
 ;; (setq peep-dired-cleanup-on-disable t
