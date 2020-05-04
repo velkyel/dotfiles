@@ -1,5 +1,8 @@
 #!/bin/bash -ex
 
+cd $HOME/dotfiles
+git pull --rebase
+
 #cd $HOME/ccls
 #git pull --rebase
 #git submodule update
