@@ -406,6 +406,8 @@
 (require 'dired-subtree)
 (require 'ivy-dired-history)
 
+(when *osx* (setq dired-use-ls-dired nil))
+
 (bind-key "<tab>" 'dired-subtree-insert dired-mode-map)
 (bind-key "<deletechar>" 'dired-subtree-remove dired-mode-map)
 
