@@ -1004,9 +1004,13 @@
 ;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
 ;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
 
+(defun my-org-mode-setup ()
+  (org-bullets-mode)
+  (setq fill-column 100))
+
 (require 'org)
 (require 'org-bullets)
-(add-hook 'org-mode-hook 'org-bullets-mode)
+(add-hook 'org-mode-hook 'my-org-mode-setup)
 (setq org-clock-into-drawer "CLOCKING")
 
 (defun what-face (pos) ;; under cursor
