@@ -85,7 +85,6 @@
                      clang-format
                      highlight-symbol
                      company
-                     elpy
                      popup
                      magit
                      git-timemachine
@@ -865,15 +864,7 @@
 (with-eval-after-load 'python
   (if *windows*
       (progn
-        (setq python-shell-interpreter "python.exe"))
-    (progn
-      (require 'elpy)
-      (setq python-shell-interpreter "python3")
-      (setq elpy-rpc-python-command "python3")
-      (setq elpy-eldoc-show-current-function nil)
-      (elpy-enable)
-      (remove-hook 'elpy-modules 'elpy-module-yasnippet)
-      (remove-hook 'elpy-modules 'elpy-module-flymake))))
+        (setq python-shell-interpreter "python.exe"))))
 
 (defun my-goto-match-beginning ()
   (when (and (not isearch-mode-end-hook-quit) isearch-forward isearch-other-end)
