@@ -863,8 +863,8 @@
 
 (with-eval-after-load 'python
   (if *windows*
-      (progn
-        (setq python-shell-interpreter "python.exe"))))
+      (setq python-shell-interpreter "python.exe")
+    (setq python-shell-interpreter "python3")))
 
 (defun my-goto-match-beginning ()
   (when (and (not isearch-mode-end-hook-quit) isearch-forward isearch-other-end)
