@@ -414,6 +414,7 @@
 (require 'dired-collapse)
 (require 'dired-subtree)
 (require 'helm-dired-history)
+(add-to-list 'savehist-additional-variables 'helm-dired-history-variable)
 
 (when *osx* (setq dired-use-ls-dired nil))
 
