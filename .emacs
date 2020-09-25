@@ -519,7 +519,7 @@
                             (flycheck-mode)))
 
 (require 'dumb-jump)
-(setq dumb-jump-selector 'helm
+(setq dumb-jump-selector 'popup
       dumb-jump-prefer-searcher 'rg)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
 
 (add-to-list 'dumb-jump-language-file-exts '(:language "c++" :ext "mm" :agtype "cpp" :rgtype "cpp"))
@@ -672,10 +672,9 @@
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (goto-address-prog-mode)
   (company-mode)
-  (semantic-mode 1)
   (bind-keys :map prog-mode-map
              ("<C-tab>" . company-complete)
-             ("C-." . helm-semantic-or-imenu)))
+             ("C-." . helm-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -830,34 +829,15 @@
 (require 'clang-format)
 (fset 'c-indent-region 'clang-format-region)
 
-(defun ciao-goto-symbol ()
-  (interactive)
-  (deactivate-mark)
-  (condition-case err
-      (progn
-        (ring-insert find-tag-marker-ring (point-marker))
-        (cl-flet ((always-no (&rest _) (signal (car err) (cdr err))))
-          (cl-letf (((symbol-function 'y-or-no-p) #'always-no)
-                    ((symbol-function 'yes-or-no-p) #'always-no))
-            (semantic-ia-fast-jump (point)))))
-    (error
-     (set-marker (ring-remove find-tag-marker-ring 0) nil nil)
-     (dumb-jump-go))))
-
-;; (require 'smart-jump)
-(require 'semantic/ia)
-(setq semantic-c-obey-conditional-section-parsing-flag nil)
-(delete '(scheme-mode . semantic-default-scheme-setup) semantic-new-buffer-setup-functions)
-
 (defun my-find-other-file ()
   (interactive)
   (ff-find-other-file nil t))
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-." . helm-semantic-or-imenu)
+           ("C-." . helm-imenu)
            ("M-o" . my-find-other-file)
-           ("M-." . ciao-goto-symbol)   ;; dumb-jump-go
+           ("M-." . dumb-jump-go)
            ("M-," . pop-tag-mark))      ;; dumb-jump-back
 
 (bind-keys :map c++-mode-map
