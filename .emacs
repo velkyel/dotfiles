@@ -825,7 +825,7 @@
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-." . ivy-imenu)
+           ("C-." . counsel-imenu)
            ("M-o" . my-find-other-file)
            ("M-." . dumb-jump-go)
            ("M-," . pop-tag-mark))      ;; dumb-jump-back
