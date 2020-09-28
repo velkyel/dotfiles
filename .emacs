@@ -57,11 +57,13 @@
                      haskell-mode
                      csharp-mode
                      restart-emacs
-                     helm
-                     helm-ext
-                     helm-xref
-                     helm-dired-history
-                     helm-projectile
+                     ivy
+                     ivy-rich
+                     ivy-xref
+                     ivy-dired-history
+                     smex
+                     counsel
+                     counsel-projectile
                      projectile
                      hydra
                      super-save
@@ -272,31 +274,39 @@
 
 (setq python-shell-completion-native-enable nil)
 
-(require 'helm)
-(require 'helm-config)
-(require 'helm-grep)
-(helm-mode 1)
-(setq helm-buffer-max-length 32
-      helm-display-header-line nil
-      helm-mode-fuzzy-match t
-      helm-completion-in-region-fuzzy-match t
-      helm-find-files-ignore-thing-at-point t)
+(require 'ivy)
+(ivy-mode 1)
 
-(bind-keys :map helm-map
-           ("<tab>" . helm-execute-persistent-action)
-           ("TAB" . helm-execute-persistent-action)
-           ("C-z" . helm-select-action))
+(setq ivy-use-virtual-buffers t   ;; add recentf-mode and bookmarks
+      ivy-re-builders-alist '((t . ivy--regex-ignore-order))   ;; allow input not in order
+      ivy-height 15
+      ivy-count-format "(%d/%d) "
+      swiper-action-recenter t)
 
-(add-hook 'helm-grep-mode-hook 'grep-mode)
-(setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number %s %s %s"
-      helm-grep-save-buffer-name-no-confirm 1
-      helm-grep-file-path-style 'relative)
+(add-to-list 'savehist-additional-variables 'ivy-dired-history-variable)
+
+(require 'counsel)
+(bind-keys ("M-x" . counsel-M-x)
+           ("C-x C-f" . counsel-find-file)
+           ("C-h a" . counsel-apropos)
+           ("C-h v" . counsel-describe-variable)
+           ("C-h f" . counsel-describe-function)
+           ("M-y" . counsel-yank-pop)
+           ("C-c <SPC>" . counsel-mark-ring))
+
+(bind-key "C-l" 'counsel-up-directory counsel-find-file-map)
+(bind-key "M-i" '(lambda ()
+                   (interactive)
+                   (swiper (thing-at-point 'symbol t))))
+
+;; TODO: zde vlastni nahradu za ivy-occur
+(bind-key "C-x C-s" 'ivy-occur ivy-minibuffer-map)
 
 (require 'projectile)
 (setq projectile-enable-caching t)
 (projectile-global-mode)
-(setq projectile-completion-system 'helm)
-(helm-projectile-on)
+(setq projectile-completion-system 'ivy)
+(bind-key "C-x C-p" 'counsel-projectile)
 
 (setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s \"%s\"")
 
@@ -311,43 +321,23 @@
 (bind-key "M-g" '(lambda ()
                    (interactive)
                    (save-some-buffers t nil)
-                   (helm-grep-ag (projectile-project-root) current-prefix-arg)))
+                   (counsel-rg (thing-at-point 'symbol t)
+                               (projectile-project-root)
+                               current-prefix-arg)))
 
 (bind-key* "M-G" '(lambda ()
                     (interactive)
                     (save-some-buffers t nil)
-                    (helm-grep-ag (helm-current-directory) current-prefix-arg)))
+                    (counsel-rg (thing-at-point 'symbol t)
+                                default-directory
+                                current-prefix-arg)))
 
-(bind-key "M-i" 'helm-occur-from-isearch isearch-mode-map)
+(require 'ivy-rich)
+(ivy-rich-mode 1)
+(setq ivy-format-function #'ivy-format-function-line
+      ivy-rich-path-style 'abbrev)
 
-(defun my-helm-projectile-buffers-list ()
-  (interactive)
-  (unless helm-source-buffers-list
-    (setq helm-source-buffers-list
-          (helm-make-source "Buffers" 'helm-source-buffers)))
-  (helm :sources (if (projectile-project-p)
-                     '(helm-source-buffers-list
-                       helm-source-projectile-files-list
-                       helm-source-buffer-not-found)
-                   '(helm-source-buffers-list
-                     helm-source-buffer-not-found))
-        :buffer "*helm buffers*"
-        :keymap helm-buffer-map
-        :truncate-lines helm-buffers-truncate-lines))
-
-(bind-keys ([remap list-buffers] . my-helm-projectile-buffers-list)
-           ("M-x" . helm-M-x)
-           ("C-x b" . my-helm-projectile-buffers-list)
-           ("C-h a" . helm-apropos)
-           ("C-x C-f" . helm-find-files)
-           ("M-y" . helm-show-kill-ring)
-           ("M-i" . helm-occur)
-           ("C-c h" . helm-command-prefix)
-           ("C-c <SPC>" . helm-all-mark-rings)
-           ("C-c C-r" . helm-resume))
-
-(require 'helm-ext)
-(helm-ext-ff-enable-auto-path-expansion t)
+(setq ivy-initial-inputs-alist nil)   ;; no regexp by default
 
 (require 'shackle)
 (setq shackle-rules
@@ -413,8 +403,8 @@
 (require 'dired)
 (require 'dired-collapse)
 (require 'dired-subtree)
-(require 'helm-dired-history)
-(add-to-list 'savehist-additional-variables 'helm-dired-history-variable)
+(require 'ivy-dired-history)
+(add-to-list 'savehist-additional-variables 'ivy-dired-history-variable)
 
 (when *osx* (setq dired-use-ls-dired nil))
 
@@ -519,7 +509,7 @@
                             (flycheck-mode)))
 
 (require 'dumb-jump)
-(setq dumb-jump-selector 'popup
+(setq dumb-jump-selector 'ivy
       dumb-jump-prefer-searcher 'rg)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
 
 (add-to-list 'dumb-jump-language-file-exts '(:language "c++" :ext "mm" :agtype "cpp" :rgtype "cpp"))
@@ -674,7 +664,7 @@
   (company-mode)
   (bind-keys :map prog-mode-map
              ("<C-tab>" . company-complete)
-             ("C-." . helm-imenu)))
+             ("C-." . counsel-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -685,8 +675,8 @@
 ;; (add-hook 'c-mode-hook 'electric-pair-local-mode)
 ;; (add-hook 'c++-mode-hook 'electric-pair-local-mode)
 
-(require 'helm-xref)
-(setq xref-show-xrefs-function 'helm-xref-show-xrefs)
+(require 'ivy-xref)
+(setq xref-show-xrefs-function 'ivy-xref-show-xrefs)
 
 (require 'smartparens-config)
 
@@ -835,7 +825,7 @@
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-." . helm-imenu)
+           ("C-." . ivy-imenu)
            ("M-o" . my-find-other-file)
            ("M-." . dumb-jump-go)
            ("M-," . pop-tag-mark))      ;; dumb-jump-back
@@ -1013,28 +1003,6 @@
 (set-face-attribute 'avy-background-face
                     nil
                     :foreground "gray50")
-
-
-(set-face-attribute 'helm-ff-executable
-                    nil
-                    :foreground "#228b22")
-
-(set-face-attribute 'helm-selection
-                    nil
-                    :background "#a5e8be")
-
-(set-face-attribute 'helm-visible-mark
-                    nil
-                    :background "#f1c40f")
-
-(set-face-attribute 'helm-source-header
-                    nil
-                    :height 0.9)
-
-(with-eval-after-load 'helm-xref
-  (set-face-attribute 'helm-xref-file-name
-                      nil
-                      :foreground "red"))
 
 (set-face-attribute 'font-lock-comment-face
                     nil
