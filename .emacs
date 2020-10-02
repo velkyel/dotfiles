@@ -632,7 +632,7 @@
 
 (require 'lua-mode)
 (add-hook 'lua-mode-hook 'flycheck-mode)
-(setq lua-default-application '("192.168.0.220" . 5555))
+(setq lua-default-application '("192.168.0.122" . 5555))
 ;; (setq lua-default-application "lua5.3")  ;; '("localhost" . 5555))
 
 (defun my-lua-switch-to-process-buffer ()
