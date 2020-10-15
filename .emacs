@@ -57,6 +57,7 @@
                      haskell-mode
                      csharp-mode
                      restart-emacs
+                     helm
                      ivy
                      ivy-rich
                      ivy-xref
@@ -274,6 +275,22 @@
 
 (setq python-shell-completion-native-enable nil)
 
+(require 'helm)
+
+(setq helm-display-header-line nil
+      helm-mode-fuzzy-match t
+      helm-buffer-max-length 32)
+
+(bind-keys :map helm-map
+           ("<tab>" . helm-execute-persistent-action)
+           ("TAB" . helm-execute-persistent-action)
+           ("C-z" . helm-select-action))
+
+(add-hook 'helm-grep-mode-hook 'grep-mode)
+(setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number %s %s %s"
+      helm-grep-save-buffer-name-no-confirm 1
+      helm-grep-file-path-style 'relative)
+
 (require 'ivy)
 (ivy-mode 1)
 
@@ -321,16 +338,12 @@
 (bind-key "M-g" '(lambda ()
                    (interactive)
                    (save-some-buffers t nil)
-                   (counsel-rg (thing-at-point 'symbol t)
-                               (projectile-project-root)
-                               current-prefix-arg)))
+                   (helm-grep-ag (projectile-project-root) current-prefix-arg)))
 
 (bind-key* "M-G" '(lambda ()
                     (interactive)
                     (save-some-buffers t nil)
-                    (counsel-rg (thing-at-point 'symbol t)
-                                default-directory
-                                current-prefix-arg)))
+                    (helm-grep-ag (helm-current-directory) current-prefix-arg)))
 
 (require 'ivy-rich)
 (ivy-rich-mode 1)
@@ -1003,6 +1016,22 @@
 (set-face-attribute 'avy-background-face
                     nil
                     :foreground "gray50")
+
+(set-face-attribute 'helm-ff-executable
+                    nil
+                    :foreground "#228b22")
+
+(set-face-attribute 'helm-selection
+                    nil
+                    :background "#a5e8be")
+
+(set-face-attribute 'helm-visible-mark
+                    nil
+                    :background "#f1c40f")
+
+(set-face-attribute 'helm-source-header
+                    nil
+                    :height 1.0)
 
 (set-face-attribute 'font-lock-comment-face
                     nil
