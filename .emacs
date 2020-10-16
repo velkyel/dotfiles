@@ -1017,10 +1017,6 @@
                     nil
                     :foreground "gray50")
 
-(set-face-attribute 'helm-ff-executable
-                    nil
-                    :foreground "#228b22")
-
 (set-face-attribute 'helm-selection
                     nil
                     :background "#a5e8be")
