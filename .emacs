@@ -276,6 +276,8 @@
 (setq python-shell-completion-native-enable nil)
 
 (require 'helm)
+(require 'helm-grep)
+(require 'helm-files)
 
 (setq helm-display-header-line nil
       helm-mode-fuzzy-match t
@@ -287,9 +289,10 @@
            ("C-z" . helm-select-action))
 
 (add-hook 'helm-grep-mode-hook 'grep-mode)
-(setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number %s %s %s"
-      helm-grep-save-buffer-name-no-confirm 1
+;; (setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number %s %s %s"
+(setq helm-grep-save-buffer-name-no-confirm 1
       helm-grep-file-path-style 'relative)
+;; (setq helm-follow-mode-persistent t)
 
 (require 'ivy)
 (ivy-mode 1)
