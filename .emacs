@@ -530,12 +530,11 @@
 
 (add-to-list 'dumb-jump-language-file-exts '(:language "c++" :ext "mm" :agtype "cpp" :rgtype "cpp"))
 
+(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (setq js-indent-level 2)
-(bind-keys :map js2-mode-map
-           ("M-." . dumb-jump-go)
-           ("M-," . dumb-jump-back))
 
 (quelpa '(inf-js :fetcher github :repo "velkyel/inf-js"))
 (require 'inf-js)
@@ -660,8 +659,6 @@
            ("C-M-x" . lua-send-defun)
            ("C-c C-b" . lua-send-buffer)
            ("C-c C-l" . lua-send-current-line)
-           ("M-." . dumb-jump-go)
-           ("M-," . dumb-jump-back)
            ("C-c C-z" . my-lua-switch-to-process-buffer))
 
 (defun my-non-special-modes-setup ()
@@ -842,9 +839,7 @@
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
            ("C-." . counsel-imenu)
-           ("M-o" . my-find-other-file)
-           ("M-." . dumb-jump-go)
-           ("M-," . pop-tag-mark))      ;; dumb-jump-back
+           ("M-o" . my-find-other-file))
 
 (bind-keys :map c++-mode-map
            ("C-M-\\" . clang-format-region)
