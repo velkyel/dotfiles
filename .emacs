@@ -289,7 +289,6 @@
            ("C-z" . helm-select-action))
 
 (add-hook 'helm-grep-mode-hook 'grep-mode)
-;; (setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number %s %s %s"
 (setq helm-grep-save-buffer-name-no-confirm 1
       helm-grep-file-path-style 'relative)
 ;; (setq helm-follow-mode-persistent t)
@@ -526,7 +525,7 @@
 
 (require 'dumb-jump)
 (setq dumb-jump-selector 'ivy
-      dumb-jump-prefer-searcher 'rg)    ;; because https://github.com/jacktasia/dumb-jump/issues/129
+      dumb-jump-prefer-searcher 'ag)
 
 (add-to-list 'dumb-jump-language-file-exts '(:language "c++" :ext "mm" :agtype "cpp" :rgtype "cpp"))
 
