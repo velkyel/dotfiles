@@ -523,6 +523,11 @@
                             (flycheck-select-checker 'wren-lint)
                             (flycheck-mode)))
 
+(require 'ivy-xref)
+(when (>= emacs-major-version 27)
+  (setq xref-show-definitions-function #'ivy-xref-show-defs))
+(setq xref-show-xrefs-function #'ivy-xref-show-xrefs)
+
 (require 'dumb-jump)
 (setq dumb-jump-selector 'ivy
       dumb-jump-prefer-searcher 'ag)
@@ -686,9 +691,6 @@
 
 ;; (add-hook 'c-mode-hook 'electric-pair-local-mode)
 ;; (add-hook 'c++-mode-hook 'electric-pair-local-mode)
-
-(require 'ivy-xref)
-(setq xref-show-xrefs-function 'ivy-xref-show-xrefs)
 
 (require 'smartparens-config)
 
