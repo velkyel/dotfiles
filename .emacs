@@ -909,71 +909,111 @@
       smtpmail-smtp-server "mail.messagingengine.com"
       smtpmail-smtp-service 587)
 
-(autoload 'gnus "gnus" "Read network news." t)
-(global-set-key (kbd "C-c m") 'gnus)
+;; (autoload 'gnus "gnus" "Read network news." t)
+;; (global-set-key (kbd "C-c m") 'gnus)
 
-(quelpa '(gnus-harvest :fetcher github :repo "jwiegley/gnus-harvest"))
-(eval-after-load "gnus"
-  '(progn (require 'gnus-harvest)
-          (gnus-harvest-install)
-          (bind-keys :map message-mode-map
-                     ("C-M-i" . gnus-harvest-find-address))))
+;; (quelpa '(gnus-harvest :fetcher github :repo "jwiegley/gnus-harvest"))
+;; (eval-after-load "gnus"
+;;   '(progn (require 'gnus-harvest)
+;;           (gnus-harvest-install)
+;;           (bind-keys :map message-mode-map
+;;                      ("C-M-i" . gnus-harvest-find-address))))
 
-(quelpa '(gnus-article-treat-patch :fetcher github :repo "velkyel/gnus-article-treat-patch"))
-(require 'gnus-article-treat-patch)
-(setq ft/gnus-article-patch-conditions '( "^@@ -[0-9]+,[0-9]+ \\+[0-9]+,[0-9]+ @@" ))
-(set-face-attribute 'ft/gnus-commit-message nil :foreground "black")
-(set-face-attribute 'ft/gnus-diff-stat-file nil :foreground "black")
-(set-face-attribute 'ft/gnus-diff-stat-bar nil :foreground "black")
-(set-face-attribute 'ft/gnus-diff-stat-num nil :foreground "black")
-(set-face-attribute 'ft/gnus-diff-misc nil :foreground "black")
-(set-face-attribute 'ft/gnus-diff-hunk nil :inherit 'diff-hunk-header :foreground "black")
+;; (quelpa '(gnus-article-treat-patch :fetcher github :repo "velkyel/gnus-article-treat-patch"))
+;; (require 'gnus-article-treat-patch)
+;; (setq ft/gnus-article-patch-conditions '( "^@@ -[0-9]+,[0-9]+ \\+[0-9]+,[0-9]+ @@" ))
+;; (set-face-attribute 'ft/gnus-commit-message nil :foreground "black")
+;; (set-face-attribute 'ft/gnus-diff-stat-file nil :foreground "black")
+;; (set-face-attribute 'ft/gnus-diff-stat-bar nil :foreground "black")
+;; (set-face-attribute 'ft/gnus-diff-stat-num nil :foreground "black")
+;; (set-face-attribute 'ft/gnus-diff-misc nil :foreground "black")
+;; (set-face-attribute 'ft/gnus-diff-hunk nil :inherit 'diff-hunk-header :foreground "black")
 
-(setq gnus-select-method '(nnimap "fastmail"
-                                  (nnimap-address "mail.messagingengine.com")
-                                  (nnimap-server-port 993)
-                                  (nnimap-stream ssl)
-                                  (nnir-search-engine imap)
-                                  (nnmail-expiry-wait immediate)
-                                  ;; press E to expire mail
-                                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
-      gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
-      gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
-      gnus-user-date-format-alist '((t . "%d-%m-%Y %H:%M"))
-      gnus-thread-sort-functions '(gnus-thread-sort-by-most-recent-date)  ;; gnus-thread-sort-by-date))
-      gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
-      gnus-gcc-mark-as-read t
-      gnus-use-cache t
-      ;; gnus-cache-enter-articles '(ticked dormant read unread)
-      ;; gnus-cache-remove-articles nil
-      ;; gnus-cacheable-groups "^nnimap"
-      gnus-sum-thread-tree-false-root ""
-      gnus-sum-thread-tree-indent " "
-      gnus-sum-thread-tree-leaf-with-other "├► "
-      gnus-sum-thread-tree-root ""
-      gnus-sum-thread-tree-single-leaf "╰► "
-      gnus-sum-thread-tree-vertical "│"
-      gnus-use-full-window nil
-      gnus-interactive-exit nil
+;; (setq gnus-select-method '(nnimap "fastmail"
+;;                                   (nnimap-address "mail.messagingengine.com")
+;;                                   (nnimap-server-port 993)
+;;                                   (nnimap-stream ssl)
+;;                                   (nnir-search-engine imap)
+;;                                   (nnmail-expiry-wait immediate)
+;;                                   ;; press E to expire mail
+;;                                   (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
+;;       gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
+;;       gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
+;;       gnus-user-date-format-alist '((t . "%d-%m-%Y %H:%M"))
+;;       gnus-thread-sort-functions '(gnus-thread-sort-by-most-recent-date)  ;; gnus-thread-sort-by-date))
+;;       gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
+;;       gnus-gcc-mark-as-read t
+;;       gnus-use-cache t
+;;       ;; gnus-cache-enter-articles '(ticked dormant read unread)
+;;       ;; gnus-cache-remove-articles nil
+;;       ;; gnus-cacheable-groups "^nnimap"
+;;       gnus-sum-thread-tree-false-root ""
+;;       gnus-sum-thread-tree-indent " "
+;;       gnus-sum-thread-tree-leaf-with-other "├► "
+;;       gnus-sum-thread-tree-root ""
+;;       gnus-sum-thread-tree-single-leaf "╰► "
+;;       gnus-sum-thread-tree-vertical "│"
+;;       gnus-use-full-window nil
+;;       gnus-interactive-exit nil
+;;       message-kill-buffer-on-exit t
+;;       gnus-large-newsgroup nil
+;;       gnus-read-active-file 'some
+;;       mm-discouraged-alternatives '("text/html" "text/richtext")
+;;       gnus-inhibit-startup-message t
+;;       gnus-agent nil
+;;       ;; gnus-use-scoring nil
+;;       gnus-parameters
+;;       '((".*"
+;;          (display . all))))
+
+;; (defun exit-gnus-on-exit ()
+;;   (if (and (fboundp 'gnus-group-exit)
+;;            (gnus-alive-p))
+;;       (with-current-buffer (get-buffer "*Group*")
+;;         (let (gnus-interactive-exit)
+;;           (gnus-group-exit)))))
+
+;; (add-hook 'kill-emacs-hook 'exit-gnus-on-exit)
+
+(when *osx*
+  (add-to-list 'load-path "/usr/local/opt/mu/share/emacs/site-lisp/mu/mu4e"))
+
+(when *linux*
+  (add-to-list 'load-path "/usr/ushare/emacs/site-lisp/mu4e"))
+
+(require 'mu4e)
+(setq mail-user-agent 'mu4e-user-agent
+      mu4e-attachment-dir "~/Downloads"
+      mu4e-root-maildir (expand-file-name "~/Maildir")
+      mu4e-drafts-folder "/INBOX.Drafts"
+      mu4e-sent-folder "/INBOX.Sent"
+      mu4e-trash-folder "/INBOX.Trash"
+      mu4e-get-mail-command "offlineimap -o"
+      mu4e-update-interval 300
+      mu4e-confirm-quit nil
+      mu4e-date-format-long "%d.%m.%Y"
+      mu4e-headers-date-format "%d.%m.%y"
+      mu4e-view-show-addresses t
+      mu4e-sent-messages-behavior 'delete
+      mu4e-view-show-images t
+      mu4e-completing-read-function 'completing-read
+      mu4e-headers-leave-behavior 'apply
       message-kill-buffer-on-exit t
-      gnus-large-newsgroup nil
-      gnus-read-active-file 'some
-      mm-discouraged-alternatives '("text/html" "text/richtext")
-      gnus-inhibit-startup-message t
-      gnus-agent nil
-      ;; gnus-use-scoring nil
-      gnus-parameters
-      '((".*"
-         (display . all))))
-
-(defun exit-gnus-on-exit ()
-  (if (and (fboundp 'gnus-group-exit)
-           (gnus-alive-p))
-      (with-current-buffer (get-buffer "*Group*")
-        (let (gnus-interactive-exit)
-          (gnus-group-exit)))))
-
-(add-hook 'kill-emacs-hook 'exit-gnus-on-exit)
+      mu4e-maildir-shortcuts
+      '(("/INBOX" . ?i)
+        ("/INBOX.Sent" . ?s)
+        ("/INBOX.Trash" . ?t)
+        ("/INBOX.Archive" . ?a))
+      mu4e-bookmarks '(((concat "flag:unread"
+                                " AND NOT flag:trashed"
+                                " AND NOT maildir:/INBOX.Trash"
+                                " AND NOT maildir:/INBOX.Spam")
+                        "Unread messages"      ?u)
+                       ("date:today..now"                  "Today's messages"     ?t)
+                       ("date:7d..now"                     "Last 7 days"          ?w)
+                       ("mime:image/*"                     "Messages with images" ?p)
+                       ("size:2M..500M"                    "Big messages"         ?b)))
+(global-set-key (kbd "C-c m") 'mu4e)
 
 ;; (setq nnmail-expiry-wait-function
 ;;       (lambda (group)
