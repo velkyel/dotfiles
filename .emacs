@@ -49,6 +49,7 @@
       initial-scratch-message nil)
 
 (setq package-list '(packed
+                     auto-package-update
                      bind-key
                      auto-compile
                      exec-path-from-shell
