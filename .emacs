@@ -1006,7 +1006,7 @@
         ("/INBOX.Archive" . ?a))
       mu4e-bookmarks '(("flag:unread AND NOT flag:trashed AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam" "Unread messages" ?u)
                        ("date:today..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam" "Today's messages" ?t)
-                       ("date:7d..now" "Last 7 days" ?w)
+                       ("date:7d..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam" "Last 7 days" ?w)
                        ("mime:image/*" "Messages with images" ?p)
                        ("size:2M..500M" "Big messages" ?b)))
 (global-set-key (kbd "C-c m") 'mu4e)
