@@ -989,7 +989,7 @@
       mu4e-sent-folder "/INBOX.Sent"
       mu4e-trash-folder "/INBOX.Trash"
       mu4e-get-mail-command "offlineimap -o"
-      mu4e-update-interval 300
+      mu4e-update-interval nil ;; 300
       mu4e-confirm-quit nil
       mu4e-date-format-long "%d.%m.%Y"
       mu4e-headers-date-format "%d.%m.%y"
@@ -1009,10 +1009,10 @@
                                 " AND NOT maildir:/INBOX.Trash"
                                 " AND NOT maildir:/INBOX.Spam")
                         "Unread messages"      ?u)
-                       ("date:today..now"                  "Today's messages"     ?t)
-                       ("date:7d..now"                     "Last 7 days"          ?w)
-                       ("mime:image/*"                     "Messages with images" ?p)
-                       ("size:2M..500M"                    "Big messages"         ?b)))
+                       ("date:today..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam" "Today's messages" ?t)
+                       ("date:7d..now" "Last 7 days" ?w)
+                       ("mime:image/*" "Messages with images" ?p)
+                       ("size:2M..500M" "Big messages" ?b)))
 (global-set-key (kbd "C-c m") 'mu4e)
 
 ;; (setq nnmail-expiry-wait-function
