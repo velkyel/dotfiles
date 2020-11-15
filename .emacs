@@ -59,7 +59,7 @@
                      restart-emacs
                      helm
                      ivy
-                     ivy-rich
+                     ;; ivy-rich
                      ivy-xref
                      ivy-dired-history
                      smex
@@ -346,10 +346,10 @@
                     (save-some-buffers t nil)
                     (helm-grep-ag (helm-current-directory) current-prefix-arg)))
 
-(require 'ivy-rich)
-(ivy-rich-mode 1)
-(setq ivy-format-function #'ivy-format-function-line
-      ivy-rich-path-style 'abbrev)
+;; (require 'ivy-rich)
+;; (ivy-rich-mode 1)
+;; (setq ivy-format-function #'ivy-format-function-line
+;;       ivy-rich-path-style 'abbrev)
 
 (setq ivy-initial-inputs-alist nil)   ;; no regexp by default
 
