@@ -994,9 +994,10 @@
       mu4e-date-format-long "%d.%m.%Y"
       mu4e-headers-date-format "%d.%m.%y"
       mu4e-view-show-addresses t
-      mu4e-sent-messages-behavior 'delete
+      mu4e-sent-messages-behavior 'sent
       mu4e-view-show-images t
       mu4e-completing-read-function 'completing-read
+      mu4e-compose-signature-auto-include nil
       mu4e-headers-leave-behavior 'apply
       message-kill-buffer-on-exit t
       mu4e-maildir-shortcuts
