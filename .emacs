@@ -1012,18 +1012,6 @@
                        ("size:2M..500M" "Big messages" ?b)))
 (global-set-key (kbd "C-c m") 'mu4e)
 
-;; (setq nnmail-expiry-wait-function
-;;       (lambda (group)
-;;         (cond ((string= group "INBOX") 'immediate)
-;;               (t 'never))))
-
-;; (defun fastmail-archive ()
-;;   (interactive)
-;;   (gnus-summary-move-article nil "nnimap+fastmail:INBOX.Archive"))
-
-;; (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
-;; (add-hook 'gnus-summary-mode-hook 'my-gnus-summary-keys)
-
 (defun my-org-mode-setup ()
   (org-bullets-mode)
   (setq fill-column 100))
