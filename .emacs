@@ -996,7 +996,7 @@
       mu4e-view-show-addresses t
       mu4e-sent-messages-behavior 'sent
       mu4e-view-show-images t
-      mu4e-completing-read-function 'completing-read
+      mu4e-completing-read-function #'ivy-completing-read
       mu4e-compose-signature-auto-include nil
       mu4e-headers-leave-behavior 'apply
       message-kill-buffer-on-exit t
