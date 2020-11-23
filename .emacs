@@ -1010,6 +1010,12 @@
                        ("date:7d..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam" "Last 7 days" ?w)
                        ("mime:image/*" "Messages with images" ?p)
                        ("size:2M..500M" "Big messages" ?b)))
+
+(quelpa '(mu4e-patch :fetcher github :repo "seanfarley/mu4e-patch"))
+(require 'mu4e-patch)
+(add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight)
+(copy-face 'mu4e-header-key-face 'mu4e-patch-commit-message)
+
 (global-set-key (kbd "C-c m") 'mu4e)
 
 (defun my-org-mode-setup ()
