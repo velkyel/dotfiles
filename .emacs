@@ -999,6 +999,7 @@
       mu4e-completing-read-function #'ivy-completing-read
       mu4e-compose-signature-auto-include nil
       mu4e-headers-leave-behavior 'apply
+      mu4e-html2text-command "html2text -utf8 -width 72"
       message-kill-buffer-on-exit t
       mu4e-maildir-shortcuts
       '(("/INBOX" . ?i)
