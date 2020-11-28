@@ -66,7 +66,6 @@
                      counsel
                      counsel-projectile
                      projectile
-                     hydra
                      super-save
                      avy
                      goto-chg
@@ -121,9 +120,9 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
-(unless package-archive-contents
-  (package-initialize)
-  (package-refresh-contents))
+;; (unless package-archive-contents
+;;   (package-initialize)
+;;   (package-refresh-contents))
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
