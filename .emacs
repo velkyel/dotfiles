@@ -302,8 +302,6 @@
       ivy-count-format "(%d/%d) "
       swiper-action-recenter t)
 
-(add-to-list 'savehist-additional-variables 'ivy-dired-history-variable)
-
 (require 'counsel)
 (bind-keys ("M-x" . counsel-M-x)
            ("C-x C-f" . counsel-find-file)
