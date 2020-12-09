@@ -981,6 +981,20 @@
   (add-to-list 'load-path "~/mu/mu4e"))
 
 (require 'mu4e)
+
+(defun mu4e-display-image (imgpath &optional maxwidth maxheight)
+  "Display image IMG at point; optionally specify MAXWIDTH and MAXHEIGHT."
+  (let ((img (create-image imgpath nil nil
+                           :max-width maxwidth :max-height maxheight)))
+    (save-excursion
+      (insert "\n")
+      (let ((size (image-size img))) ;; inspired by gnus..
+        (insert-char ?\n
+                     (max 0 (round (- (window-height) (or maxheight (cdr size)) 1) 2)))
+        (insert-char ?\.
+                     (max 0 (round (- (window-width)  (or maxwidth (car size))) 2)))
+        (insert-image img)))))
+
 (setq mail-user-agent 'mu4e-user-agent
       mu4e-attachment-dir "~/Downloads"
       mu4e-root-maildir (expand-file-name "~/Maildir")
