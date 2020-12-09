@@ -266,6 +266,8 @@
 (bind-key "C-<" 'goto-last-point)
 
 (when (or *osx* *linux*)
+  (require 'exec-path-from-shell)
+  (setq exec-path-from-shell-arguments (remove "-i" exec-path-from-shell-arguments))   ;; optimization
   (exec-path-from-shell-initialize))
 
 (when *windows*
