@@ -58,13 +58,9 @@
                      csharp-mode
                      restart-emacs
                      helm
-                     ivy
-                     ;; ivy-rich
-                     ivy-xref
-                     ivy-dired-history
-                     smex
-                     counsel
-                     counsel-projectile
+                     selectrum
+                     selectrum-prescient
+                     marginalia
                      projectile
                      super-save
                      avy
@@ -120,9 +116,9 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
-;; (unless package-archive-contents
-;;   (package-initialize)
-;;   (package-refresh-contents))
+(unless package-archive-contents
+  (package-initialize)
+  (package-refresh-contents))
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
@@ -293,37 +289,20 @@
       helm-grep-file-path-style 'relative)
 ;; (setq helm-follow-mode-persistent t)
 
-(require 'ivy)
-(ivy-mode 1)
+(require 'selectrum)
+(selectrum-mode +1)
+(selectrum-prescient-mode +1)
+(prescient-persist-mode +1)
 
-(setq ivy-use-virtual-buffers t   ;; add recentf-mode and bookmarks
-      ivy-re-builders-alist '((t . ivy--regex-ignore-order))   ;; allow input not in order
-      ivy-height 15
-      ivy-count-format "(%d/%d) "
-      swiper-action-recenter t)
-
-(require 'counsel)
-(bind-keys ("M-x" . counsel-M-x)
-           ("C-x C-f" . counsel-find-file)
-           ("C-h a" . counsel-apropos)
-           ("C-h v" . counsel-describe-variable)
-           ("C-h f" . counsel-describe-function)
-           ("M-y" . counsel-yank-pop)
-           ("C-c <SPC>" . counsel-mark-ring))
-
-(bind-key "C-l" 'counsel-up-directory counsel-find-file-map)
-(bind-key "M-i" '(lambda ()
-                   (interactive)
-                   (swiper (thing-at-point 'symbol t))))
-
-;; TODO: zde vlastni nahradu za ivy-occur
-(bind-key "C-x C-s" 'ivy-occur ivy-minibuffer-map)
+(require 'marginalia)
+(marginalia-mode)
+;; (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light))
 
 (require 'projectile)
 (setq projectile-enable-caching t)
 (projectile-global-mode)
-(setq projectile-completion-system 'ivy)
-(bind-key "C-x C-p" 'counsel-projectile)
+(setq projectile-completion-system 'default)
+(bind-key "C-x C-p" 'projectile-find-file)
 
 (setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s \"%s\"")
 
@@ -344,13 +323,6 @@
                     (interactive)
                     (save-some-buffers t nil)
                     (helm-grep-ag (helm-current-directory) current-prefix-arg)))
-
-;; (require 'ivy-rich)
-;; (ivy-rich-mode 1)
-;; (setq ivy-format-function #'ivy-format-function-line
-;;       ivy-rich-path-style 'abbrev)
-
-(setq ivy-initial-inputs-alist nil)   ;; no regexp by default
 
 (require 'shackle)
 (setq shackle-rules
@@ -416,8 +388,6 @@
 (require 'dired)
 (require 'dired-collapse)
 (require 'dired-subtree)
-(require 'ivy-dired-history)
-(add-to-list 'savehist-additional-variables 'ivy-dired-history-variable)
 
 (when *osx* (setq dired-use-ls-dired nil))
 
@@ -521,13 +491,15 @@
                             (flycheck-select-checker 'wren-lint)
                             (flycheck-mode)))
 
-(require 'ivy-xref)
+
+(quelpa '(completing-read-xref :fetcher github :repo "travitch/completing-read-xref.el"))
+(require 'completing-read-xref)
 (when (>= emacs-major-version 27)
-  (setq xref-show-definitions-function #'ivy-xref-show-defs))
-(setq xref-show-xrefs-function #'ivy-xref-show-xrefs)
+  (setq xref-show-definitions-function #'completing-read-xref-show-defs))
+(setq xref-show-xrefs-function #'completing-read-xref-show-xrefs)
 
 (require 'dumb-jump)
-(setq dumb-jump-selector 'ivy
+(setq dumb-jump-selector 'completing-read
       dumb-jump-prefer-searcher 'ag)
 
 (add-to-list 'dumb-jump-language-file-exts '(:language "c++" :ext "mm" :agtype "cpp" :rgtype "cpp"))
@@ -679,7 +651,7 @@
   (company-mode)
   (bind-keys :map prog-mode-map
              ("<C-tab>" . company-complete)
-             ("C-." . counsel-imenu)))
+             ("C-." . imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -837,7 +809,7 @@
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-." . counsel-imenu)
+           ("C-." . imenu)
            ("M-o" . my-find-other-file))
 
 (bind-keys :map c++-mode-map
@@ -1009,7 +981,7 @@
       mu4e-view-show-addresses t
       mu4e-sent-messages-behavior 'sent
       mu4e-view-show-images t
-      mu4e-completing-read-function #'ivy-completing-read
+      mu4e-completing-read-function #'completing-read
       mu4e-compose-signature-auto-include nil
       mu4e-headers-leave-behavior 'apply
       mu4e-html2text-command "w3m -I UTF-8 -O UTF-8 -dump -T text/html"  ;; "html2text -utf8 -width 72"
