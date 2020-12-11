@@ -61,7 +61,6 @@
                      selectrum
                      selectrum-prescient
                      marginalia
-                     projectile
                      super-save
                      avy
                      goto-chg
@@ -298,26 +297,19 @@
 (marginalia-mode)
 ;; (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light))
 
-(require 'projectile)
-(setq projectile-enable-caching t)
-(projectile-global-mode)
-(setq projectile-completion-system 'default)
-(bind-key "C-x C-p" 'projectile-find-file)
+(require 'project)
+(bind-key "C-x C-p" 'project-find-file)
 
-(setq projectile-tags-command "ctags-exuberant -Re -f \"%s\" %s \"%s\"")
-
-(add-to-list 'projectile-globally-ignored-files ".DS_Store")
-(add-to-list 'projectile-globally-ignored-files "TAGS")
-(add-to-list 'projectile-globally-ignored-directories ".build")
-(add-to-list 'projectile-globally-ignored-directories "build")
-(add-to-list 'projectile-globally-ignored-directories "_darcs")
-(add-to-list 'projectile-globally-ignored-directories ".cquery_cached_index")
-(add-to-list 'projectile-globally-ignored-directories ".ccls-cache")
+(add-to-list 'grep-find-ignored-files ".DS_Store")
+(add-to-list 'grep-find-ignored-files "TAGS")
+(add-to-list 'grep-find-ignored-directories ".build")
+(add-to-list 'grep-find-ignored-directories "build")
+(add-to-list 'grep-find-ignored-directories "_darcs")
 
 (bind-key "M-g" '(lambda ()
                    (interactive)
                    (save-some-buffers t nil)
-                   (helm-grep-ag (projectile-project-root) current-prefix-arg)))
+                   (helm-grep-ag (expand-file-name (car (project-roots (project-current t)))) current-prefix-arg)))
 
 (bind-key* "M-G" '(lambda ()
                     (interactive)
