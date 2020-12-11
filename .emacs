@@ -300,6 +300,7 @@
 (require 'project)
 (bind-key "C-x C-p" 'project-find-file)
 
+(require 'grep)
 (add-to-list 'grep-find-ignored-files ".DS_Store")
 (add-to-list 'grep-find-ignored-files "TAGS")
 (add-to-list 'grep-find-ignored-directories ".build")
