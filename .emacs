@@ -465,10 +465,10 @@
 (add-to-list 'vc-handled-backends 'DARCS t)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
-(if (file-exists-p "~/wren-mode.el")
-    (add-to-list 'load-path "~/wren-mode.el")
-  (quelpa '(wren-mode :fetcher github :repo "velkyel/wren-mode.el")))
-(require 'wren-mode)
+;; (if (file-exists-p "~/wren-mode.el")
+;;     (add-to-list 'load-path "~/wren-mode.el")
+;;   (quelpa '(wren-mode :fetcher github :repo "velkyel/wren-mode.el")))
+;; (require 'wren-mode)
 
 (require 'flycheck)
 
@@ -503,21 +503,21 @@
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (setq js-indent-level 2)
 
-(quelpa '(inf-js :fetcher github :repo "velkyel/inf-js"))
-(require 'inf-js)
-(setq inf-js-program '("192.168.0.220" . 5555))
-(add-hook 'js2-mode-hook 'inf-js-minor-mode)
+;; (quelpa '(inf-js :fetcher github :repo "velkyel/inf-js"))
+;; (require 'inf-js)
+;; (setq inf-js-program '("192.168.0.220" . 5555))
+;; (add-hook 'js2-mode-hook 'inf-js-minor-mode)
 ;; (js2-imenu-extras-mode 1)
 
-(require 'janet-mode)
-(quelpa '(inf-janet :fetcher github :repo "velkyel/inf-janet"))
-(require 'inf-janet)
-(setq inf-janet-program '("192.168.0.220" . 5555))
-(add-hook 'janet-mode-hook 'inf-janet-minor-mode)
+;; (require 'janet-mode)
+;; (quelpa '(inf-janet :fetcher github :repo "velkyel/inf-janet"))
+;; (require 'inf-janet)
+;; (setq inf-janet-program '("192.168.0.220" . 5555))
+;; (add-hook 'janet-mode-hook 'inf-janet-minor-mode)
 
-(quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
-(require 'hlsl-mode)
-(add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
+;; (quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
+;; (require 'hlsl-mode)
+;; (add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
 
 (quelpa '(metal-mode :fetcher github :repo "masfj/metal-mode"))
 (add-to-list 'auto-mode-alist '("\\.mtl\\'" . metal-mode))
