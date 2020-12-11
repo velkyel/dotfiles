@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (setq my-gc-threshold (* 64 1024 1024))
 
 (setq max-lisp-eval-depth 50000)
@@ -301,7 +303,7 @@
          (bf (or (buffer-file-name cb) ""))
          (buffers (mapcar 'buffer-name (cl-delete-if (lambda (buf) (eq buf cb)) (buffer-list))))
          (to-level-buffers (cl-delete-if (lambda (name) (string-prefix-p " " name)) buffers))
-         (files (cl-delete-if (lambda (f) (string= f bf)) (copy-sequence (mapcar 'abbreviate-file-name recentf-list))))
+         (files (cl-delete-if (lambda (f) (string= f bf)) (copy-sequence recentf-list)))
          (candidates (append to-level-buffers files))
          (cand (selectrum-read "Switch to: " candidates)))
     (cond ((member cand recentf-list)
