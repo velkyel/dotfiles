@@ -236,6 +236,7 @@
 ;; (global-auto-revert-mode 1)
 
 (require 'recentf)
+(recentf-mode 1)
 (setq recentf-max-saved-items 150)
 ;; (add-to-list 'recentf-exclude "bookmarks")
 
@@ -292,6 +293,23 @@
 (selectrum-mode +1)
 (selectrum-prescient-mode +1)
 (prescient-persist-mode +1)
+
+(defun my-switch-to-buffer ()
+  (interactive)
+  (let* ((selectrum-should-sort-p nil)
+         (cb (window-buffer (minibuffer-selected-window)))
+         (bf (or (buffer-file-name cb) ""))
+         (buffers (mapcar 'buffer-name (cl-delete-if (lambda (buf) (eq buf cb)) (buffer-list))))
+         (to-level-buffers (cl-delete-if (lambda (name) (string-prefix-p " " name)) buffers))
+         (files (cl-delete-if (lambda (f) (string= f bf)) (copy-sequence (mapcar 'abbreviate-file-name recentf-list))))
+         (candidates (append to-level-buffers files))
+         (cand (selectrum-read "Switch to: " candidates)))
+    (cond ((member cand recentf-list)
+           (find-file cand))
+          (t
+           (switch-to-buffer cand)))))
+
+(bind-key "C-x b" 'my-switch-to-buffer)
 
 (require 'marginalia)
 (marginalia-mode)
