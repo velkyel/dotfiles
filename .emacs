@@ -1015,6 +1015,11 @@
 ;; (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight)
 ;; (copy-face 'mu4e-header-key-face 'mu4e-patch-commit-message)
 
+;; https://rakhim.org/fastmail-setup-with-emacs-mu4e-and-mbsync-on-macos/
+(fset 'my-move-to-trash "mt")
+(define-key mu4e-headers-mode-map (kbd "d") 'my-move-to-trash)
+(define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
+
 (global-set-key (kbd "C-c m") 'mu4e)
 
 (defun my-org-mode-setup ()
