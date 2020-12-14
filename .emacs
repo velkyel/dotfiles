@@ -618,6 +618,10 @@
 ;; ...usf = unreal engine, sc = bgfx
 
 (require 'google-translate)
+;; fix https://github.com/atykhonov/google-translate/issues/137
+(defun google-translate--search-tkk ()
+  "Search TKK."
+  (list 430675 2721866130))
 (setq google-translate-default-source-language "en"
       google-translate-default-target-language "cs")
 
