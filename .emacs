@@ -491,17 +491,17 @@
 
 (require 'flycheck)
 
-(flycheck-define-checker
- wren-lint
- "Wren syntax checker"
- :command ("wrenlint" source)
- :modes wren-mode
- :error-patterns ((error "WREN_ERROR_COMPILE in " (file-name) ":" line "> " (message) line-end)))
+;; (flycheck-define-checker
+;;  wren-lint
+;;  "Wren syntax checker"
+;;  :command ("wrenlint" source)
+;;  :modes wren-mode
+;;  :error-patterns ((error "WREN_ERROR_COMPILE in " (file-name) ":" line "> " (message) line-end)))
 
-(add-hook 'wren-mode-hook (lambda ()
-                            (message "activating wren-lint")
-                            (flycheck-select-checker 'wren-lint)
-                            (flycheck-mode)))
+;; (add-hook 'wren-mode-hook (lambda ()
+;;                             (message "activating wren-lint")
+;;                             (flycheck-select-checker 'wren-lint)
+;;                             (flycheck-mode)))
 
 
 (quelpa '(completing-read-xref :fetcher github :repo "travitch/completing-read-xref.el"))
