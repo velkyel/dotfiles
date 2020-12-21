@@ -51,7 +51,6 @@
       initial-scratch-message nil)
 
 (setq package-list '(packed
-                     auto-package-update
                      bind-key
                      auto-compile
                      exec-path-from-shell
@@ -772,10 +771,6 @@
 (add-to-list 'auto-mode-alist '("\\.sld\\'" . scheme-mode))
 
 (setq pulse-delay .06)
-;; (when *linux*
-;;   (progn
-;;     (require 'pulse)
-;;     (setq pulse-flag nil)))
 
 (require 'compile)
 (bind-key "C-c C-t"
@@ -1090,11 +1085,6 @@
   (set-face-attribute 'popup-face
                       nil
                       :background "#dddd30"))
-
-(with-eval-after-load 'highlight-indentation
-  (set-face-attribute 'highlight-indentation-face     ;; elpy
-                      nil
-                      :background "gray90"))
 
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file :noerror)
