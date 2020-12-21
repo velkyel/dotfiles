@@ -62,6 +62,7 @@
                      selectrum
                      selectrum-prescient
                      marginalia
+                     consult-selectrum
                      super-save
                      avy
                      goto-chg
@@ -295,22 +296,11 @@
 (selectrum-prescient-mode +1)
 (prescient-persist-mode +1)
 
-(defun my-switch-to-buffer ()
-  (interactive)
-  (let* ((selectrum-should-sort-p nil)
-         (cb (window-buffer (minibuffer-selected-window)))
-         (bf (or (buffer-file-name cb) ""))
-         (buffers (mapcar 'buffer-name (cl-delete-if (lambda (buf) (eq buf cb)) (buffer-list))))
-         (to-level-buffers (cl-delete-if (lambda (name) (string-prefix-p " " name)) buffers))
-         (files (cl-delete-if (lambda (f) (string= f bf)) (copy-sequence recentf-list)))
-         (candidates (append to-level-buffers files))
-         (cand (selectrum-read "Switch to: " candidates)))
-    (cond ((member cand recentf-list)
-           (find-file cand))
-          (t
-           (switch-to-buffer cand)))))
-
-(bind-key "C-x b" 'my-switch-to-buffer)
+(require 'consult-selectrum)
+(bind-key "C-x b" 'consult-buffer)
+(bind-key "C-h a" 'consult-apropos)
+(bind-key "C-c l" 'consult-line)
+(bind-key "M-y" 'consult-yank-pop)
 
 (require 'marginalia)
 (marginalia-mode)
@@ -667,7 +657,7 @@
   (company-mode)
   (bind-keys :map prog-mode-map
              ("<C-tab>" . company-complete)
-             ("C-." . imenu)))
+             ("C-." . consult-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -821,7 +811,7 @@
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-." . imenu)
+           ("C-." . consult-imenu)
            ("M-o" . my-find-other-file))
 
 (bind-keys :map c++-mode-map
