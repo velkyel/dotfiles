@@ -52,6 +52,7 @@
 
 (setq package-list '(packed
                      bind-key
+                     auto-package-update    ; script upgrade-emacs-packages.sh
                      auto-compile
                      exec-path-from-shell
                      json-mode
