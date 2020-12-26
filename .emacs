@@ -656,6 +656,7 @@
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (goto-address-prog-mode)
   (company-mode)
+  (semantic-mode +1)     ;; for better imenu
   (bind-keys :map prog-mode-map
              ("<C-tab>" . company-complete)
              ("C-." . consult-imenu)))
