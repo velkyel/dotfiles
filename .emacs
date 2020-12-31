@@ -63,6 +63,7 @@
                      helm-xref
                      helm-dired-history
                      ;; helm-projectile
+                     helm-org-rifle
                      super-save
                      avy
                      goto-chg
@@ -1025,6 +1026,9 @@
 (require 'org-bullets)
 (add-hook 'org-mode-hook 'my-org-mode-setup)
 (setq org-clock-into-drawer "CLOCKING")
+
+(require 'helm-org-rifle)
+(bind-key (kbd "C-.") 'helm-org-rifle-current-buffer org-mode-map)
 
 (defun what-face (pos) ;; under cursor
   (interactive "d")
