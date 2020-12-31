@@ -60,10 +60,9 @@
                      csharp-mode
                      restart-emacs
                      helm
-                     selectrum
-                     selectrum-prescient
-                     marginalia
-                     consult-selectrum
+                     helm-xref
+                     helm-dired-history
+                     ;; helm-projectile
                      super-save
                      avy
                      goto-chg
@@ -275,8 +274,11 @@
 (setq python-shell-completion-native-enable nil)
 
 (require 'helm)
+(require 'helm-config)
 (require 'helm-grep)
 (require 'helm-files)
+
+(helm-mode +1)
 
 (setq helm-display-header-line nil
       helm-mode-fuzzy-match t
@@ -292,20 +294,19 @@
       helm-grep-file-path-style 'relative)
 ;; (setq helm-follow-mode-persistent t)
 
-(require 'selectrum)
-(selectrum-mode +1)
-(selectrum-prescient-mode +1)
-(prescient-persist-mode +1)
+(bind-keys ("M-x" . helm-M-x)
+           ("C-x C-b" . helm-mini)
+           ("C-x b" . helm-mini)
+           ("C-h a" . helm-apropos)
+           ("C-x C-f" . helm-find-files)
+           ("M-y" . helm-show-kill-ring)
+           ("M-i" . helm-occur)
+           ("C-c h" . helm-command-prefix)
+           ("C-c <SPC>" . helm-all-mark-rings)
+           ("C-c C-r" . helm-resume))
 
-(require 'consult-selectrum)
-(bind-key "C-x b" 'consult-buffer)
-(bind-key "C-h a" 'consult-apropos)
-(bind-key "C-c l" 'consult-line)
-(bind-key "M-y" 'consult-yank-pop)
-
-(require 'marginalia)
-(marginalia-mode)
-;; (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light))
+(require 'helm-dired-history)
+(add-to-list 'savehist-additional-variables 'helm-dired-history-variable)
 
 (require 'project)
 (bind-key "C-x C-p" 'project-find-file)
@@ -495,11 +496,14 @@
 ;;                             (flycheck-mode)))
 
 
-(quelpa '(completing-read-xref :fetcher github :repo "travitch/completing-read-xref.el"))
-(require 'completing-read-xref)
-(when (>= emacs-major-version 27)
-  (setq xref-show-definitions-function #'completing-read-xref-show-defs))
-(setq xref-show-xrefs-function #'completing-read-xref-show-xrefs)
+;; (quelpa '(completing-read-xref :fetcher github :repo "travitch/completing-read-xref.el"))
+;; (require 'completing-read-xref)
+;; (when (>= emacs-major-version 27)
+;;   (setq xref-show-definitions-function #'completing-read-xref-show-defs))
+;; (setq xref-show-xrefs-function #'completing-read-xref-show-xrefs)
+
+(require 'helm-xref)
+(setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
 (require 'dumb-jump)
 (setq dumb-jump-selector 'completing-read
@@ -659,7 +663,7 @@
   (semantic-mode +1)     ;; for better imenu
   (bind-keys :map prog-mode-map
              ("<C-tab>" . company-complete)
-             ("C-." . consult-imenu)))
+             ("C-." . helm-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -813,7 +817,7 @@
 
 (bind-keys :map c-mode-base-map
            ("<C-tab>" . company-complete)
-           ("C-." . consult-imenu)
+           ("C-." . helm-imenu)
            ("M-o" . my-find-other-file))
 
 (bind-keys :map c++-mode-map
