@@ -111,6 +111,7 @@
                      janet-mode
                      minions
                      hydra
+                     w3m
                      ))
 
 (set-language-environment "czech")
@@ -912,6 +913,8 @@
 (set-face-attribute 'ft/gnus-diff-misc nil :foreground "black")
 (set-face-attribute 'ft/gnus-diff-hunk nil :inherit 'diff-hunk-header :foreground "black")
 
+(require 'w3m)
+
 (setq gnus-select-method '(nnimap "fastmail"
                                   (nnimap-address "mail.messagingengine.com")
                                   (nnimap-server-port 993)
@@ -942,6 +945,7 @@
       gnus-large-newsgroup nil
       gnus-read-active-file 'some
       mm-discouraged-alternatives '("text/html" "text/richtext")
+      mm-text-html-renderer 'w3m
       gnus-inhibit-startup-message t
       gnus-agent nil
       ;; gnus-use-scoring nil
