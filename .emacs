@@ -969,7 +969,7 @@
 [_!_] Mail -> disk  [_R_] Reply with original
 [_d_] Disk -> mail  [_w_] Reply all (S w)
 [_c_] Read all      [_W_] Reply all with original (S W)
-[_#_] Mark
+[_#_] Mark          [_M_] Move to another folder
 "
        ("s" gnus-summary-show-thread)
        ("h" gnus-summary-hide-thread)
@@ -984,6 +984,7 @@
        ("W" gnus-summary-wide-reply-with-original)
        ("w" gnus-summary-wide-reply)
        ("#" gnus-topic-mark-topic)
+       ("M" gnus-summary-move-article)
        ("q" nil))
      ;; y is not used by default
      (define-key gnus-summary-mode-map "y" 'hydra-gnus-summary/body)))
