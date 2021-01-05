@@ -110,6 +110,7 @@
                      goto-last-point
                      janet-mode
                      minions
+                     hydra
                      ))
 
 (set-language-environment "czech")
@@ -889,134 +890,211 @@
       smtpmail-smtp-server "mail.messagingengine.com"
       smtpmail-smtp-service 587)
 
-;; (autoload 'gnus "gnus" "Read network news." t)
-;; (global-set-key (kbd "C-c m") 'gnus)
+(autoload 'gnus "gnus" "Read network news." t)
+(global-set-key (kbd "C-c m") 'gnus)
 
-;; (quelpa '(gnus-harvest :fetcher github :repo "jwiegley/gnus-harvest"))
-;; (eval-after-load "gnus"
-;;   '(progn (require 'gnus-harvest)
-;;           (gnus-harvest-install)
-;;           (bind-keys :map message-mode-map
-;;                      ("C-M-i" . gnus-harvest-find-address))))
+(quelpa '(gnus-harvest :fetcher github :repo "jwiegley/gnus-harvest"))
+(eval-after-load "gnus"
+  '(progn (require 'gnus-harvest)
+          (gnus-harvest-install)
+          (bind-keys :map message-mode-map
+                     ("C-M-i" . gnus-harvest-find-address))
+          (require 'gnus-async)
+          (setq gnus-asynchronous t)))
 
-;; (quelpa '(gnus-article-treat-patch :fetcher github :repo "velkyel/gnus-article-treat-patch"))
-;; (require 'gnus-article-treat-patch)
-;; (setq ft/gnus-article-patch-conditions '( "^@@ -[0-9]+,[0-9]+ \\+[0-9]+,[0-9]+ @@" ))
-;; (set-face-attribute 'ft/gnus-commit-message nil :foreground "black")
-;; (set-face-attribute 'ft/gnus-diff-stat-file nil :foreground "black")
-;; (set-face-attribute 'ft/gnus-diff-stat-bar nil :foreground "black")
-;; (set-face-attribute 'ft/gnus-diff-stat-num nil :foreground "black")
-;; (set-face-attribute 'ft/gnus-diff-misc nil :foreground "black")
-;; (set-face-attribute 'ft/gnus-diff-hunk nil :inherit 'diff-hunk-header :foreground "black")
+(quelpa '(gnus-article-treat-patch :fetcher github :repo "velkyel/gnus-article-treat-patch"))
+(require 'gnus-article-treat-patch)
+(setq ft/gnus-article-patch-conditions '( "^@@ -[0-9]+,[0-9]+ \\+[0-9]+,[0-9]+ @@" ))
+(set-face-attribute 'ft/gnus-commit-message nil :foreground "black")
+(set-face-attribute 'ft/gnus-diff-stat-file nil :foreground "black")
+(set-face-attribute 'ft/gnus-diff-stat-bar nil :foreground "black")
+(set-face-attribute 'ft/gnus-diff-stat-num nil :foreground "black")
+(set-face-attribute 'ft/gnus-diff-misc nil :foreground "black")
+(set-face-attribute 'ft/gnus-diff-hunk nil :inherit 'diff-hunk-header :foreground "black")
 
-;; (setq gnus-select-method '(nnimap "fastmail"
-;;                                   (nnimap-address "mail.messagingengine.com")
-;;                                   (nnimap-server-port 993)
-;;                                   (nnimap-stream ssl)
-;;                                   (nnir-search-engine imap)
-;;                                   (nnmail-expiry-wait immediate)
-;;                                   ;; press E to expire mail
-;;                                   (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
-;;       gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
-;;       gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
-;;       gnus-user-date-format-alist '((t . "%d-%m-%Y %H:%M"))
-;;       gnus-thread-sort-functions '(gnus-thread-sort-by-most-recent-date)  ;; gnus-thread-sort-by-date))
-;;       gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
-;;       gnus-gcc-mark-as-read t
-;;       gnus-use-cache t
-;;       ;; gnus-cache-enter-articles '(ticked dormant read unread)
-;;       ;; gnus-cache-remove-articles nil
-;;       ;; gnus-cacheable-groups "^nnimap"
-;;       gnus-sum-thread-tree-false-root ""
-;;       gnus-sum-thread-tree-indent " "
-;;       gnus-sum-thread-tree-leaf-with-other "├► "
-;;       gnus-sum-thread-tree-root ""
-;;       gnus-sum-thread-tree-single-leaf "╰► "
-;;       gnus-sum-thread-tree-vertical "│"
-;;       gnus-use-full-window nil
-;;       gnus-interactive-exit nil
-;;       message-kill-buffer-on-exit t
-;;       gnus-large-newsgroup nil
-;;       gnus-read-active-file 'some
-;;       mm-discouraged-alternatives '("text/html" "text/richtext")
-;;       gnus-inhibit-startup-message t
-;;       gnus-agent nil
-;;       ;; gnus-use-scoring nil
-;;       gnus-parameters
-;;       '((".*"
-;;          (display . all))))
-
-;; (defun exit-gnus-on-exit ()
-;;   (if (and (fboundp 'gnus-group-exit)
-;;            (gnus-alive-p))
-;;       (with-current-buffer (get-buffer "*Group*")
-;;         (let (gnus-interactive-exit)
-;;           (gnus-group-exit)))))
-
-;; (add-hook 'kill-emacs-hook 'exit-gnus-on-exit)
-
-(when *osx*
-  (add-to-list 'load-path "/usr/local/opt/mu/share/emacs/site-lisp/mu/mu4e"))
-
-(when *linux*
-  (add-to-list 'load-path "~/mu/mu4e"))
-
-(require 'mu4e)
-
-(defun mu4e-display-image (imgpath &optional maxwidth maxheight)
-  "Display image IMG at point; optionally specify MAXWIDTH and MAXHEIGHT."
-  (let ((img (create-image imgpath nil nil
-                           :max-width maxwidth :max-height maxheight)))
-    (save-excursion
-      (insert "\n")
-      (let ((size (image-size img))) ;; inspired by gnus..
-        (insert-char ?\n
-                     (max 0 (round (- (window-height) (or maxheight (cdr size)) 1) 2)))
-        (insert-char ?\.
-                     (max 0 (round (- (window-width)  (or maxwidth (car size))) 2)))
-        (insert-image img)))))
-
-(setq mail-user-agent 'mu4e-user-agent
-      mu4e-attachment-dir "~/Downloads"
-      mu4e-root-maildir (expand-file-name "~/Maildir")
-      mu4e-drafts-folder "/INBOX.Drafts"
-      mu4e-sent-folder "/INBOX.Sent"
-      mu4e-trash-folder "/INBOX.Trash"
-      mu4e-get-mail-command "offlineimap -o"
-      mu4e-update-interval nil ;; 300
-      mu4e-confirm-quit nil
-      mu4e-date-format-long "%d.%m.%Y"
-      mu4e-headers-date-format "%d.%m.%y"
-      mu4e-view-show-addresses t
-      mu4e-sent-messages-behavior 'sent
-      mu4e-view-show-images t
-      mu4e-completing-read-function #'completing-read
-      mu4e-compose-signature-auto-include nil
-      mu4e-headers-leave-behavior 'apply
-      mu4e-html2text-command "w3m -I UTF-8 -O UTF-8 -dump -T text/html"  ;; "html2text -utf8 -width 72"
+(setq gnus-select-method '(nnimap "fastmail"
+                                  (nnimap-address "mail.messagingengine.com")
+                                  (nnimap-server-port 993)
+                                  (nnimap-stream ssl)
+                                  (nnir-search-engine imap)
+                                  (nnmail-expiry-wait immediate)
+                                  ;; press E to expire mail
+                                  (nnmail-expiry-target "nnimap+fastmail:INBOX.Trash"))
+      gnus-permanently-visible-groups ".*\\(Inbox\\|INBOX\\).*"
+      gnus-summary-line-format "%U%R%z %(%&user-date;  %-22,22f  %B%s%)\n"
+      gnus-user-date-format-alist '((t . "%d-%m-%Y %H:%M"))
+      gnus-thread-sort-functions '(gnus-thread-sort-by-most-recent-date)  ;; gnus-thread-sort-by-date))
+      gnus-message-archive-group "nnimap+fastmail:INBOX.Sent"
+      gnus-gcc-mark-as-read t
+      gnus-use-cache t
+      ;; gnus-cache-enter-articles '(ticked dormant read unread)
+      ;; gnus-cache-remove-articles nil
+      ;; gnus-cacheable-groups "^nnimap"
+      gnus-sum-thread-tree-false-root ""
+      gnus-sum-thread-tree-indent " "
+      gnus-sum-thread-tree-leaf-with-other "├► "
+      gnus-sum-thread-tree-root ""
+      gnus-sum-thread-tree-single-leaf "╰► "
+      gnus-sum-thread-tree-vertical "│"
+      gnus-use-full-window nil
+      gnus-interactive-exit nil
       message-kill-buffer-on-exit t
-      mu4e-maildir-shortcuts
-      '(("/INBOX" . ?i)
-        ("/INBOX.Sent" . ?s)
-        ("/INBOX.Trash" . ?t)
-        ("/INBOX.Archive" . ?a))
-      mu4e-bookmarks '(("flag:unread AND NOT flag:trashed AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam AND NOT maildir:/INBOX.Sent" "Unread messages" ?u)
-                       ("date:today..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam AND NOT maildir:/INBOX.Sent" "Today's messages" ?t)
-                       ("date:7d..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam" "Last 7 days" ?w)
-                       ("mime:image/*" "Messages with images" ?p)
-                       ("size:2M..500M" "Big messages" ?b)))
+      gnus-large-newsgroup nil
+      gnus-read-active-file 'some
+      mm-discouraged-alternatives '("text/html" "text/richtext")
+      gnus-inhibit-startup-message t
+      gnus-agent nil
+      ;; gnus-use-scoring nil
+      gnus-parameters
+      '((".*"
+         (display . all))))
 
-;; (quelpa '(mu4e-patch :fetcher github :repo "seanfarley/mu4e-patch"))
-;; (require 'mu4e-patch)
-;; (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight)
-;; (copy-face 'mu4e-header-key-face 'mu4e-patch-commit-message)
+(defun exit-gnus-on-exit ()
+  (if (and (fboundp 'gnus-group-exit)
+           (gnus-alive-p))
+      (with-current-buffer (get-buffer "*Group*")
+        (let (gnus-interactive-exit)
+          (gnus-group-exit)))))
 
-;; https://rakhim.org/fastmail-setup-with-emacs-mu4e-and-mbsync-on-macos/
-(fset 'my-move-to-trash "mt")
-(define-key mu4e-headers-mode-map (kbd "d") 'my-move-to-trash)
-(define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
+(add-hook 'kill-emacs-hook 'exit-gnus-on-exit)
 
-(global-set-key (kbd "C-c m") 'mu4e)
+;; gnus-summary-mode
+(eval-after-load 'gnus-sum
+  '(progn
+     (defhydra hydra-gnus-summary (:color blue)
+       "
+[_s_] Show thread   [_F_] Forward (C-c C-f)
+[_h_] Hide thread   [_e_] Resend (S D e)
+[_n_] Refresh (/ N) [_r_] Reply
+[_!_] Mail -> disk  [_R_] Reply with original
+[_d_] Disk -> mail  [_w_] Reply all (S w)
+[_c_] Read all      [_W_] Reply all with original (S W)
+[_#_] Mark
+"
+       ("s" gnus-summary-show-thread)
+       ("h" gnus-summary-hide-thread)
+       ("n" gnus-summary-insert-new-articles)
+       ("F" gnus-summary-mail-forward)
+       ("!" gnus-summary-tick-article-forward)
+       ("d" gnus-summary-put-mark-as-read-next)
+       ("c" gnus-summary-catchup-and-exit)
+       ("e" gnus-summary-resend-message-edit)
+       ("R" gnus-summary-reply-with-original)
+       ("r" gnus-summary-reply)
+       ("W" gnus-summary-wide-reply-with-original)
+       ("w" gnus-summary-wide-reply)
+       ("#" gnus-topic-mark-topic)
+       ("q" nil))
+     ;; y is not used by default
+     (define-key gnus-summary-mode-map "y" 'hydra-gnus-summary/body)))
+
+;; gnus-article-mode
+(eval-after-load 'gnus-art
+  '(progn
+     (defhydra hydra-gnus-article (:color blue)
+       "
+[_o_] Save attachment        [_F_] Forward
+[_v_] Play video/audio       [_r_] Reply
+[_d_] CLI to download stream [_R_] Reply with original
+[_b_] Open external browser  [_w_] Reply all (S w)
+[_f_] Click link/button      [_W_] Reply all with original (S W)
+[_g_] Focus link/button
+"
+       ("F" gnus-summary-mail-forward)
+       ("r" gnus-article-reply)
+       ("R" gnus-article-reply-with-original)
+       ("w" gnus-article-wide-reply)
+       ("W" gnus-article-wide-reply-with-original)
+       ("o" gnus-mime-save-part)
+       ("v" w3mext-open-with-mplayer)
+       ("d" w3mext-download-rss-stream)
+       ("b" w3mext-open-link-or-image-or-url)
+       ("f" w3m-lnum-follow)
+       ("g" w3m-lnum-goto)
+       ("q" nil))
+     ;; y is not used by default
+     (define-key gnus-article-mode-map "y" 'hydra-gnus-article/body)))
+
+;; message-mode
+(eval-after-load 'message
+  '(progn
+     (defhydra hydra-message (:color blue)
+  "
+[_c_] Complete mail address
+[_a_] Attach file
+[_s_] Send mail (C-c C-c)
+"
+       ("c" gnus-harvest-find-address)
+       ("a" mml-attach-file)
+       ("s" message-send-and-exit)
+       ("q" nil))))
+
+(defun message-mode-hook-hydra-setup ()
+  (local-set-key (kbd "C-c C-y") 'hydra-message/body))
+(add-hook 'message-mode-hook 'message-mode-hook-hydra-setup)
+
+;; (when *osx*
+;;   (add-to-list 'load-path "/usr/local/opt/mu/share/emacs/site-lisp/mu/mu4e"))
+
+;; (when *linux*
+;;   (add-to-list 'load-path "~/mu/mu4e"))
+
+;; (require 'mu4e)
+
+;; (defun mu4e-display-image (imgpath &optional maxwidth maxheight)
+;;   "Display image IMG at point; optionally specify MAXWIDTH and MAXHEIGHT."
+;;   (let ((img (create-image imgpath nil nil
+;;                            :max-width maxwidth :max-height maxheight)))
+;;     (save-excursion
+;;       (insert "\n")
+;;       (let ((size (image-size img))) ;; inspired by gnus..
+;;         (insert-char ?\n
+;;                      (max 0 (round (- (window-height) (or maxheight (cdr size)) 1) 2)))
+;;         (insert-char ?\.
+;;                      (max 0 (round (- (window-width)  (or maxwidth (car size))) 2)))
+;;         (insert-image img)))))
+
+;; (setq mail-user-agent 'mu4e-user-agent
+;;       mu4e-attachment-dir "~/Downloads"
+;;       mu4e-root-maildir (expand-file-name "~/Maildir")
+;;       mu4e-drafts-folder "/INBOX.Drafts"
+;;       mu4e-sent-folder "/INBOX.Sent"
+;;       mu4e-trash-folder "/INBOX.Trash"
+;;       mu4e-get-mail-command "offlineimap -o"
+;;       mu4e-update-interval nil ;; 300
+;;       mu4e-confirm-quit nil
+;;       mu4e-date-format-long "%d.%m.%Y"
+;;       mu4e-headers-date-format "%d.%m.%y"
+;;       mu4e-view-show-addresses t
+;;       mu4e-sent-messages-behavior 'sent
+;;       mu4e-view-show-images t
+;;       mu4e-completing-read-function #'completing-read
+;;       mu4e-compose-signature-auto-include nil
+;;       mu4e-headers-leave-behavior 'apply
+;;       mu4e-html2text-command "w3m -I UTF-8 -O UTF-8 -dump -T text/html"  ;; "html2text -utf8 -width 72"
+;;       message-kill-buffer-on-exit t
+;;       mu4e-maildir-shortcuts
+;;       '(("/INBOX" . ?i)
+;;         ("/INBOX.Sent" . ?s)
+;;         ("/INBOX.Trash" . ?t)
+;;         ("/INBOX.Archive" . ?a))
+;;       mu4e-bookmarks '(("flag:unread AND NOT flag:trashed AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam AND NOT maildir:/INBOX.Sent" "Unread messages" ?u)
+;;                        ("date:today..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam AND NOT maildir:/INBOX.Sent" "Today's messages" ?t)
+;;                        ("date:7d..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam" "Last 7 days" ?w)
+;;                        ("mime:image/*" "Messages with images" ?p)
+;;                        ("size:2M..500M" "Big messages" ?b)))
+
+;; ;; (quelpa '(mu4e-patch :fetcher github :repo "seanfarley/mu4e-patch"))
+;; ;; (require 'mu4e-patch)
+;; ;; (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight)
+;; ;; (copy-face 'mu4e-header-key-face 'mu4e-patch-commit-message)
+
+;; ;; https://rakhim.org/fastmail-setup-with-emacs-mu4e-and-mbsync-on-macos/
+;; (fset 'my-move-to-trash "mt")
+;; (define-key mu4e-headers-mode-map (kbd "d") 'my-move-to-trash)
+;; (define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
+
+;; (global-set-key (kbd "C-c m") 'mu4e)
 
 (defun my-org-mode-setup ()
   (org-bullets-mode)
