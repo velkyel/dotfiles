@@ -1143,6 +1143,10 @@
                     nil
                     :background "#f1c40f")
 
+(set-face-attribute 'helm-ff-executable
+                    nil
+                    :foreground "#228b22")
+
 (set-face-attribute 'helm-source-header
                     nil
                     :height 1.0)
