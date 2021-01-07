@@ -106,7 +106,6 @@
                      janet-mode
                      minions
                      hydra
-                     w3m
                      ))
 
 (set-language-environment "czech")
@@ -123,6 +122,8 @@
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
+
+(require 'quelpa)
 
 (require 'auto-package-update)
 (setq auto-package-update-delete-old-versions t)
@@ -915,8 +916,6 @@
 (set-face-attribute 'ft/gnus-diff-stat-num nil :foreground "black")
 (set-face-attribute 'ft/gnus-diff-misc nil :foreground "black")
 (set-face-attribute 'ft/gnus-diff-hunk nil :inherit 'diff-hunk-header :foreground "black")
-
-(require 'w3m)
 
 (setq gnus-select-method '(nnimap "fastmail"
                                   (nnimap-address "mail.messagingengine.com")
