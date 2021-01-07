@@ -16,11 +16,6 @@
 (add-hook 'minibuffer-exit-hook
           (lambda () (setq gc-cons-threshold my-gc-threshold)))
 
-(require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-(when (< emacs-major-version 27)
-  (package-initialize))
-
 (menu-bar-mode -1)
 (blink-cursor-mode 1)
 
@@ -120,12 +115,20 @@
 (set-terminal-coding-system 'utf-8)
 (set-keyboard-coding-system 'utf-8)
 
-(unless package-archive-contents
-  (package-initialize)
-  (package-refresh-contents))
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(package-refresh-contents)
+(package-initialize)
+
 (dolist (package package-list)
   (unless (package-installed-p package)
     (package-install package)))
+
+(require 'auto-package-update)
+(setq auto-package-update-delete-old-versions t)
+(auto-package-update-maybe)
+(add-hook 'auto-package-update-before-hook
+          (lambda () (message "I will update packages now") (quelpa-upgrade-all)))
 
 (require 'packed)
 (require 'auto-compile)
