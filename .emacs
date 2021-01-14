@@ -88,7 +88,6 @@
                      web-mode
                      js2-mode
                      rust-mode
-                     dired-collapse
                      dired-subtree
                      dired-rainbow
                      dired-recent
@@ -397,13 +396,10 @@
 (bind-key [remap fill-paragraph] 'unfill-toggle)
 
 (require 'dired)
-(require 'dired-collapse)
 (require 'dired-subtree)
+(bind-key "<tab>" 'dired-subtree-toggle dired-mode-map)
 
 (when *osx* (setq dired-use-ls-dired nil))
-
-(bind-key "<tab>" 'dired-subtree-insert dired-mode-map)
-(bind-key "<deletechar>" 'dired-subtree-remove dired-mode-map)
 
 (setq dired-recursive-copies 'always
       dired-recursive-deletes 'always
@@ -441,8 +437,6 @@
 
 (put 'dired-find-alternate-file 'disabled nil)
 (bind-key "RET" 'dired-find-alternate-file dired-mode-map)
-
-(add-hook 'dired-mode-hook #'dired-collapse-mode)
 
 (require 'dired-rainbow)
 
@@ -1169,6 +1163,13 @@
                     nil
                     :background "gray80"
                     :box '(:line-width -1 :style released-button))
+
+(set-face-attribute 'dired-subtree-depth-1-face nil :background "gray85")
+(set-face-attribute 'dired-subtree-depth-2-face nil :background "gray85")
+(set-face-attribute 'dired-subtree-depth-3-face nil :background "gray85")
+(set-face-attribute 'dired-subtree-depth-4-face nil :background "gray85")
+(set-face-attribute 'dired-subtree-depth-5-face nil :background "gray85")
+(set-face-attribute 'dired-subtree-depth-6-face nil :background "gray85")
 
 (with-eval-after-load 'popup
   (set-face-attribute 'popup-face
