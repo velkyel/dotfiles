@@ -425,7 +425,7 @@
 (defun dired-back-to-top ()
   (interactive)
   (beginning-of-buffer)
-  (dired-next-line 4))
+  (dired-next-line 2))
 
 (defun dired-jump-to-bottom ()
   (interactive)
