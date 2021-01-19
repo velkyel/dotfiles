@@ -649,10 +649,8 @@
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (goto-address-prog-mode)
-  (company-mode)
   (semantic-mode +1)     ;; for better imenu
   (bind-keys :map prog-mode-map
-             ("<C-tab>" . company-complete)
              ("C-." . helm-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
@@ -806,7 +804,6 @@
   (ff-find-other-file nil t))
 
 (bind-keys :map c-mode-base-map
-           ("<C-tab>" . company-complete)
            ("C-." . helm-imenu)
            ("M-o" . my-find-other-file))
 
