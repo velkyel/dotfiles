@@ -55,7 +55,7 @@
                      restart-emacs
                      helm
                      helm-xref
-                     helm-dired-history
+                     ;; helm-dired-history
                      ;; helm-projectile
                      helm-org-rifle
                      super-save
@@ -308,9 +308,6 @@
            ("C-c h" . helm-command-prefix)
            ("C-c <SPC>" . helm-all-mark-rings)
            ("C-c C-r" . helm-resume))
-
-(require 'helm-dired-history)
-(add-to-list 'savehist-additional-variables 'helm-dired-history-variable)
 
 (require 'project)
 (bind-key "C-x C-p" 'project-find-file)
