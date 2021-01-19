@@ -76,7 +76,6 @@
                      glsl-mode
                      clang-format
                      highlight-symbol
-                     company
                      popup
                      magit
                      volatile-highlights
@@ -618,15 +617,6 @@
   (list 430675 2721866130))
 (setq google-translate-default-source-language "en"
       google-translate-default-target-language "cs")
-
-(require 'company)
-(setq company-idle-delay nil)  ;; 0.1)
-(when *windows* (delete 'company-clang company-backends))
-(bind-keys :map company-active-map
-           ("C-n" . company-select-next)
-           ("C-p" . company-select-previous)
-           ("C-d" . company-show-doc-buffer)
-           ("M-." . company-show-location))
 
 (add-to-list 'auto-mode-alist '("\\.p8$" . lua-mode))
 
