@@ -53,10 +53,10 @@
                      json-mode
                      haskell-mode
                      restart-emacs
+                     projectile
                      helm
                      helm-xref
                      ;; helm-dired-history
-                     ;; helm-projectile
                      helm-org-rifle
                      super-save
                      avy
@@ -309,8 +309,11 @@
            ("C-c <SPC>" . helm-all-mark-rings)
            ("C-c C-r" . helm-resume))
 
-(require 'project)
-(bind-key "C-x C-p" 'project-find-file)
+(require 'projectile)
+(setq projectile-enable-caching t
+      projectile-completion-system 'helm)
+(projectile-global-mode)
+(bind-key "C-x C-p" 'projectile-find-file)
 
 (require 'grep)
 (add-to-list 'grep-find-ignored-files ".DS_Store")
@@ -322,7 +325,7 @@
 (bind-key "M-g" '(lambda ()
                    (interactive)
                    (save-some-buffers t nil)
-                   (helm-grep-ag (expand-file-name (car (project-roots (project-current t)))) current-prefix-arg)))
+                   (helm-grep-ag (projectile-project-root) current-prefix-arg)))
 
 (bind-key* "M-G" '(lambda ()
                     (interactive)
