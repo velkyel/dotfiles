@@ -56,6 +56,7 @@
                      projectile
                      helm
                      helm-xref
+                     helm-projectile
                      ;; helm-dired-history
                      helm-org-rifle
                      super-save
@@ -243,7 +244,7 @@
 
 (require 'recentf)
 (recentf-mode 1)
-(setq recentf-max-saved-items 150)
+(setq recentf-max-saved-items 30)
 ;; (add-to-list 'recentf-exclude "bookmarks")
 
 (when *osx*
@@ -281,6 +282,7 @@
 (require 'helm-config)
 (require 'helm-grep)
 (require 'helm-files)
+(require 'helm-for-files)
 
 (helm-mode +1)
 
@@ -298,9 +300,33 @@
       helm-grep-file-path-style 'relative)
 ;; (setq helm-follow-mode-persistent t)
 
+(require 'projectile)
+(require 'helm-projectile)
+(setq projectile-enable-caching t
+      projectile-completion-system 'helm)
+(projectile-global-mode)
+(bind-key "C-x C-p" 'projectile-find-file)
+
+(defun my-helm-switch-buffer ()
+  (interactive)
+  (unless helm-source-buffers-list
+    (setq helm-source-buffers-list
+          (helm-make-source "Buffers" 'helm-source-buffers)))
+  (helm :sources (if (projectile-project-p)
+                     '(helm-source-buffers-list
+                       helm-source-recentf
+                       helm-source-projectile-files-list
+                       helm-source-buffer-not-found)
+                   '(helm-source-buffers-list
+                     helm-source-recentf
+                     helm-source-buffer-not-found))
+        :buffer "*helm buffers*"
+        :keymap helm-buffer-map
+        :truncate-lines helm-buffers-truncate-lines))
+
 (bind-keys ("M-x" . helm-M-x)
-           ("C-x C-b" . helm-mini)
-           ("C-x b" . helm-mini)
+           ("C-x C-b" . my-helm-switch-buffer)
+           ("C-x b" . my-helm-switch-buffer)
            ("C-h a" . helm-apropos)
            ("C-x C-f" . helm-find-files)
            ("M-y" . helm-show-kill-ring)
@@ -308,12 +334,6 @@
            ("C-c h" . helm-command-prefix)
            ("C-c <SPC>" . helm-all-mark-rings)
            ("C-c C-r" . helm-resume))
-
-(require 'projectile)
-(setq projectile-enable-caching t
-      projectile-completion-system 'helm)
-(projectile-global-mode)
-(bind-key "C-x C-p" 'projectile-find-file)
 
 (require 'grep)
 (add-to-list 'grep-find-ignored-files ".DS_Store")
