@@ -139,6 +139,8 @@
 (require 'minions)
 (minions-mode 1)
 
+(require 'uniquify)
+
 (setq compilation-ask-about-save nil
       compilation-always-kill t
       compilation-scroll-output 'first-error
