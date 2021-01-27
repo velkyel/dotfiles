@@ -347,12 +347,12 @@
 (bind-key "M-g" '(lambda ()
                    (interactive)
                    (save-some-buffers t nil)
-                   (helm-grep-git-1 (projectile-project-root) current-prefix-arg)))
+                   (helm-grep-ag (projectile-project-root) current-prefix-arg)))
 
 (bind-key* "M-G" '(lambda ()
                     (interactive)
                     (save-some-buffers t nil)
-                    (helm-grep-git-1 (helm-current-directory) current-prefix-arg)))
+                    (helm-grep-ag (helm-current-directory) current-prefix-arg)))
 
 (require 'shackle)
 (setq shackle-rules
