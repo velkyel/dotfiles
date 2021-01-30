@@ -304,7 +304,8 @@
 
 (require 'projectile)
 (require 'helm-projectile)
-(setq projectile-enable-caching t
+(setq projectile-indexing-method 'native
+      projectile-enable-caching t
       projectile-completion-system 'helm)
 (projectile-global-mode)
 (bind-key "C-x C-p" 'projectile-find-file)
