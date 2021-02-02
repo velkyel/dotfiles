@@ -104,6 +104,8 @@
                      janet-mode
                      minions
                      hydra
+                     w3m
+                     semi    ;; for w3m
                      ))
 
 (set-language-environment "czech")
