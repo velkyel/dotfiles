@@ -53,6 +53,7 @@
                      json-mode
                      haskell-mode
                      restart-emacs
+                     imenu-anywhere
                      projectile
                      helm
                      helm-xref
@@ -676,7 +677,8 @@
   (goto-address-prog-mode)
   (semantic-mode +1)     ;; for better imenu
   (bind-keys :map prog-mode-map
-             ("C-." . helm-imenu)))
+             ("C-." . helm-imenu)
+             ("C->" . helm-imenu-anywhere)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -829,7 +831,6 @@
   (ff-find-other-file nil t))
 
 (bind-keys :map c-mode-base-map
-           ("C-." . helm-imenu)
            ("M-o" . my-find-other-file))
 
 (bind-keys :map c++-mode-map
