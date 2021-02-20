@@ -107,6 +107,7 @@
                      hydra
                      w3m
                      semi    ;; for w3m
+                     restclient
                      ))
 
 (set-language-environment "czech")
