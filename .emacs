@@ -493,6 +493,22 @@
 ;; (dired-quick-sort-setup)      ;; binds "S" and invoke hydra
 ;; ;; (when *osx* (setq dired-use-ls-dired nil))
 
+(defun open-file-external (file)
+  (interactive "f")
+  (let ((process-connection-type nil))
+    (start-process
+     "" nil shell-file-name
+     shell-command-switch
+     (format "nohup 1>/dev/null 2>/dev/null xdg-open %s"
+             (expand-file-name file)))))
+
+(defun dired-open ()
+  (interactive)
+  (let ((files (dired-get-marked-files nil nil)))
+    (mapc (lambda (file) (open-file-external (shell-quote-argument file))) files)))
+
+(bind-key (kbd "<C-return>") 'dired-open dired-mode-map)
+
 (save-place-mode 1)
 ;; (desktop-save-mode 1)
 
