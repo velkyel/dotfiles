@@ -222,9 +222,9 @@
 
 (setenv "PAGER" (executable-find "cat"))
 
-(bind-key "C-c t" '(lambda ()
-                     (interactive)
-                     (crux-start-or-switch-to 'shell "*shell*")))
+(bind-key "C-c t" #'(lambda ()
+                      (interactive)
+                      (crux-start-or-switch-to 'shell "*shell*")))
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
@@ -349,15 +349,15 @@
 (add-to-list 'grep-find-ignored-directories "build")
 (add-to-list 'grep-find-ignored-directories "_darcs")
 
-(bind-key "M-g" '(lambda ()
-                   (interactive)
-                   (save-some-buffers t nil)
-                   (helm-grep-ag (projectile-project-root) current-prefix-arg)))
-
-(bind-key* "M-G" '(lambda ()
+(bind-key "M-g" #'(lambda ()
                     (interactive)
                     (save-some-buffers t nil)
-                    (helm-grep-ag (helm-current-directory) current-prefix-arg)))
+                    (helm-grep-ag (projectile-project-root) current-prefix-arg)))
+
+(bind-key* "M-G" #'(lambda ()
+                     (interactive)
+                     (save-some-buffers t nil)
+                     (helm-grep-ag (helm-current-directory) current-prefix-arg)))
 
 (require 'shackle)
 (setq shackle-rules
@@ -588,11 +588,11 @@
 (add-to-list 'transient-values '(magit-pull "--rebase"))
 ;; (bind-key "C-x M-g" 'magit-dispatch-popup)
 
-(bind-key "C-w" '(lambda ()
-                   (interactive)
-                   (if (use-region-p)
-                       (call-interactively 'kill-region)
-                     (crux-kill-whole-line))))
+(bind-key "C-w" #'(lambda ()
+                    (interactive)
+                    (if (use-region-p)
+                        (call-interactively 'kill-region)
+                      (crux-kill-whole-line))))
 
 (bind-key "C-a" 'crux-move-beginning-of-line)
 (bind-key "C-c d" 'crux-duplicate-current-line-or-region)
@@ -802,9 +802,9 @@
 
 (require 'compile)
 (bind-key "C-c C-t"
-          '(lambda ()
-             (interactive)
-             (compilation-set-skip-threshold (mod (1+ compilation-skip-threshold) 3)))
+          #'(lambda ()
+              (interactive)
+              (compilation-set-skip-threshold (mod (1+ compilation-skip-threshold) 3)))
           compilation-mode-map)
 (setq compile-command "ninja")
 
@@ -859,8 +859,8 @@
            ("C-i" . clang-format))
 
 (add-hook 'python-mode-hook
-          '(lambda ()
-             (setq-local eldoc-mode nil)))
+          (lambda ()
+            (setq-local eldoc-mode nil)))
 
 (with-eval-after-load 'python
   (if *windows*
@@ -900,11 +900,11 @@
 
 (bind-key "RET" 'newline-and-indent)
 (bind-key "S-RET" 'crux-smart-open-line)
-(bind-key "M-r" '(lambda ()
-                   (interactive)
-                   (call-interactively (if (get-buffer "*compilation*")
-                                           'recompile
-                                         'compile))))
+(bind-key "M-r" #'(lambda ()
+                    (interactive)
+                    (call-interactively (if (get-buffer "*compilation*")
+                                            'recompile
+                                          'compile))))
 (bind-key "M-R" 'shell-command)
 ;; (bind-key "M-o" 'other-window)
 
