@@ -1162,10 +1162,6 @@
                     nil
                     :foreground "gray50")
 
-(set-face-attribute 'highlight-indentation-face
-                    nil
-                    :background "gray80")
-
 (set-face-attribute 'helm-selection
                     nil
                     :background "#a5e8be")
@@ -1213,6 +1209,11 @@
   (set-face-attribute 'popup-face
                       nil
                       :background "#dddd30"))
+
+(with-eval-after-load 'highlight-indentation
+  (set-face-attribute 'highlight-indentation-face
+                     nil
+                     :background "gray80"))
 
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file :noerror)
