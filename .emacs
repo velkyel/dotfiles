@@ -1162,6 +1162,10 @@
                     nil
                     :foreground "gray50")
 
+(set-face-attribute 'highlight-indentation-face
+                    nil
+                    :background "gray80")
+
 (set-face-attribute 'helm-selection
                     nil
                     :background "#a5e8be")
