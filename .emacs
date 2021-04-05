@@ -655,8 +655,8 @@
 ;; ...usf = unreal engine, sc = bgfx
 
 (require 'google-translate)
-;; fix https://github.com/atykhonov/google-translate/issues/137
 (require 'facemenu)    ;; fix google-translate dependency
+;; fix https://github.com/atykhonov/google-translate/issues/137
 (defun google-translate--search-tkk ()
   "Search TKK."
   (list 430675 2721866130))
