@@ -467,7 +467,7 @@
 (require 'dired-rainbow)
 
 (defconst my-dired-media-files-extensions
-  '("mp3" "mp4" "MP3" "MP4" "avi" "mpg" "mkv" "flv" "ogg")
+  '("mp3" "mp4" "MP3" "MP4" "avi" "mpg" "mkv" "flv" "ogg" "m4v" "mpeg")
   "Media files.")
 
 (defconst my-dired-image-files-extensions
