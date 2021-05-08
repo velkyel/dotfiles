@@ -168,6 +168,7 @@
       ediff-window-setup-function 'ediff-setup-windows-plain
       search-highlight t
       isearch-allow-scroll t
+      isearch-lazy-count t
       eval-expression-print-level nil
       mail-user-agent 'gnus-user-agent
       user-mail-address "capak@inputwish.com"
@@ -890,9 +891,6 @@
            ("C-M-s" . isearch-forward)
            ("C-M-r" . isearch-backward)
            ("C-x k" . kill-this-buffer))
-
-(when (>= emacs-major-version 27)
-  (setq isearch-lazy-count t))
 
 ;; suspend-frame:
 (unbind-key "C-z")
