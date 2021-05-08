@@ -109,6 +109,7 @@
                      semi    ;; for w3m
                      restclient
                      elpy
+                     pdf-tools
                      ))
 
 (set-language-environment "czech")
@@ -1143,6 +1144,10 @@
 
 (require 'helm-org-rifle)
 (bind-key (kbd "C-.") 'helm-org-rifle-current-buffer org-mode-map)
+
+(when *linux*
+  (require 'pdf-tools)
+  (pdf-tools-install))
 
 (defun what-face (pos) ;; under cursor
   (interactive "d")
