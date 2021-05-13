@@ -713,6 +713,7 @@
 ;; (add-hook 'c++-mode-hook 'electric-pair-local-mode)
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
+(setq lsp-completion-provider :none)
 
 (require 'smartparens-config)
 
