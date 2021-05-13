@@ -110,6 +110,8 @@
                      restclient
                      elpy
                      pdf-tools
+                     lsp-mode      ;; needs clangd package
+                     helm-lsp
                      ))
 
 (set-language-environment "czech")
@@ -547,8 +549,8 @@
 ;;   (setq xref-show-definitions-function #'completing-read-xref-show-defs))
 ;; (setq xref-show-xrefs-function #'completing-read-xref-show-xrefs)
 
-(require 'helm-xref)
-(setq xref-show-xrefs-function 'helm-xref-show-xrefs)
+;; (require 'helm-xref)
+;; (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
 
 (require 'dumb-jump)
 (setq dumb-jump-selector 'completing-read
@@ -696,7 +698,7 @@
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (goto-address-prog-mode)
-  (semantic-mode +1)     ;; for better imenu
+  ;; (semantic-mode +1)     ;; for better imenu
   (bind-keys :map prog-mode-map
              ("C-." . helm-imenu)
              ("C->" . helm-imenu-anywhere)))
@@ -709,6 +711,8 @@
 
 ;; (add-hook 'c-mode-hook 'electric-pair-local-mode)
 ;; (add-hook 'c++-mode-hook 'electric-pair-local-mode)
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
 
 (require 'smartparens-config)
 
