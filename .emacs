@@ -698,7 +698,8 @@
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (goto-address-prog-mode)
-  ;; (semantic-mode +1)     ;; for better imenu
+  (when *kelly*
+    (semantic-mode +1))     ;; for better imenu
   (bind-keys :map prog-mode-map
              ("C-." . helm-imenu)
              ("C->" . helm-imenu-anywhere)))
@@ -711,9 +712,10 @@
 
 ;; (add-hook 'c-mode-hook 'electric-pair-local-mode)
 ;; (add-hook 'c++-mode-hook 'electric-pair-local-mode)
-(add-hook 'c-mode-hook 'lsp)
-(add-hook 'c++-mode-hook 'lsp)
-(setq lsp-completion-provider :none)
+(when (not *kelly*)
+  (add-hook 'c-mode-hook 'lsp)
+  (add-hook 'c++-mode-hook 'lsp)
+  (setq lsp-completion-provider :none))
 
 (require 'smartparens-config)
 
@@ -1148,7 +1150,7 @@
 (require 'helm-org-rifle)
 (bind-key (kbd "C-.") 'helm-org-rifle-current-buffer org-mode-map)
 
-(when *linux*
+(when (and *linux* (not *kelly*))
   (require 'pdf-tools)
   (pdf-tools-install))
 
