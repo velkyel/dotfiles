@@ -715,7 +715,8 @@
 (when (not *kelly*)
   (add-hook 'c-mode-hook 'lsp)
   (add-hook 'c++-mode-hook 'lsp)
-  (setq lsp-completion-provider :none))
+  (setq lsp-completion-provider :none)
+  (setq lsp-diagnostics-provider :none))
 
 (require 'smartparens-config)
 
