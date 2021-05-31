@@ -716,6 +716,7 @@
   (add-hook 'c-mode-hook 'lsp)
   (add-hook 'c++-mode-hook 'lsp)
   (setq lsp-completion-provider :none)
+  (setq lsp-headerline-breadcrumb-enable nil)
   (setq lsp-diagnostics-provider :none))
 
 (require 'smartparens-config)
