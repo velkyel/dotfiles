@@ -54,12 +54,10 @@
                      haskell-mode
                      restart-emacs
                      imenu-anywhere
+                     vertico
+                     orderless
+                     consult
                      projectile
-                     helm
-                     helm-xref
-                     helm-projectile
-                     ;; helm-dired-history
-                     helm-org-rifle
                      super-save
                      avy
                      goto-chg
@@ -101,7 +99,6 @@
                      unkillable-scratch
                      comment-or-uncomment-sexp
                      shader-mode
-                     goto-last-point
                      janet-mode
                      minions
                      hydra
@@ -109,9 +106,7 @@
                      semi    ;; for w3m
                      restclient
                      elpy
-                     pdf-tools
                      lsp-mode      ;; needs clangd package
-                     helm-lsp
                      ))
 
 (set-language-environment "czech")
@@ -275,10 +270,6 @@
 (require 'goto-chg)
 (bind-key "C-x C-\\" 'goto-last-change)
 
-(require 'goto-last-point)
-(goto-last-point-mode)
-(bind-key "C-<" 'goto-last-point)
-
 (when (or *osx* *linux*)
   (require 'exec-path-from-shell)
   (setq exec-path-from-shell-arguments (remove "-i" exec-path-from-shell-arguments))   ;; optimization
@@ -289,63 +280,37 @@
 
 (setq python-shell-completion-native-enable nil)
 
-(require 'helm)
-(require 'helm-config)
-(require 'helm-grep)
-(require 'helm-files)
-(require 'helm-for-files)
+(require 'vertico)
+(vertico-mode 1)
 
-(helm-mode +1)
+(require 'orderless)
+(setq completion-styles '(orderless)
+      completion-category-defaults nil
+      completion-category-overrides '((fle (styles . partial-completion))))
 
-(setq helm-display-header-line nil
-      helm-mode-fuzzy-match t
-      helm-buffer-max-length 32)
+(require 'consult)
+(setq consult-preview-key nil)
+(bind-key "C-x b" 'consult-buffer)
+(setq xref-show-xrefs-function 'consult-xref
+      xref-show-definitions-function 'consult-xref)
 
-(bind-keys :map helm-map
-           ("<tab>" . helm-execute-persistent-action)
-           ("TAB" . helm-execute-persistent-action)
-           ("C-z" . helm-select-action))
+(consult-customize
+ consult-git-grep consult-buffer consult-xref consult-imenu consult-project-imenu
+ :group nil)
 
-(add-hook 'helm-grep-mode-hook 'grep-mode)
-(setq helm-grep-save-buffer-name-no-confirm 1
-      helm-grep-file-path-style 'relative)
-;; (setq helm-follow-mode-persistent t)
+(bind-key "M-y" 'consult-yank-pop)
+(bind-key "<help> a" 'consult-apropos)
+
+;; (consult-customize
+;;  consult-git-grep consult-buffer consult-xref
+;;  :preview-key (kbd "M-."))
 
 (require 'projectile)
-(require 'helm-projectile)
 (setq projectile-indexing-method 'native
       projectile-enable-caching t
-      projectile-completion-system 'helm)
+      projectile-completion-system 'default)
 (projectile-global-mode)
 (bind-key "C-x C-p" 'projectile-find-file)
-
-(defun my-helm-switch-buffer ()
-  (interactive)
-  (unless helm-source-buffers-list
-    (setq helm-source-buffers-list
-          (helm-make-source "Buffers" 'helm-source-buffers)))
-  (helm :sources (if (projectile-project-p)
-                     '(helm-source-buffers-list
-                       helm-source-recentf
-                       helm-source-projectile-files-list
-                       helm-source-buffer-not-found)
-                   '(helm-source-buffers-list
-                     helm-source-recentf
-                     helm-source-buffer-not-found))
-        :buffer "*helm buffers*"
-        :keymap helm-buffer-map
-        :truncate-lines helm-buffers-truncate-lines))
-
-(bind-keys ("M-x" . helm-M-x)
-           ("C-x C-b" . my-helm-switch-buffer)
-           ("C-x b" . my-helm-switch-buffer)
-           ("C-h a" . helm-apropos)
-           ("C-x C-f" . helm-find-files)
-           ("M-y" . helm-show-kill-ring)
-           ("M-i" . helm-occur)
-           ("C-c h" . helm-command-prefix)
-           ("C-c <SPC>" . helm-all-mark-rings)
-           ("C-c C-r" . helm-resume))
 
 (require 'grep)
 (add-to-list 'grep-find-ignored-files ".DS_Store")
@@ -356,13 +321,11 @@
 
 (bind-key "M-g" #'(lambda ()
                     (interactive)
-                    (save-some-buffers t nil)
-                    (helm-grep-ag (projectile-project-root) current-prefix-arg)))
+                    (consult-git-grep (projectile-project-root) (thing-at-point 'symbol))))
 
 (bind-key* "M-G" #'(lambda ()
                      (interactive)
-                     (save-some-buffers t nil)
-                     (helm-grep-ag (helm-current-directory) current-prefix-arg)))
+                     (consult-git-grep default-directory (thing-at-point 'symbol))))
 
 (require 'shackle)
 (setq shackle-rules
@@ -375,7 +338,6 @@
 (shackle-mode)
 
 (require 'json-mode)    ;; C-c C-p show-path; C-c C-f beautify
-(require 'hideshow)
 (add-hook 'json-mode-hook (lambda ()
                             (make-local-variable 'js-indent-level)
                             (setq js-indent-level 2)
@@ -410,9 +372,6 @@
 
 (require 'avy)
 (setq avy-background t)
-(bind-keys ("C-;" . avy-goto-word-or-subword-1)
-           ("M-m" . avy-goto-char-timer))
-(bind-key "C-;" 'avy-isearch isearch-mode-map)
 
 (require 'key-seq)
 (key-seq-define-global "jj" 'avy-goto-word-or-subword-1)
@@ -549,9 +508,6 @@
 ;;   (setq xref-show-definitions-function #'completing-read-xref-show-defs))
 ;; (setq xref-show-xrefs-function #'completing-read-xref-show-xrefs)
 
-;; (require 'helm-xref)
-;; (setq xref-show-xrefs-function 'helm-xref-show-xrefs)
-
 (require 'dumb-jump)
 (setq dumb-jump-selector 'completing-read
       dumb-jump-prefer-searcher 'ag)
@@ -591,7 +547,6 @@
 (require 'magit)
 (bind-key "C-c g" 'magit-status)
 (add-to-list 'transient-values '(magit-pull "--rebase"))
-;; (bind-key "C-x M-g" 'magit-dispatch-popup)
 
 (bind-key "C-w" #'(lambda ()
                     (interactive)
@@ -667,9 +622,8 @@
 (setq google-translate-default-source-language "en"
       google-translate-default-target-language "cs")
 
-(add-to-list 'auto-mode-alist '("\\.p8$" . lua-mode))
-
 (require 'lua-mode)
+(add-to-list 'auto-mode-alist '("\\.p8$" . lua-mode))
 (add-hook 'lua-mode-hook 'flycheck-mode)
 (setq lua-default-application '("192.168.0.122" . 5555))
 ;; (setq lua-default-application "lua5.3")  ;; '("localhost" . 5555))
@@ -701,8 +655,8 @@
   (when *kelly*
     (semantic-mode +1))     ;; for better imenu
   (bind-keys :map prog-mode-map
-             ("C-." . helm-imenu)
-             ("C->" . helm-imenu-anywhere)))
+             ("C-." . consult-imenu)
+             ("C->" . consult-project-imenu)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
@@ -870,7 +824,6 @@
 (bind-keys :map c-mode-map
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format))
-
 
 (add-hook 'python-mode-hook
           (lambda ()
@@ -1149,12 +1102,7 @@
 (add-hook 'org-mode-hook 'my-org-mode-setup)
 (setq org-clock-into-drawer "CLOCKING")
 
-(require 'helm-org-rifle)
-(bind-key (kbd "C-.") 'helm-org-rifle-current-buffer org-mode-map)
-
-(when (and *linux* (not *kelly*))
-  (require 'pdf-tools)
-  (pdf-tools-install))
+(bind-key (kbd "C-.") 'consult-org-heading org-mode-map)
 
 (defun what-face (pos) ;; under cursor
   (interactive "d")
@@ -1174,22 +1122,6 @@
 (set-face-attribute 'avy-background-face
                     nil
                     :foreground "gray50")
-
-(set-face-attribute 'helm-selection
-                    nil
-                    :background "#a5e8be")
-
-(set-face-attribute 'helm-visible-mark
-                    nil
-                    :background "#f1c40f")
-
-(set-face-attribute 'helm-ff-executable
-                    nil
-                    :foreground "#228b22")
-
-(set-face-attribute 'helm-source-header
-                    nil
-                    :height 1.0)
 
 (set-face-attribute 'font-lock-comment-face
                     nil
