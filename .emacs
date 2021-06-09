@@ -294,9 +294,7 @@
 (setq xref-show-xrefs-function 'consult-xref
       xref-show-definitions-function 'consult-xref)
 
-(consult-customize
- consult-git-grep consult-buffer consult-xref consult-imenu consult-project-imenu
- :group nil)
+(consult-customize consult-buffer consult-xref consult-imenu consult-project-imenu :group nil)
 
 (bind-key "M-y" 'consult-yank-pop)
 (bind-key "<help> a" 'consult-apropos)
@@ -319,13 +317,19 @@
 (add-to-list 'grep-find-ignored-directories "build")
 (add-to-list 'grep-find-ignored-directories "_darcs")
 
-(bind-key "M-g" #'(lambda ()
-                    (interactive)
-                    (consult-git-grep (projectile-project-root) (thing-at-point 'symbol))))
+(defun my/project-git-grep ()
+  (interactive)
+  (consult-git-grep (projectile-project-root) (thing-at-point 'symbol)))
 
-(bind-key* "M-G" #'(lambda ()
-                     (interactive)
-                     (consult-git-grep default-directory (thing-at-point 'symbol))))
+(defun my/directory-git-grep ()
+  (interactive)
+  (consult-git-grep default-directory (thing-at-point 'symbol)))
+
+(consult-customize my/project-git-grep :group nil)
+(consult-customize my/directory-git-grep :group nil)
+
+(bind-key "M-g" 'my/project-git-grep)
+(bind-key* "M-G" 'my/directory-git-grep)
 
 (require 'shackle)
 (setq shackle-rules
