@@ -282,6 +282,7 @@
 
 (require 'vertico)
 (vertico-mode 1)
+(setq vertico-count 15)
 
 (require 'orderless)
 (setq completion-styles '(orderless)
