@@ -303,6 +303,7 @@
 
 (require 'embark-consult)
 (define-key minibuffer-local-map (kbd "C-x s") 'embark-export)
+(define-key minibuffer-local-map (kbd "C-x C-s") 'embark-export)
 
 ;; (consult-customize
 ;;  consult-git-grep consult-buffer consult-xref
