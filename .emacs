@@ -259,7 +259,7 @@
   (setq mac-option-modifier 'nil)
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
-  (add-to-list 'default-frame-alist '(font . "hack 13")))
+  (add-to-list 'default-frame-alist '(font . "hack 14")))
 
 (when *windows*
   (add-to-list 'default-frame-alist '(font . "hack 11")))
