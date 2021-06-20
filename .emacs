@@ -57,6 +57,7 @@
                      vertico
                      orderless
                      consult
+                     embark-consult
                      projectile
                      super-save
                      avy
@@ -299,6 +300,9 @@
 
 (bind-key "M-y" 'consult-yank-pop)
 (bind-key "<help> a" 'consult-apropos)
+
+(require 'embark-consult)
+(define-key minibuffer-local-map (kbd "C-x s") 'embark-export)
 
 ;; (consult-customize
 ;;  consult-git-grep consult-buffer consult-xref
