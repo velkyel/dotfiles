@@ -51,9 +51,7 @@
                      auto-compile
                      exec-path-from-shell
                      json-mode
-                     haskell-mode
                      restart-emacs
-                     imenu-anywhere
                      vertico
                      orderless
                      consult
@@ -65,9 +63,7 @@
                      unfill
                      quelpa
                      ninja-mode
-                     clojure-mode
                      lua-mode
-                     shrink-whitespace
                      expand-region
                      visual-regexp
                      visual-regexp-steroids
@@ -571,9 +567,6 @@
 (setq whitespace-line-column 90
       whitespace-style '(face trailing newline))
 
-(require 'shrink-whitespace)
-(bind-key "M-\\" 'shrink-whitespace)
-
 (require 'expand-region)
 (bind-key "M-=" 'er/expand-region)
 
@@ -722,7 +715,6 @@
            ("C-c (" . my-wrap-with-parens)
            ("C-c \"" . my-wrap-with-double-quotes))
 
-(add-hook 'clojure-mode-hook #'smartparens-mode)
 (add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
 (add-hook 'scheme-mode-hook #'smartparens-mode)
 (add-hook 'lisp-mode-hook #'smartparens-mode)
