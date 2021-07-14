@@ -526,11 +526,11 @@
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (setq js-indent-level 2)
 
-;; (quelpa '(inf-js :fetcher github :repo "velkyel/inf-js"))
-;; (require 'inf-js)
-;; (setq inf-js-program '("192.168.0.220" . 5555))
-;; (add-hook 'js2-mode-hook 'inf-js-minor-mode)
-;; (js2-imenu-extras-mode 1)
+(quelpa '(inf-js :fetcher github :repo "velkyel/inf-js"))
+(require 'inf-js)
+(setq inf-js-program '("192.168.0.122" . 5555))
+(add-hook 'js2-mode-hook 'inf-js-minor-mode)
+(js2-imenu-extras-mode 1)
 
 ;; (require 'janet-mode)
 ;; (quelpa '(inf-janet :fetcher github :repo "velkyel/inf-janet"))
