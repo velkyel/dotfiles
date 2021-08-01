@@ -292,7 +292,7 @@
 (setq xref-show-xrefs-function 'consult-xref
       xref-show-definitions-function 'consult-xref)
 
-(consult-customize consult-buffer consult-xref consult-imenu consult-imenu-project :group nil)
+(consult-customize consult-buffer consult-xref consult-imenu consult-imenu-multi :group nil)
 
 (bind-key "M-y" 'consult-yank-pop)
 (bind-key "<help> a" 'consult-apropos)
@@ -659,7 +659,7 @@
     (semantic-mode +1))     ;; for better imenu
   (bind-keys :map prog-mode-map
              ("C-." . consult-imenu)
-             ("C->" . consult-imenu-project)))
+             ("C->" . consult-imenu-multi)))
 
 (add-hook 'text-mode-hook 'auto-fill-mode)
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
