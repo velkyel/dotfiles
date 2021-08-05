@@ -284,7 +284,7 @@
 (require 'orderless)
 (setq completion-styles '(orderless)
       completion-category-defaults nil
-      completion-category-overrides '((fle (styles . partial-completion))))
+      completion-category-overrides '((file (styles partial-completion))))
 
 (require 'consult)
 (setq consult-preview-key nil)
