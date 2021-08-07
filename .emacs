@@ -319,19 +319,19 @@
 (add-to-list 'grep-find-ignored-directories "build")
 (add-to-list 'grep-find-ignored-directories "_darcs")
 
-(defun my/project-git-grep ()
+(defun my/project-ripgrep ()
   (interactive)
-  (consult-git-grep (projectile-project-root) (thing-at-point 'symbol)))
+  (consult-ripgrep (projectile-project-root) (thing-at-point 'symbol)))
 
-(defun my/directory-git-grep ()
+(defun my/directory-ripgrep ()
   (interactive)
-  (consult-git-grep default-directory (thing-at-point 'symbol)))
+  (consult-ripgrep default-directory (thing-at-point 'symbol)))
 
-(consult-customize my/project-git-grep :group nil)
-(consult-customize my/directory-git-grep :group nil)
+(consult-customize my/project-ripgrep :group nil)
+(consult-customize my/directory-ripgrep :group nil)
 
-(bind-key "M-g" 'my/project-git-grep)
-(bind-key* "M-G" 'my/directory-git-grep)
+(bind-key "M-g" 'my/project-ripgrep)
+(bind-key* "M-G" 'my/directory-ripgrep)
 
 (require 'shackle)
 (setq shackle-rules
