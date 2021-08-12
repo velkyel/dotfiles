@@ -585,6 +585,7 @@
 (add-hook 'scheme-mode-hook 'rainbow-mode)
 (add-hook 'janet-mode-hook 'rainbow-mode)
 (add-hook 'lua-mode-hook 'rainbow-mode)
+(add-hook 'org-mode-hook 'rainbow-mode)
 
 (require 'highlight-symbol)
 (setq highlight-symbol-idle-delay 0.5)
