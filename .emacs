@@ -102,7 +102,6 @@
                      w3m
                      semi    ;; for w3m
                      restclient
-                     elpy
                      lsp-mode      ;; needs clangd package
                      ))
 
@@ -828,14 +827,7 @@
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format))
 
-(add-hook 'python-mode-hook
-          (lambda ()
-            (elpy-enable)
-            (setq-local eldoc-mode nil)))
-
 (with-eval-after-load 'python
-  (setq elpy-rpc-python-command "python3")
-  (setq elpy-formatter 'autopep8)
   (if *windows*
       (setq python-shell-interpreter "python.exe")
     (setq python-shell-interpreter "python3")))
