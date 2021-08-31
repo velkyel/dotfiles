@@ -342,6 +342,18 @@
       shackle-inhibit-window-quit-on-same-windows t)
 (shackle-mode)
 
+;; https://www.reddit.com/r/emacs/comments/pavjxj/how_to_make_compilegotoerror_use_the_current/
+
+(defun display-buffer-from-compilation-p (_buffer-name _action)
+  (unless current-prefix-arg
+    (with-current-buffer (window-buffer)
+      (derived-mode-p 'compilation-mode))))
+
+(push '(display-buffer-from-compilation-p
+        display-buffer-same-window
+        (inhibit-same-window . nil))
+      display-buffer-alist)
+
 (require 'json-mode)    ;; C-c C-p show-path; C-c C-f beautify
 (add-hook 'json-mode-hook (lambda ()
                             (make-local-variable 'js-indent-level)
