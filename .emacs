@@ -245,7 +245,7 @@
 
 (require 'recentf)
 (recentf-mode 1)
-(setq recentf-max-saved-items 30)
+(setq recentf-max-saved-items 100)
 ;; (add-to-list 'recentf-exclude "bookmarks")
 
 (when *osx*
