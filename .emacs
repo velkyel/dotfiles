@@ -1102,6 +1102,7 @@
 (defun my-org-mode-setup ()
   (org-bullets-mode)
   (setq org-startup-with-inline-images t)
+  (hl-line-mode 1)
   (setq fill-column 100))
 
 (require 'org)
