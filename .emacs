@@ -309,6 +309,7 @@
       projectile-completion-system 'default)
 (projectile-global-mode)
 (bind-key "C-x C-p" 'projectile-find-file)
+(setq consult-project-root-function #'projectile-project-root)
 
 (require 'grep)
 (add-to-list 'grep-find-ignored-files ".DS_Store")
