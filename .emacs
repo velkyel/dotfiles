@@ -311,6 +311,27 @@
 (bind-key "C-x C-p" 'projectile-find-file)
 (setq consult-project-root-function #'projectile-project-root)
 
+(defconst fg/consult--source-git-ls-files
+  `(:name     "Git ls-files"
+    :narrow   (?g . "Git ls-files")
+    :category file
+    :face     consult-file
+    :history  file-name-history
+    :state    ,#'consult--file-state
+    :enabled  ,(lambda () (and consult-project-root-function))
+    :items
+    ,(lambda ()
+      (when-let (root (consult--project-root))
+	(let* ((default-directory root)
+	       (cmd (format "git ls-files --full-name"))
+	       (files (split-string (shell-command-to-string cmd) "\n" t))
+	       (abs-files (mapcar (lambda (fn) (expand-file-name fn root)) files))
+	       )
+	  abs-files))))
+  "Git ls-files candidate source for `consult-buffer'.")
+
+(add-to-list 'consult-buffer-sources fg/consult--source-git-ls-files t)
+
 (require 'grep)
 (add-to-list 'grep-find-ignored-files ".DS_Store")
 (add-to-list 'grep-find-ignored-files "TAGS")
