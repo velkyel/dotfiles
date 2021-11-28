@@ -99,8 +99,6 @@
                      janet-mode
                      minions
                      hydra
-                     w3m
-                     semi    ;; for w3m
                      restclient
                      lsp-mode      ;; needs clangd package
                      ))
@@ -965,7 +963,6 @@
       gnus-large-newsgroup nil
       gnus-read-active-file 'some
       mm-discouraged-alternatives '("text/html" "text/richtext")
-      mm-text-html-renderer 'w3m
       gnus-inhibit-startup-message t
       gnus-agent nil
       ;; gnus-use-scoring nil
@@ -1019,11 +1016,9 @@
      (defhydra hydra-gnus-article (:color blue)
        "
 [_o_] Save attachment        [_F_] Forward
-[_v_] Play video/audio       [_r_] Reply
-[_d_] CLI to download stream [_R_] Reply with original
-[_b_] Open external browser  [_w_] Reply all (S w)
-[_f_] Click link/button      [_W_] Reply all with original (S W)
-[_g_] Focus link/button
+[_r_] Reply                  [_R_] Reply with original
+[_w_] Reply all (S w)        [_W_] Reply all with original (S W)
+
 "
        ("F" gnus-summary-mail-forward)
        ("r" gnus-article-reply)
@@ -1031,11 +1026,6 @@
        ("w" gnus-article-wide-reply)
        ("W" gnus-article-wide-reply-with-original)
        ("o" gnus-mime-save-part)
-       ("v" w3mext-open-with-mplayer)
-       ("d" w3mext-download-rss-stream)
-       ("b" w3mext-open-link-or-image-or-url)
-       ("f" w3m-lnum-follow)
-       ("g" w3m-lnum-goto)
        ("q" nil))
      ;; y is not used by default
      (define-key gnus-article-mode-map "y" 'hydra-gnus-article/body)))
