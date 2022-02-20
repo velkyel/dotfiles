@@ -101,6 +101,8 @@
                      hydra
                      restclient
                      lsp-mode      ;; needs clangd package
+                     tree-sitter
+                     tree-sitter-langs
                      ))
 
 (set-language-environment "czech")
@@ -169,8 +171,8 @@
       ;; c-hungry-delete-key t
       vc-follow-symlinks t
       calendar-week-start-day 1
-      font-lock-maximum-decoration '((c++-mode . 1)
-                                     (t . t))
+      ;; font-lock-maximum-decoration '((c++-mode . 1)
+      ;;                                (t . t))
       enable-local-eval t)
 
 (setq-default indent-tabs-mode nil
@@ -858,6 +860,10 @@
 (bind-keys :map c-mode-map
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format))
+
+(require 'tree-sitter)
+(require 'tree-sitter-langs)
+(global-tree-sitter-mode)
 
 (with-eval-after-load 'python
   (if *windows*
