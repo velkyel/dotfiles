@@ -786,7 +786,7 @@
 (put 'varlet 'scheme-indent-function 1)
 
 (setq s7-host (if (string= (system-name) "Libors-Mac-mini.local")
-                  "169.254.239.168"
+                  "169.254.19.205"
                 "localhost"))
 
 (defun run-s7 ()
