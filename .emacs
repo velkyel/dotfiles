@@ -88,7 +88,7 @@
                      dired-recent
                      dired-narrow
                      markdown-mode
-                     org-bullets
+                     org-superstar
                      smartparens
                      vc-darcs
                      flycheck
@@ -1119,13 +1119,13 @@
 ;; (global-set-key (kbd "C-c m") 'mu4e)
 
 (defun my-org-mode-setup ()
-  (org-bullets-mode)
+  (org-superstar-mode 1)
   (setq org-startup-with-inline-images t)
   (hl-line-mode 1)
   (setq fill-column 100))
 
 (require 'org)
-(require 'org-bullets)
+(require 'org-superstar)
 (add-hook 'org-mode-hook 'my-org-mode-setup)
 (setq org-clock-into-drawer "CLOCKING")
 
