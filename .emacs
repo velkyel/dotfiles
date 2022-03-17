@@ -661,8 +661,7 @@
 (require 'lua-mode)
 (add-to-list 'auto-mode-alist '("\\.p8$" . lua-mode))
 (add-hook 'lua-mode-hook 'flycheck-mode)
-;; (setq lua-default-application '("192.168.0.122" . 5555))
-(setq lua-default-application '("169.254.239.168" . 5555))
+(setq lua-default-application '("192.168.0.122" . 5555))
 ;; (setq lua-default-application "lua5.3")  ;; '("localhost" . 5555))
 
 (defun my-lua-switch-to-process-buffer ()
