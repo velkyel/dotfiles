@@ -65,8 +65,6 @@
                      ninja-mode
                      lua-mode
                      expand-region
-                     visual-regexp
-                     visual-regexp-steroids
                      rainbow-mode
                      smart-mark
                      google-translate
@@ -601,10 +599,6 @@
 
 (require 'expand-region)
 (bind-key "M-=" 'er/expand-region)
-
-(require 'visual-regexp)
-(require 'visual-regexp-steroids)
-(bind-key "C-c r" 'vr/replace)
 
 (setq eldoc-idle-delay 0.2)
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
