@@ -1122,6 +1122,7 @@
 (require 'org-superstar)
 (add-hook 'org-mode-hook 'my-org-mode-setup)
 (setq org-clock-into-drawer "CLOCKING")
+(setq org-todo-keywords '((sequence "TODO" "WAITING" "|" "CANCELLED" "DONE")))
 
 (bind-key (kbd "C-.") 'consult-org-heading org-mode-map)
 
