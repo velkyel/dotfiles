@@ -544,6 +544,11 @@
 ;;   (setq xref-show-definitions-function #'completing-read-xref-show-defs))
 ;; (setq xref-show-xrefs-function #'completing-read-xref-show-xrefs)
 
+(if (file-exists-p "~/pocketlang-mode.el")
+    (add-to-list 'load-path "~/pocketlang-mode.el")
+  (quelpa '(pocketlang-mode :fetcher github :repo "velkyel/pocketlang-mode.el")))
+(require 'pocketlang-mode)
+
 (require 'dumb-jump)
 (setq dumb-jump-selector 'completing-read
       dumb-jump-prefer-searcher 'ag)
