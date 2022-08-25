@@ -168,6 +168,7 @@
       scroll-conservatively 101
       ;; c-hungry-delete-key t
       vc-follow-symlinks t
+      find-file-visit-truename t
       calendar-week-start-day 1
       ;; font-lock-maximum-decoration '((c++-mode . 1)
       ;;                                (t . t))
@@ -204,6 +205,8 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 (windmove-default-keybindings)
 (savehist-mode 1)
+
+(global-so-long-mode 1)
 
 (persistent-scratch-setup-default)
 (require 'unkillable-scratch)
@@ -544,10 +547,10 @@
 ;;   (setq xref-show-definitions-function #'completing-read-xref-show-defs))
 ;; (setq xref-show-xrefs-function #'completing-read-xref-show-xrefs)
 
-(if (file-exists-p "~/pocketlang-mode.el")
-    (add-to-list 'load-path "~/pocketlang-mode.el")
-  (quelpa '(pocketlang-mode :fetcher github :repo "velkyel/pocketlang-mode.el")))
-(require 'pocketlang-mode)
+;; (if (file-exists-p "~/pocketlang-mode.el")
+;;     (add-to-list 'load-path "~/pocketlang-mode.el")
+;;   (quelpa '(pocketlang-mode :fetcher github :repo "velkyel/pocketlang-mode.el")))
+;; (require 'pocketlang-mode)
 
 (require 'dumb-jump)
 (setq dumb-jump-selector 'completing-read
@@ -785,7 +788,7 @@
 (put 'dotimes 'scheme-indent-function 1)
 
 (setq s7-host (if (string= (system-name) "Libors-Mac-mini.local")
-                  "169.254.19.205"
+                  "169.254.73.255"
                 "localhost"))
 
 (defun run-s7 ()
