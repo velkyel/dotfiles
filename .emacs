@@ -50,6 +50,7 @@
                      auto-package-update    ; script upgrade-emacs-packages.sh
                      auto-compile
                      exec-path-from-shell
+                     eshell-autojump
                      json-mode
                      restart-emacs
                      vertico
@@ -251,10 +252,10 @@
      (eshell/alias "la" "ls -lacrt")
      (eshell/alias ".." "cd ..")))
 
-;; (bind-key "C-c t" #'crux-visit-shell-buffer)
+(eval-after-load 'eshell
+  '(require 'eshell-autojump nil t))
 
-;; (when *osx*
-;;    (setq explicit-shell-file-name "/bin/zsh --interactive --login"))
+;; (bind-key "C-c t" #'crux-visit-shell-buffer)
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
