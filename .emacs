@@ -218,9 +218,43 @@
 
 (setenv "PAGER" (executable-find "cat"))
 
-(bind-key "C-c t" #'(lambda ()
-                      (interactive)
-                      (crux-start-or-switch-to 'shell "*shell*")))
+(defun eshell-here ()
+  "Opens up a new shell in the directory associated with the
+    current buffer's file. The eshell is renamed to match that
+    directory to make multiple eshell windows easier."
+  (interactive)
+  (let* ((parent (if (buffer-file-name)
+                     (file-name-directory (buffer-file-name))
+                   default-directory))
+         (height (/ (window-total-height) 3))
+         (name   (car (last (split-string parent "/" t)))))
+    (split-window-vertically (- height))
+    (other-window 1)
+    (eshell "new")
+    (rename-buffer (concat "*eshell: " name "*"))
+
+    ;; (insert (concat "ls"))
+    ;; (eshell-send-input)
+    ))
+
+(global-set-key (kbd "C-c t") 'eshell-here)
+
+(defun eshell/x ()
+  (insert "exit")
+  (eshell-send-input)
+  (delete-window))
+
+(eval-after-load "em-alias"
+  '(progn
+     (eshell/alias "l" "ls -crt")
+     (eshell/alias "ll" "ls -lcrt")
+     (eshell/alias "la" "ls -lacrt")
+     (eshell/alias ".." "cd ..")))
+
+;; (bind-key "C-c t" #'crux-visit-shell-buffer)
+
+;; (when *osx*
+;;    (setq explicit-shell-file-name "/bin/zsh --interactive --login"))
 
 (require 'volatile-highlights)
 (volatile-highlights-mode t)
