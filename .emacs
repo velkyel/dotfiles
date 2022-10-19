@@ -33,21 +33,13 @@
 (defconst *linux* (eq system-type 'gnu/linux))
 (defconst *windows* (eq system-type 'windows-nt))
 
-(defconst *kelly* (let ((name (system-name)))
-                    (or (string= name "idev02")
-                        (string= name "idev02.autokelly.local")
-                        (string= name "idev03")
-                        (string= name "idev03.autokelly.local")
-                        (string= name "idev06")
-                        (string= name "idev06.autokelly.local"))))
-
 (setq inhibit-startup-message t
       frame-inhibit-implied-resize t
       initial-scratch-message nil)
 
 (setq package-list '(packed
                      bind-key
-                     auto-package-update    ; script upgrade-emacs-packages.sh
+                     auto-package-update
                      auto-compile
                      exec-path-from-shell
                      eshell-autojump
@@ -95,7 +87,6 @@
                      unkillable-scratch
                      comment-or-uncomment-sexp
                      shader-mode
-                     janet-mode
                      minions
                      hydra
                      restclient
@@ -112,7 +103,6 @@
 
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-;; (package-refresh-contents)   ;; keep it on auto-package-update
 
 (dolist (package package-list)
   (unless (package-installed-p package)
@@ -164,15 +154,11 @@
       mail-user-agent 'gnus-user-agent
       user-mail-address "capak@inputwish.com"
       user-full-name  "Libor Capak"
-      ;;scroll-preserve-screen-position 'always
       scroll-margin 4
       scroll-conservatively 101
-      ;; c-hungry-delete-key t
       vc-follow-symlinks t
       find-file-visit-truename t
       calendar-week-start-day 1
-      ;; font-lock-maximum-decoration '((c++-mode . 1)
-      ;;                                (t . t))
       enable-local-eval t)
 
 (setq-default indent-tabs-mode nil
@@ -438,8 +424,6 @@
 
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(when *kelly*
-  (add-to-list 'auto-mode-alist '("\\.tem?\\'" . web-mode)))
 
 (require 'super-save)
 (super-save-mode 1)
@@ -556,36 +540,7 @@
 (add-to-list 'vc-handled-backends 'DARCS t)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
-;; (if (file-exists-p "~/wren-mode.el")
-;;     (add-to-list 'load-path "~/wren-mode.el")
-;;   (quelpa '(wren-mode :fetcher github :repo "velkyel/wren-mode.el")))
-;; (require 'wren-mode)
-
 (require 'flycheck)
-
-;; (flycheck-define-checker
-;;  wren-lint
-;;  "Wren syntax checker"
-;;  :command ("wrenlint" source)
-;;  :modes wren-mode
-;;  :error-patterns ((error "WREN_ERROR_COMPILE in " (file-name) ":" line "> " (message) line-end)))
-
-;; (add-hook 'wren-mode-hook (lambda ()
-;;                             (message "activating wren-lint")
-;;                             (flycheck-select-checker 'wren-lint)
-;;                             (flycheck-mode)))
-
-
-;; (quelpa '(completing-read-xref :fetcher github :repo "travitch/completing-read-xref.el"))
-;; (require 'completing-read-xref)
-;; (when (>= emacs-major-version 27)
-;;   (setq xref-show-definitions-function #'completing-read-xref-show-defs))
-;; (setq xref-show-xrefs-function #'completing-read-xref-show-xrefs)
-
-;; (if (file-exists-p "~/pocketlang-mode.el")
-;;     (add-to-list 'load-path "~/pocketlang-mode.el")
-;;   (quelpa '(pocketlang-mode :fetcher github :repo "velkyel/pocketlang-mode.el")))
-;; (require 'pocketlang-mode)
 
 (require 'dumb-jump)
 (setq dumb-jump-selector 'completing-read
@@ -604,12 +559,6 @@
 (setq inf-js-program '("192.168.0.122" . 5555))
 (add-hook 'js2-mode-hook 'inf-js-minor-mode)
 (js2-imenu-extras-mode 1)
-
-;; (require 'janet-mode)
-;; (quelpa '(inf-janet :fetcher github :repo "velkyel/inf-janet"))
-;; (require 'inf-janet)
-;; (setq inf-janet-program '("192.168.0.220" . 5555))
-;; (add-hook 'janet-mode-hook 'inf-janet-minor-mode)
 
 ;; (quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
 ;; (require 'hlsl-mode)
@@ -652,7 +601,6 @@
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 (add-hook 'js2-mode-hook 'rainbow-mode)
 (add-hook 'scheme-mode-hook 'rainbow-mode)
-(add-hook 'janet-mode-hook 'rainbow-mode)
 (add-hook 'lua-mode-hook 'rainbow-mode)
 (add-hook 'org-mode-hook 'rainbow-mode)
 
@@ -725,8 +673,6 @@
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (goto-address-prog-mode)
-  (when *kelly*
-    (semantic-mode +1))     ;; for better imenu
   (bind-keys :map prog-mode-map
              ("C-." . consult-imenu)
              ("C->" . consult-imenu-multi)))
@@ -739,12 +685,11 @@
 
 ;; (add-hook 'c-mode-hook 'electric-pair-local-mode)
 ;; (add-hook 'c++-mode-hook 'electric-pair-local-mode)
-(when (not *kelly*)
-  (add-hook 'c-mode-hook 'lsp)
-  (add-hook 'c++-mode-hook 'lsp)
-  (setq lsp-completion-provider :none)
-  (setq lsp-headerline-breadcrumb-enable nil)
-  (setq lsp-diagnostics-provider :none))
+(add-hook 'c-mode-hook 'lsp)
+(add-hook 'c++-mode-hook 'lsp)
+(setq lsp-completion-provider :none)
+(setq lsp-headerline-breadcrumb-enable nil)
+(setq lsp-diagnostics-provider :none)
 
 (require 'smartparens-config)
 
@@ -788,7 +733,6 @@
 (add-hook 'emacs-lisp-mode-hook #'smartparens-mode)
 (add-hook 'scheme-mode-hook #'smartparens-mode)
 (add-hook 'lisp-mode-hook #'smartparens-mode)
-(add-hook 'janet-mode-hook #'smartparens-mode)
 
 (bind-key "C-M-;" 'comment-or-uncomment-sexp)
 
@@ -858,25 +802,24 @@
 (add-to-list 'cc-other-file-alist '("\\.m\\'" (".h")))
 (add-to-list 'cc-other-file-alist '("\\.mm\\'" (".h")))
 
-(when (not *kelly*)
-  (setq clang-format-style (concat "{BasedOnStyle: Google,"
-                                   " BreakBeforeBraces: Mozilla,"
-                                   " BinPackParameters: true,"
-                                   " BreakBeforeBinaryOperators: NonAssignment,"
-                                   " IndentWidth: 2,"
-                                   " ColumnLimit: 90,"
-                                   " AlwaysBreakBeforeMultilineStrings: false,"
-                                   " SpacesBeforeTrailingComments: 4,"
-                                   " AccessModifierOffset: -2,"
-                                   " AllowShortFunctionsOnASingleLine: Inline,"
-                                   " NamespaceIndentation: All,"
-                                   " UseTab: Never,"
-                                   " ConstructorInitializerIndentWidth: 2,"
-                                   " ContinuationIndentWidth: 2,"
-                                   " PointerAlignment: Left,"
-                                   " DerivePointerAlignment: false,"
-                                   " Standard: Cpp11,"
-                                   " SortIncludes: false}")))
+(setq clang-format-style (concat "{BasedOnStyle: Google,"
+                                 " BreakBeforeBraces: Mozilla,"
+                                 " BinPackParameters: true,"
+                                 " BreakBeforeBinaryOperators: NonAssignment,"
+                                 " IndentWidth: 2,"
+                                 " ColumnLimit: 90,"
+                                 " AlwaysBreakBeforeMultilineStrings: false,"
+                                 " SpacesBeforeTrailingComments: 4,"
+                                 " AccessModifierOffset: -2,"
+                                 " AllowShortFunctionsOnASingleLine: Inline,"
+                                 " NamespaceIndentation: All,"
+                                 " UseTab: Never,"
+                                 " ConstructorInitializerIndentWidth: 2,"
+                                 " ContinuationIndentWidth: 2,"
+                                 " PointerAlignment: Left,"
+                                 " DerivePointerAlignment: false,"
+                                 " Standard: Cpp11,"
+                                 " SortIncludes: false}"))
 
 (setq clang-format-executable "clang-format")   ;; ev symlink in ~/bin
 
