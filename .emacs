@@ -43,7 +43,7 @@
                      auto-compile
                      exec-path-from-shell
                      eshell-autojump
-                     json-mode
+                     jsonian
                      restart-emacs
                      vertico
                      orderless
@@ -276,7 +276,9 @@
   (setq mac-option-modifier 'nil)
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
-  (add-to-list 'default-frame-alist '(font . "hack 14")))
+  (add-to-list 'default-frame-alist '(font . "hack 14"))
+  (setq insert-directory-program "gls" dired-use-ls-dired t)
+  (setq dired-listing-switches "-al --group-directories-first"))
 
 (when *windows*
   (add-to-list 'default-frame-alist '(font . "hack 11")))
