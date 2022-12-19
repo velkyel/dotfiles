@@ -277,6 +277,7 @@
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
   (add-to-list 'default-frame-alist '(font . "hack 14"))
+  ;; brew install coreutils:
   (setq insert-directory-program "gls" dired-use-ls-dired t)
   (setq dired-listing-switches "-al --group-directories-first"))
 
@@ -447,8 +448,6 @@
 (require 'dired)
 (require 'dired-subtree)
 (bind-key "<tab>" 'dired-subtree-toggle dired-mode-map)
-
-(when *osx* (setq dired-use-ls-dired nil))
 
 (setq dired-recursive-copies 'always
       dired-recursive-deletes 'always
