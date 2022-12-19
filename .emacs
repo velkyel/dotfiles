@@ -43,7 +43,7 @@
                      auto-compile
                      exec-path-from-shell
                      eshell-autojump
-                     jsonian
+                     json-mode
                      restart-emacs
                      vertico
                      orderless
