@@ -213,15 +213,13 @@
   (let* ((parent (if (buffer-file-name)
                      (file-name-directory (buffer-file-name))
                    default-directory))
-         (height (/ (window-total-height) 3))
-         (name   (car (last (split-string parent "/" t)))))
-    (split-window-vertically (- height))
+         (name (car (last (split-string parent "/" t)))))
     (other-window 1)
     (eshell "new")
     (rename-buffer (concat "*eshell: " name "*"))
 
-    ;; (insert (concat "ls"))
-    ;; (eshell-send-input)
+    (insert (concat "ls"))
+    (eshell-send-input)
     ))
 
 (global-set-key (kbd "C-c t") 'eshell-here)
