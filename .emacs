@@ -689,6 +689,7 @@
 (setq lsp-completion-provider :none)
 (setq lsp-headerline-breadcrumb-enable nil)
 (setq lsp-diagnostics-provider :none)
+(setq lsp-enable-snippet nil)
 
 (require 'smartparens-config)
 
