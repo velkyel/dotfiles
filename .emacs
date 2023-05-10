@@ -72,7 +72,6 @@
                      crux
                      web-mode
                      js2-mode
-                     rust-mode
                      dired-subtree
                      dired-rainbow
                      dired-recent
