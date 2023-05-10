@@ -42,7 +42,6 @@
                      auto-package-update
                      auto-compile
                      exec-path-from-shell
-                     eshell-autojump
                      json-mode
                      restart-emacs
                      vertico
@@ -235,9 +234,6 @@
      (eshell/alias "ll" "ls -lcrt")
      (eshell/alias "la" "ls -lacrt")
      (eshell/alias ".." "cd ..")))
-
-(eval-after-load 'eshell
-  '(require 'eshell-autojump nil t))
 
 ;; (bind-key "C-c t" #'crux-visit-shell-buffer)
 
