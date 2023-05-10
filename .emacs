@@ -1032,69 +1032,6 @@
   (local-set-key (kbd "C-c C-y") 'hydra-message/body))
 (add-hook 'message-mode-hook 'message-mode-hook-hydra-setup)
 
-;; (when *osx*
-;;   (add-to-list 'load-path "/usr/local/opt/mu/share/emacs/site-lisp/mu/mu4e"))
-
-;; (when *linux*
-;;   (add-to-list 'load-path "~/mu/mu4e"))
-
-;; (require 'mu4e)
-
-;; (defun mu4e-display-image (imgpath &optional maxwidth maxheight)
-;;   "Display image IMG at point; optionally specify MAXWIDTH and MAXHEIGHT."
-;;   (let ((img (create-image imgpath nil nil
-;;                            :max-width maxwidth :max-height maxheight)))
-;;     (save-excursion
-;;       (insert "\n")
-;;       (let ((size (image-size img))) ;; inspired by gnus..
-;;         (insert-char ?\n
-;;                      (max 0 (round (- (window-height) (or maxheight (cdr size)) 1) 2)))
-;;         (insert-char ?\.
-;;                      (max 0 (round (- (window-width)  (or maxwidth (car size))) 2)))
-;;         (insert-image img)))))
-
-;; (setq mail-user-agent 'mu4e-user-agent
-;;       mu4e-attachment-dir "~/Downloads"
-;;       mu4e-root-maildir (expand-file-name "~/Maildir")
-;;       mu4e-drafts-folder "/INBOX.Drafts"
-;;       mu4e-sent-folder "/INBOX.Sent"
-;;       mu4e-trash-folder "/INBOX.Trash"
-;;       mu4e-get-mail-command "offlineimap -o"
-;;       mu4e-update-interval nil ;; 300
-;;       mu4e-confirm-quit nil
-;;       mu4e-date-format-long "%d.%m.%Y"
-;;       mu4e-headers-date-format "%d.%m.%y"
-;;       mu4e-view-show-addresses t
-;;       mu4e-sent-messages-behavior 'sent
-;;       mu4e-view-show-images t
-;;       mu4e-completing-read-function #'completing-read
-;;       mu4e-compose-signature-auto-include nil
-;;       mu4e-headers-leave-behavior 'apply
-;;       mu4e-html2text-command "w3m -I UTF-8 -O UTF-8 -dump -T text/html"  ;; "html2text -utf8 -width 72"
-;;       message-kill-buffer-on-exit t
-;;       mu4e-maildir-shortcuts
-;;       '(("/INBOX" . ?i)
-;;         ("/INBOX.Sent" . ?s)
-;;         ("/INBOX.Trash" . ?t)
-;;         ("/INBOX.Archive" . ?a))
-;;       mu4e-bookmarks '(("flag:unread AND NOT flag:trashed AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam AND NOT maildir:/INBOX.Sent" "Unread messages" ?u)
-;;                        ("date:today..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam AND NOT maildir:/INBOX.Sent" "Today's messages" ?t)
-;;                        ("date:7d..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam" "Last 7 days" ?w)
-;;                        ("mime:image/*" "Messages with images" ?p)
-;;                        ("size:2M..500M" "Big messages" ?b)))
-
-;; ;; (quelpa '(mu4e-patch :fetcher github :repo "seanfarley/mu4e-patch"))
-;; ;; (require 'mu4e-patch)
-;; ;; (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight)
-;; ;; (copy-face 'mu4e-header-key-face 'mu4e-patch-commit-message)
-
-;; ;; https://rakhim.org/fastmail-setup-with-emacs-mu4e-and-mbsync-on-macos/
-;; (fset 'my-move-to-trash "mt")
-;; (define-key mu4e-headers-mode-map (kbd "d") 'my-move-to-trash)
-;; (define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
-
-;; (global-set-key (kbd "C-c m") 'mu4e)
-
 (defun my-org-mode-setup ()
   (org-superstar-mode 1)
   (setq org-startup-with-inline-images t)
