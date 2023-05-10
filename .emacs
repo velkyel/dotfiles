@@ -151,7 +151,7 @@
       eval-expression-print-level nil
       mail-user-agent 'gnus-user-agent
       user-mail-address "capak@inputwish.com"
-      user-full-name  "Libor Capak"
+      user-full-name  "Libor Čapák"
       scroll-margin 4
       scroll-conservatively 101
       vc-follow-symlinks t
