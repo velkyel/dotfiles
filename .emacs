@@ -434,6 +434,7 @@
 (key-seq-define-global "JJ" 'crux-switch-to-previous-buffer)
 
 (key-chord-mode +1)
+(setq key-chord-safety-interval-forward 0.1)
 
 (require 'unfill)
 (bind-key [remap fill-paragraph] 'unfill-toggle)
