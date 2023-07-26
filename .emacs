@@ -42,6 +42,7 @@
                      auto-package-update
                      auto-compile
                      exec-path-from-shell
+                     visual-regexp
                      json-mode
                      restart-emacs
                      vertico
@@ -120,6 +121,11 @@
 (auto-compile-on-save-mode 1)
 
 (require 'subr-x)    ;; string-trim
+
+(require 'visual-regexp)
+(defalias 'replace-regexp 'vr/replace)
+(define-key global-map (kbd "C-c r") 'vr/replace)
+(define-key global-map (kbd "C-c q") 'vr/query-replace)
 
 (require 'minions)
 (minions-mode 1)
