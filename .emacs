@@ -380,6 +380,7 @@
 (require 'shackle)
 (setq shackle-rules
       '(("*Help*" :align t :select t)
+        (compilation-mode :other t)
         ("\\`\\*cider-repl .*" :regexp t :align t :size 0.2)
         ((inferior-scheme-mode "*shell*" "*eshell*") :popup t))
       ;; shackle-default-rule '(:select t)
