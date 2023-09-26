@@ -81,17 +81,13 @@
                      org-superstar
                      smartparens
                      vc-darcs
-                     flycheck
                      persistent-scratch
                      unkillable-scratch
                      comment-or-uncomment-sexp
-                     shader-mode
                      minions
                      hydra
                      restclient
                      lsp-mode      ;; needs clangd package
-                     tree-sitter
-                     tree-sitter-langs
                      ))
 
 (set-language-environment "czech")
@@ -185,14 +181,9 @@
 (delete-selection-mode t)
 (setq show-paren-delay 0)   ;; must be set before mode activating
 (show-paren-mode 1)
-;; (setq show-paren-style 'expression)
-;; (electric-pair-mode 1)
 (transient-mark-mode t)
 (which-function-mode)
 (winner-mode t)   ;; C-c <left|right>
-;; (type-break-mode 1)
-;; (type-break-query-mode 1)
-;; (type-break-mode-line-message-mode 1)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (windmove-default-keybindings)
 (savehist-mode 1)
@@ -437,8 +428,9 @@
 (require 'key-seq)
 (key-seq-define-global "jj" 'avy-goto-word-or-subword-1)
 (key-seq-define-global "jl" 'goto-line)
-(key-seq-define-global "jk" 'avy-goto-char-timer)
 (key-seq-define-global "JJ" 'crux-switch-to-previous-buffer)
+(key-seq-define-global "qq" 'bookmark-jump)
+(key-seq-define-global "QQ" 'bookmark-set-no-overwrite)
 
 (key-chord-mode +1)
 (setq key-chord-safety-interval-forward 0.1)
@@ -542,11 +534,9 @@
 (add-to-list 'vc-handled-backends 'DARCS t)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
-(require 'flycheck)
-
 (require 'dumb-jump)
 (setq dumb-jump-selector 'completing-read
-      dumb-jump-prefer-searcher 'ag)
+      dumb-jump-prefer-searcher 'rg)
 
 (add-to-list 'dumb-jump-language-file-exts '(:language "c++" :ext "mm" :agtype "cpp" :rgtype "cpp"))
 
@@ -569,10 +559,6 @@
 (quelpa '(metal-mode :fetcher github :repo "masfj/metal-mode"))
 (add-to-list 'auto-mode-alist '("\\.mtl\\'" . metal-mode))
 (require 'metal-mode)
-
-(require 'shader-mode)
-(add-to-list 'auto-mode-alist '("\\.cginc$" . shader-mode))   ;; unity3d
-(add-to-list 'auto-mode-alist '("\\.pix$" . shader-mode))     ;; g3d
 
 (require 'magit)
 (bind-key "C-c g" 'magit-status)
@@ -689,10 +675,20 @@
 ;; (add-hook 'c++-mode-hook 'electric-pair-local-mode)
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
-(setq lsp-completion-provider :none)
-(setq lsp-headerline-breadcrumb-enable nil)
-(setq lsp-diagnostics-provider :none)
-(setq lsp-enable-snippet nil)
+(setq lsp-completion-provider :none
+      lsp-headerline-breadcrumb-enable nil
+      lsp-diagnostics-provider :none
+      lsp-enable-snippet nil
+      lsp-enable-symbol-highlighting nil
+      lsp-completion-enable nil
+      lsp-enable-links nil
+      lsp-enable-dap-auto-configure nil
+      lsp-eldoc-enable-hover nil
+      lsp-enable-on-type-formatting nil
+      lsp-before-save-edits nil
+      lsp-modeline-diagnostics-enable nil
+      lsp-modeline-workspace-status-enable nil
+      lsp-lens-enable nil)
 
 (require 'smartparens-config)
 
@@ -843,10 +839,6 @@
 (bind-keys :map c-mode-map
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format))
-
-(require 'tree-sitter)
-(require 'tree-sitter-langs)
-(global-tree-sitter-mode)
 
 (with-eval-after-load 'python
   (if *windows*
