@@ -308,7 +308,6 @@
 (consult-customize consult-buffer consult-xref consult-imenu consult-imenu-multi :group nil)
 
 (bind-key "M-y" 'consult-yank-pop)
-(bind-key "<help> a" 'consult-apropos)
 
 (require 'embark-consult)
 (define-key minibuffer-local-map (kbd "C-x s") 'embark-export)
