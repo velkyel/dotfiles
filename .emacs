@@ -37,8 +37,7 @@
       frame-inhibit-implied-resize t
       initial-scratch-message nil)
 
-(setq package-list '(packed
-                     bind-key
+(setq package-list '(bind-key
                      auto-package-update
                      auto-compile
                      exec-path-from-shell
@@ -64,7 +63,6 @@
                      glsl-mode
                      clang-format
                      highlight-symbol
-                     popup
                      magit
                      volatile-highlights
                      key-seq
@@ -111,12 +109,9 @@
 (add-hook 'auto-package-update-before-hook
           (lambda () (message "I will update packages now") (quelpa-upgrade-all)))
 
-(require 'packed)
 (require 'auto-compile)
 (auto-compile-on-load-mode 1)
 (auto-compile-on-save-mode 1)
-
-(require 'subr-x)    ;; string-trim
 
 (require 'visual-regexp)
 (defalias 'replace-regexp 'vr/replace)
@@ -141,8 +136,6 @@
       auto-save-default nil
       create-lockfiles nil
       large-file-warning-threshold nil
-      ;; imenu-auto-rescan t
-      ;; echo-keystrokes 0.1
       use-dialog-box nil
       shift-select-mode nil
       uniquify-buffer-name-style 'forward
@@ -371,7 +364,6 @@
 (setq shackle-rules
       '(("*Help*" :align t :select t)
         (compilation-mode :other t)
-        ("\\`\\*cider-repl .*" :regexp t :align t :size 0.2)
         ((inferior-scheme-mode "*shell*" "*eshell*") :popup t))
       ;; shackle-default-rule '(:select t)
       shackle-default-size 0.4
@@ -450,11 +442,6 @@
 (eval-after-load "dired-aux"
    '(add-to-list 'dired-compress-file-suffixes '("\\.zip\\'" ".zip" "unzip")))
 
-;; (require 'peep-dired)
-;; (bind-key "P" 'peep-dired dired-mode-map)
-;; (setq peep-dired-cleanup-on-disable t
-;;       peep-dired-ignore-extensions '("mkv" "webm" "mp4" "mp3" "ogg" "iso"))
-
 (require 'wdired)    ;; C-c C-q (C-c C-c finish)
 (setq wdired-allow-to-change-permissions t)
 (setq wdired-create-parent-directories t)
@@ -504,10 +491,6 @@
 (require 'dired-narrow)
 (bind-key "/" 'dired-narrow dired-mode-map)   ;; g resets the view
 
-;; (require 'dired-quick-sort)   ;; on osx: brew install coreutils + path
-;; (dired-quick-sort-setup)      ;; binds "S" and invoke hydra
-;; ;; (when *osx* (setq dired-use-ls-dired nil))
-
 (defun open-file-external (file)
   (interactive "f")
   (let ((process-connection-type nil))
@@ -525,7 +508,6 @@
 (bind-key (kbd "<C-return>") 'dired-open dired-mode-map)
 
 (save-place-mode 1)
-;; (desktop-save-mode 1)
 
 (setq quelpa-update-melpa-p nil)
 
@@ -670,8 +652,6 @@
 
 (add-hook 'prog-mode-hook 'my-prog-modes-hook)
 
-;; (add-hook 'c-mode-hook 'electric-pair-local-mode)
-;; (add-hook 'c++-mode-hook 'electric-pair-local-mode)
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
 (setq lsp-completion-provider :none
@@ -1090,11 +1070,6 @@
 (set-face-attribute 'dired-subtree-depth-4-face nil :background "gray85")
 (set-face-attribute 'dired-subtree-depth-5-face nil :background "gray85")
 (set-face-attribute 'dired-subtree-depth-6-face nil :background "gray85")
-
-(with-eval-after-load 'popup
-  (set-face-attribute 'popup-face
-                      nil
-                      :background "#dddd30"))
 
 (with-eval-after-load 'highlight-indentation
   (set-face-attribute 'highlight-indentation-face
