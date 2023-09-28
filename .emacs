@@ -803,6 +803,7 @@
 
 (require 'clang-format)
 (fset 'c-indent-region 'clang-format-region)
+(fset 'c-indent-line-or-region 'clang-format-region)
 
 (defun my-find-other-file ()
   (interactive)
