@@ -152,6 +152,7 @@
       vc-follow-symlinks t
       find-file-visit-truename t
       calendar-week-start-day 1
+      confirm-kill-processes nil
       enable-local-eval t)
 
 (setq-default indent-tabs-mode nil
@@ -166,10 +167,6 @@
 (defun dos2unix ()
   (interactive)
   (set-buffer-file-coding-system 'unix))
-
-;; (setq compilation-skip-threshold 2)
-
-;; (setq-default major-mode 'text-mode)    ;; instead fundamental-mode
 
 (delete-selection-mode t)
 (setq show-paren-delay 0)   ;; must be set before mode activating
@@ -278,9 +275,6 @@
   (setq exec-path-from-shell-arguments (remove "-i" exec-path-from-shell-arguments))   ;; optimization
   (exec-path-from-shell-initialize))
 
-(when *windows*
-  (setq eww-download-directory "c:\\Users\\el\\Downloads"))
-
 (setq python-shell-completion-native-enable nil)
 
 (require 'vertico)
@@ -305,10 +299,6 @@
 (require 'embark-consult)
 (define-key minibuffer-local-map (kbd "C-x s") 'embark-export)
 (define-key minibuffer-local-map (kbd "C-x C-s") 'embark-export)
-
-;; (consult-customize
-;;  consult-git-grep consult-buffer consult-xref
-;;  :preview-key (kbd "M-."))
 
 (require 'projectile)
 (setq projectile-indexing-method 'native
@@ -532,10 +522,6 @@
 (setq inf-js-program '("192.168.0.122" . 5555))
 (add-hook 'js2-mode-hook 'inf-js-minor-mode)
 (js2-imenu-extras-mode 1)
-
-;; (quelpa '(hlsl-mode :fetcher github :repo "darfink/hlsl-mode"))
-;; (require 'hlsl-mode)
-;; (add-to-list 'auto-mode-alist '("\\.hlsl\\'" . hlsl-mode))
 
 (quelpa '(metal-mode :fetcher github :repo "masfj/metal-mode"))
 (add-to-list 'auto-mode-alist '("\\.mtl\\'" . metal-mode))
@@ -820,11 +806,6 @@
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format))
 
-(with-eval-after-load 'python
-  (if *windows*
-      (setq python-shell-interpreter "python.exe")
-    (setq python-shell-interpreter "python3")))
-
 (defun my-goto-match-beginning ()
   (when (and (not isearch-mode-end-hook-quit) isearch-forward isearch-other-end)
     (goto-char isearch-other-end)))
@@ -860,8 +841,6 @@
                     (call-interactively (if (get-buffer "*compilation*")
                                             'recompile
                                           'compile))))
-(bind-key "M-R" 'shell-command)
-;; (bind-key "M-o" 'other-window)
 
 (setq message-send-mail-function 'smtpmail-send-it
       smtpmail-auth-credentials "~/.authinfo"
