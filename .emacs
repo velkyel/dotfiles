@@ -44,6 +44,7 @@
                      visual-regexp
                      json-mode
                      restart-emacs
+                     isearch-mb
                      vertico
                      orderless
                      consult
@@ -143,6 +144,8 @@
       search-highlight t
       isearch-allow-scroll t
       isearch-lazy-count t
+      search-ring-max 200
+      regexp-search-ring-max 200
       eval-expression-print-level nil
       mail-user-agent 'gnus-user-agent
       user-mail-address "capak@inputwish.com"
@@ -805,6 +808,9 @@
 (bind-keys :map c-mode-map
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format))
+
+(require 'isearch-mb)
+(isearch-mb-mode)
 
 (defun my-goto-match-beginning ()
   (when (and (not isearch-mode-end-hook-quit) isearch-forward isearch-other-end)
