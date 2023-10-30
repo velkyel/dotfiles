@@ -44,7 +44,6 @@
                      visual-regexp
                      json-mode
                      restart-emacs
-                     isearch-mb
                      vertico
                      orderless
                      consult
@@ -808,9 +807,6 @@
 (bind-keys :map c-mode-map
            ("C-M-\\" . clang-format-region)
            ("C-i" . clang-format))
-
-(require 'isearch-mb)
-(isearch-mb-mode)
 
 (defun my-goto-match-beginning ()
   (when (and (not isearch-mode-end-hook-quit) isearch-forward isearch-other-end)
