@@ -642,7 +642,8 @@
 
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
-(setq lsp-completion-provider :none
+(setq lsp-warn-no-matched-clients nil
+      lsp-completion-provider :none
       lsp-headerline-breadcrumb-enable nil
       lsp-diagnostics-provider :none
       lsp-enable-snippet nil
