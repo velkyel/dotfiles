@@ -555,6 +555,13 @@
 (add-hook 'ielm-mode-hook 'eldoc-mode)
 
 (require 'rainbow-mode)
+
+; hex colors only:
+(setq rainbow-html-colors nil)
+(setq rainbow-x-colors nil)
+(setq rainbow-latex-colors nil)
+(setq rainbow-r-colors nil)
+
 (add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
 (add-hook 'js2-mode-hook 'rainbow-mode)
 (add-hook 'scheme-mode-hook 'rainbow-mode)
