@@ -48,6 +48,7 @@
                      orderless
                      consult
                      embark-consult
+                     deadgrep
                      projectile
                      super-save
                      avy
@@ -338,19 +339,22 @@
 (add-to-list 'grep-find-ignored-directories "build")
 (add-to-list 'grep-find-ignored-directories "_darcs")
 
-(defun my/project-ripgrep ()
-  (interactive)
-  (consult-ripgrep (projectile-project-root) (thing-at-point 'symbol)))
+;; (defun my/project-ripgrep ()
+;;   (interactive)
+;;   (consult-ripgrep (projectile-project-root) (thing-at-point 'symbol)))
 
-(defun my/directory-ripgrep ()
-  (interactive)
-  (consult-ripgrep default-directory (thing-at-point 'symbol)))
+;; (defun my/directory-ripgrep ()
+;;   (interactive)
+;;   (consult-ripgrep default-directory (thing-at-point 'symbol)))
 
-(consult-customize my/project-ripgrep :group nil)
-(consult-customize my/directory-ripgrep :group nil)
+;; (consult-customize my/project-ripgrep :group nil)
+;; (consult-customize my/directory-ripgrep :group nil)
 
-(bind-key "M-g" 'my/project-ripgrep)
-(bind-key* "M-G" 'my/directory-ripgrep)
+;; (bind-key "M-g" 'my/project-ripgrep)
+;; (bind-key* "M-G" 'my/directory-ripgrep)
+
+(require 'deadgrep)
+(bind-key "M-g" 'deadgrep)
 
 (require 'shackle)
 (setq shackle-rules
