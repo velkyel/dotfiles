@@ -188,7 +188,7 @@
 
 (setenv "PAGER" (executable-find "cat"))
 
-(defun eshell-here ()
+(defun shell-here ()
   "Opens up a new shell in the directory associated with the
     current buffer's file. The eshell is renamed to match that
     directory to make multiple eshell windows easier."
@@ -197,27 +197,11 @@
                      (file-name-directory (buffer-file-name))
                    default-directory))
          (name (car (last (split-string parent "/" t)))))
-    (other-window 1)
-    (eshell "new")
-    (rename-buffer (concat "*eshell: " name "*"))
+    ;; (other-window 1)
+    (shell (concat "*shell: " name "*"))))
+;; TODO: switch to only if exists
 
-    (insert (concat "ls"))
-    (eshell-send-input)
-    ))
-
-(global-set-key (kbd "C-c t") 'eshell-here)
-
-(defun eshell/x ()
-  (insert "exit")
-  (eshell-send-input)
-  (delete-window))
-
-(eval-after-load "em-alias"
-  '(progn
-     (eshell/alias "l" "ls -crt")
-     (eshell/alias "ll" "ls -lcrt")
-     (eshell/alias "la" "ls -lacrt")
-     (eshell/alias ".." "cd ..")))
+(global-set-key (kbd "C-c t") 'shell-here)
 
 ;; (bind-key "C-c t" #'crux-visit-shell-buffer)
 
