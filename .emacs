@@ -81,7 +81,6 @@
                      smartparens
                      vc-darcs
                      persistent-scratch
-                     unkillable-scratch
                      comment-or-uncomment-sexp
                      minions
                      hydra
@@ -184,10 +183,6 @@
 (global-so-long-mode 1)
 
 (persistent-scratch-setup-default)
-(require 'unkillable-scratch)
-(setq unkillable-scratch-behavior 'do-nothing
-      unkillable-scratch-do-not-reset-scratch-buffer t)
-(unkillable-scratch t)
 
 (require 'crux)
 
