@@ -19,15 +19,10 @@
 (menu-bar-mode -1)
 (blink-cursor-mode 1)
 
-(defun setup-my-fringe ()
-  (fringe-mode '(8 . 0)))
-
 (when (display-graphic-p)
   (tool-bar-mode -1)
   (tooltip-mode -1)
-  (scroll-bar-mode -1)
-  (add-hook 'window-setup-hook 'setup-my-fringe)
-  (add-hook 'after-make-frame-functions 'setup-my-fringe))
+  (scroll-bar-mode -1))
 
 (defconst *osx* (eq system-type 'darwin))
 (defconst *linux* (eq system-type 'gnu/linux))
@@ -46,6 +41,7 @@
                      restart-emacs
                      vertico
                      orderless
+                     scad-mode
                      consult
                      embark-consult
                      deadgrep
@@ -58,14 +54,14 @@
                      ninja-mode
                      lua-mode
                      expand-region
-                     rainbow-mode
                      smart-mark
                      google-translate
                      glsl-mode
+                     pyvenv-auto
                      clang-format
                      highlight-symbol
                      magit
-                     volatile-highlights
+                     goggles
                      key-seq
                      dumb-jump
                      shackle
@@ -86,6 +82,8 @@
                      hydra
                      restclient
                      lsp-mode      ;; needs clangd package
+                     tree-sitter
+                     tree-sitter-langs
                      ))
 
 (set-language-environment "czech")
@@ -205,9 +203,10 @@
 
 ;; (bind-key "C-c t" #'crux-visit-shell-buffer)
 
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
-(vhl/ext/etags/off)
+(use-package goggles
+  :hook ((prog-mode text-mode) . goggles-mode)
+  :config
+  (setq-default goggles-pulse t))
 
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
@@ -233,8 +232,6 @@
 ;; (add-to-list 'recentf-exclude "bookmarks")
 
 (when *osx*
-  ;; (setq mac-command-modifier 'meta)
-  ;; (setq mac-option-modifier nil)
   (setq mac-option-modifier 'nil)
   (setq mac-command-modifier 'meta)
   (setq ns-function-modifier 'hyper)
@@ -256,6 +253,10 @@
   (require 'exec-path-from-shell)
   (setq exec-path-from-shell-arguments (remove "-i" exec-path-from-shell-arguments))   ;; optimization
   (exec-path-from-shell-initialize))
+
+(require 'python)
+(require 'pyvenv-auto)
+(add-hook 'python-mode-hook #'pyvenv-auto-run)
 
 (setq python-shell-completion-native-enable nil)
 
@@ -309,7 +310,7 @@
 	  abs-files))))
   "Git ls-files candidate source for `consult-buffer'.")
 
-(add-to-list 'consult-buffer-sources fg/consult--source-git-ls-files t)
+;; (add-to-list 'consult-buffer-sources fg/consult--source-git-ls-files t)
 
 (require 'grep)
 (add-to-list 'grep-find-ignored-files ".DS_Store")
@@ -405,6 +406,11 @@
 (bind-key [remap fill-paragraph] 'unfill-toggle)
 
 (require 'dired)
+
+(require 'dired-aux)
+(add-to-list 'dired-compress-file-suffixes '("\\.rar\\'" "" "unrar x %i"))
+(add-to-list 'dired-compress-file-suffixes '("\\.7z\\'" "" "7z x %i"))
+
 (require 'dired-subtree)
 (bind-key "<tab>" 'dired-subtree-toggle dired-mode-map)
 
@@ -542,42 +548,9 @@
 (add-hook 'lisp-interaction-mode-hook 'eldoc-mode)
 (add-hook 'ielm-mode-hook 'eldoc-mode)
 
-(require 'rainbow-mode)
-
-; hex colors only:
-(setq rainbow-html-colors nil)
-(setq rainbow-x-colors nil)
-(setq rainbow-latex-colors nil)
-(setq rainbow-r-colors nil)
-
-(add-hook 'emacs-lisp-mode-hook 'rainbow-mode)
-(add-hook 'js2-mode-hook 'rainbow-mode)
-(add-hook 'scheme-mode-hook 'rainbow-mode)
-(add-hook 'lua-mode-hook 'rainbow-mode)
-(add-hook 'org-mode-hook 'rainbow-mode)
-
 (require 'highlight-symbol)
 (setq highlight-symbol-idle-delay 0.5)
 (set-face-background 'highlight-symbol-face "gray78")
-
-(defun symbol-replace (arg)    ;; C-u limit scope to current defun (defined by narrow-to-defun)
-  (interactive "P")
-  (save-excursion
-    (let* ((oldsymbol (or (thing-at-point 'symbol)
-                          (error "No symbol at point")))
-           (newsymbol (query-replace-read-to
-                       oldsymbol (format "%sReplace" (if arg "[function] " "")) nil))
-           (counter 0))
-      (if arg (goto-char (save-excursion (beginning-of-defun) (point)))
-        ;; go to the beginning of the buffer..
-        (goto-char (point-min)))
-      (while (search-forward
-              oldsymbol (if arg (save-excursion (end-of-defun) (point)) nil) t nil)
-        (replace-match newsymbol nil t)
-        (cl-incf counter 1))
-      (message "Replaced %d matches" counter))))
-
-(bind-key "M-'" 'symbol-replace)
 
 (require 'smart-mark)
 (smart-mark-mode)
@@ -617,6 +590,10 @@
   (whitespace-mode)
   (goto-address-mode))
 
+(require 'tree-sitter)
+(require 'tree-sitter-langs)
+(global-tree-sitter-mode)
+
 (defun my-prog-modes-hook ()
   (my-non-special-modes-setup)
   (make-local-variable 'comment-auto-fill-only-comments)
@@ -624,6 +601,7 @@
   (setq fill-column 100)
   (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
+  (tree-sitter-hl-mode)
   (goto-address-prog-mode)
   (bind-keys :map prog-mode-map
              ("C-." . consult-imenu)
@@ -819,7 +797,7 @@
            ("C-r" . isearch-backward-regexp)
            ("C-M-s" . isearch-forward)
            ("C-M-r" . isearch-backward)
-           ("C-x k" . kill-this-buffer))
+           ("C-x k" . kill-current-buffer))
 
 ;; suspend-frame:
 (unbind-key "C-z")
@@ -841,17 +819,15 @@
                                           'compile))))
 
 (setq message-send-mail-function 'smtpmail-send-it
-      smtpmail-auth-credentials "~/.authinfo"
-      ;;smtpmail-stream-type 'ssl
-      starttls-use-gnutls t
-      smtpmail-starttls-credentials '(("mail.messagingengine.com" 587 nil nil))
-      smtpmail-auth-credentials '(("mail.messagingengine.com" 587 "capak@inputwish.com" nil))
       smtpmail-default-smtp-server "mail.messagingengine.com"
       smtpmail-smtp-server "mail.messagingengine.com"
       smtpmail-smtp-service 587)
 
 (autoload 'gnus "gnus" "Read network news." t)
 (global-set-key (kbd "C-c m") 'gnus)
+
+(add-hook 'gnus-group-mode-hook 'hl-line-mode)
+(add-hook 'gnus-summary-mode-hook 'hl-line-mode)
 
 (quelpa '(gnus-harvest :fetcher github :repo "jwiegley/gnus-harvest"))
 (eval-after-load "gnus"
@@ -989,6 +965,64 @@
   (local-set-key (kbd "C-c C-y") 'hydra-message/body))
 (add-hook 'message-mode-hook 'message-mode-hook-hydra-setup)
 
+;; mu4e
+
+;; (when *osx*
+;;   (add-to-list 'load-path "/usr/local/opt/mu/share/emacs/site-lisp/mu/mu4e"))
+;; (when *linux*
+;;   (add-to-list 'load-path "~/mu4e"))
+;; (require 'mu4e)
+;; (defun mu4e-display-image (imgpath &optional maxwidth maxheight)
+;;   "Display image IMG at point; optionally specify MAXWIDTH and MAXHEIGHT."
+;;   (let ((img (create-image imgpath nil nil
+;;                            :max-width maxwidth :max-height maxheight)))
+;;     (save-excursion
+;;       (insert "\n")
+;;       (let ((size (image-size img))) ;; inspired by gnus..
+;;         (insert-char ?\n
+;;                      (max 0 (round (- (window-height) (or maxheight (cdr size)) 1) 2)))
+;;         (insert-char ?\.
+;;                      (max 0 (round (- (window-width)  (or maxwidth (car size))) 2)))
+;;         (insert-image img)))))
+;; (setq mail-user-agent 'mu4e-user-agent
+;;       mu4e-attachment-dir "~/Downloads"
+;;       mu4e-root-maildir (expand-file-name "~/Maildir")
+;;       mu4e-drafts-folder "/INBOX.Drafts"
+;;       mu4e-sent-folder "/INBOX.Sent"
+;;       mu4e-trash-folder "/INBOX.Trash"
+;;       mu4e-get-mail-command "offlineimap -o"
+;;       mu4e-update-interval nil ;; 300
+;;       mu4e-confirm-quit nil
+;;       mu4e-date-format-long "%d.%m.%Y"
+;;       mu4e-headers-date-format "%d.%m.%y"
+;;       mu4e-view-show-addresses t
+;;       mu4e-sent-messages-behavior 'sent
+;;       mu4e-view-show-images t
+;;       mu4e-completing-read-function #'completing-read
+;;       mu4e-compose-signature-auto-include nil
+;;       mu4e-headers-leave-behavior 'apply
+;;       mu4e-html2text-command "w3m -I UTF-8 -O UTF-8 -dump -T text/html"  ;; "html2text -utf8 -width 72"
+;;       message-kill-buffer-on-exit t
+;;       mu4e-maildir-shortcuts
+;;       '(("/INBOX" . ?i)
+;;         ("/INBOX.Sent" . ?s)
+;;         ("/INBOX.Trash" . ?t)
+;;         ("/INBOX.Archive" . ?a))
+;;       mu4e-bookmarks '(("flag:unread AND NOT flag:trashed AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam AND NOT maildir:/INBOX.Sent" "Unread messages" ?u)
+;;                        ("date:today..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam AND NOT maildir:/INBOX.Sent" "Today's messages" ?t)
+;;                        ("date:7d..now AND NOT maildir:/INBOX.Trash AND NOT maildir:/INBOX.Spam" "Last 7 days" ?w)
+;;                        ("mime:image/*" "Messages with images" ?p)
+;;                        ("size:2M..500M" "Big messages" ?b)))
+;; ;; (quelpa '(mu4e-patch :fetcher github :repo "seanfarley/mu4e-patch"))
+;; ;; (require 'mu4e-patch)
+;; ;; (add-hook 'mu4e-view-mode-hook #'mu4e-patch-highlight)
+;; ;; (copy-face 'mu4e-header-key-face 'mu4e-patch-commit-message)
+;; ;; https://rakhim.org/fastmail-setup-with-emacs-mu4e-and-mbsync-on-macos/
+;; (fset 'my-move-to-trash "mt")
+;; (define-key mu4e-headers-mode-map (kbd "d") 'my-move-to-trash)
+;; (define-key mu4e-view-mode-map (kbd "d") 'my-move-to-trash)
+;; (global-set-key (kbd "C-c m") 'mu4e)
+
 (defun my-org-mode-setup ()
   (org-superstar-mode 1)
   (setq org-startup-with-inline-images t)
@@ -1012,7 +1046,7 @@
 (set-background-color "gray85")
 (set-face-attribute 'default
                     nil
-                    :background "gray85")   ;; terminal
+                    :background "gray90")   ;; terminal
 
 (set-face-attribute 'js2-external-variable
                     nil
@@ -1020,17 +1054,12 @@
 
 (set-face-attribute 'avy-background-face
                     nil
-                    :foreground "gray50")
+                    :foreground "gray40")
 
 (set-face-attribute 'font-lock-comment-face
                     nil
                     ;; :height 0.9
                     :slant 'italic)
-
-(set-face-attribute 'region
-                    nil
-                    :background "#f1c40f"
-                    :distant-foreground "gtk_selection_fg_color")
 
 (set-face-attribute 'mode-line
                     nil
