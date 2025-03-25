@@ -206,6 +206,8 @@
 (use-package goggles
   :hook ((prog-mode text-mode) . goggles-mode)
   :config
+  (goggles-define +general-undo undo)
+  (goggles-define +kill-word backward-kill-word kill-word)
   (setq-default goggles-pulse t))
 
 (defadvice kill-ring-save (before slick-copy activate compile)
