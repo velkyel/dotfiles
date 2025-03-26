@@ -58,12 +58,13 @@
                      google-translate
                      glsl-mode
                      pyvenv-auto
+                     yaml-mode
                      clang-format
                      highlight-symbol
                      magit
                      goggles
                      key-seq
-                     dumb-jump
+                     ;; dumb-jump
                      shackle
                      crux
                      web-mode
@@ -498,13 +499,13 @@
 (add-to-list 'vc-handled-backends 'DARCS t)
 (add-hook 'find-file-hooks 'vc-darcs-find-file-hook)
 
-(require 'dumb-jump)
-(setq dumb-jump-selector 'completing-read
-      dumb-jump-prefer-searcher 'rg)
+;; (require 'dumb-jump)
+;; (setq dumb-jump-selector 'completing-read
+;;       dumb-jump-prefer-searcher 'rg)
 
-(add-to-list 'dumb-jump-language-file-exts '(:language "c++" :ext "mm" :agtype "cpp" :rgtype "cpp"))
+;; (add-to-list 'dumb-jump-language-file-exts '(:language "c++" :ext "mm" :agtype "cpp" :rgtype "cpp"))
 
-(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+;; (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
 
 (require 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -1048,7 +1049,7 @@
 (set-background-color "gray85")
 (set-face-attribute 'default
                     nil
-                    :background "gray90")   ;; terminal
+                    :background "gray90")
 
 (set-face-attribute 'js2-external-variable
                     nil
