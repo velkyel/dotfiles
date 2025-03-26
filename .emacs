@@ -1049,7 +1049,7 @@
 (set-background-color "gray85")
 (set-face-attribute 'default
                     nil
-                    :background "gray90")
+                    :background "gray85")
 
 (set-face-attribute 'js2-external-variable
                     nil
