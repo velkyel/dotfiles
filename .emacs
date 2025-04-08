@@ -63,7 +63,7 @@
                      highlight-symbol
                      magit
                      goggles
-                     key-seq
+                     key-chord
                      ;; dumb-jump
                      shackle
                      crux
@@ -395,15 +395,14 @@
 (require 'avy)
 (setq avy-background t)
 
-(require 'key-seq)
-(key-seq-define-global "jj" 'avy-goto-word-or-subword-1)
-(key-seq-define-global "jl" 'goto-line)
-(key-seq-define-global "JJ" 'crux-switch-to-previous-buffer)
-(key-seq-define-global "qq" 'bookmark-jump)
-(key-seq-define-global "QQ" 'bookmark-set-no-overwrite)
+(require 'key-chord)
+(key-chord-mode 1)
 
-(key-chord-mode +1)
-(setq key-chord-safety-interval-forward 0.1)
+(key-chord-define-global "jj" 'avy-goto-word-or-subword-1)
+(key-chord-define-global "jl" 'goto-line)
+(key-chord-define-global "JJ" 'crux-switch-to-previous-buffer)
+(key-chord-define-global "qq" 'bookmark-jump)
+(key-chord-define-global "QQ" 'bookmark-set-no-overwrite)
 
 (require 'unfill)
 (bind-key [remap fill-paragraph] 'unfill-toggle)
