@@ -1,3 +1,5 @@
+apple keyboard:
+
 from: https://help.ubuntu.com/community/AppleKeyboard
 
 apple keyboard swap cmd & alt (no .Xmodmap config needed):
@@ -7,3 +9,11 @@ $ sudo update-initramfs -u -k all
 
 $ reboot
 
+-----------------------
+
+gnome-terminal:
+
+from: https://superuser.com/questions/216804/using-ctrl-tab-to-switch-between-tabs-in-gnome-terminal
+
+gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ next-tab '<Primary>Tab'
+gsettings set org.gnome.Terminal.Legacy.Keybindings:/org/gnome/terminal/legacy/keybindings/ prev-tab '<Primary><Shift>Tab'
