@@ -62,7 +62,7 @@
                      clang-format
                      highlight-symbol
                      magit
-                     goggles
+                     pulsar
                      key-chord
                      ;; dumb-jump
                      shackle
@@ -204,12 +204,8 @@
 
 ;; (bind-key "C-c t" #'crux-visit-shell-buffer)
 
-(use-package goggles
-  :hook ((prog-mode text-mode) . goggles-mode)
-  :config
-  (goggles-define +general-undo undo)
-  (goggles-define +kill-word backward-kill-word kill-word)
-  (setq-default goggles-pulse t))
+(require 'pulsar)
+(pulsar-global-mode 1)
 
 (defadvice kill-ring-save (before slick-copy activate compile)
   "When called interactively with no active region, copy a single line instead."
