@@ -338,6 +338,7 @@
 
 (require 'deadgrep)
 (bind-key "M-g" 'deadgrep)
+(define-key deadgrep-mode-map (kbd "C-c C-q") #'deadgrep-edit-mode)   ;; same as wdired
 
 (require 'shackle)
 (setq shackle-rules
