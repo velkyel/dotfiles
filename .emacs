@@ -82,7 +82,7 @@
                      minions
                      hydra
                      restclient
-                     lsp-mode      ;; needs clangd package
+                     ;; lsp-mode      ;; needs clangd package
                      tree-sitter
                      tree-sitter-langs
                      ))
@@ -616,23 +616,30 @@
 
 (add-hook 'prog-mode-hook 'my-prog-modes-hook)
 
-(add-hook 'c-mode-hook 'lsp)
-(add-hook 'c++-mode-hook 'lsp)
-(setq lsp-warn-no-matched-clients nil
-      lsp-completion-provider :none
-      lsp-headerline-breadcrumb-enable nil
-      lsp-diagnostics-provider :none
-      lsp-enable-snippet nil
-      lsp-enable-symbol-highlighting nil
-      lsp-completion-enable nil
-      lsp-enable-links nil
-      lsp-enable-dap-auto-configure nil
-      lsp-eldoc-enable-hover nil
-      lsp-enable-on-type-formatting nil
-      lsp-before-save-edits nil
-      lsp-modeline-diagnostics-enable nil
-      lsp-modeline-workspace-status-enable nil
-      lsp-lens-enable nil)
+(require 'eglot)
+
+(add-to-list 'eglot-server-programs '(c++-mode . ("clangd")))
+(add-hook 'c-mode-hook 'eglot-ensure)
+(add-hook 'c++-mode-hook 'eglot-ensure)
+(add-hook 'python-mode-hook 'eglot-ensure)
+
+;; (add-hook 'c-mode-hook 'lsp)
+;; (add-hook 'c++-mode-hook 'lsp)
+;; (setq lsp-warn-no-matched-clients nil
+;;       lsp-completion-provider :none
+;;       lsp-headerline-breadcrumb-enable nil
+;;       lsp-diagnostics-provider :none
+;;       lsp-enable-snippet nil
+;;       lsp-enable-symbol-highlighting nil
+;;       lsp-completion-enable nil
+;;       lsp-enable-links nil
+;;       lsp-enable-dap-auto-configure nil
+;;       lsp-eldoc-enable-hover nil
+;;       lsp-enable-on-type-formatting nil
+;;       lsp-before-save-edits nil
+;;       lsp-modeline-diagnostics-enable nil
+;;       lsp-modeline-workspace-status-enable nil
+;;       lsp-lens-enable nil)
 
 (require 'smartparens-config)
 
