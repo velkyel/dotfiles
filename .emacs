@@ -602,7 +602,7 @@
   (make-local-variable 'comment-auto-fill-only-comments)
   (setq comment-auto-fill-only-comments t)
   (setq fill-column 100)
-  (highlight-symbol-mode)
+  ;; (highlight-symbol-mode)
   (highlight-symbol-nav-mode)    ;; M-n, M-p
   (tree-sitter-hl-mode)
   (goto-address-prog-mode)
