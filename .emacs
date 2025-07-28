@@ -618,6 +618,9 @@
 
 (require 'eglot)
 
+(add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider)
+(add-to-list 'eglot-ignored-server-capabilities :documentOnTypeFormattingProvider)
+
 (add-to-list 'eglot-server-programs '(c++-mode . ("clangd")))
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
