@@ -52,7 +52,7 @@ default_border pixel 6
 hide_edge_borders smart_no_gaps
 
 # start a terminal
-bindsym $mod+Shift+Return exec gnome-terminal   # i3-sensible-terminal
+bindsym $mod+Shift+Return exec kitty   # i3-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
