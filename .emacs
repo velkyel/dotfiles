@@ -84,6 +84,7 @@
                      restclient
                      tree-sitter
                      tree-sitter-langs
+                     vundo
                      ))
 
 (set-language-environment "czech")
@@ -348,6 +349,9 @@
       shackle-default-size 0.4
       shackle-inhibit-window-quit-on-same-windows t)
 (shackle-mode)
+
+(require 'vundo)
+(setq vundo-glyph-alist vundo-unicode-symbols)
 
 ;; https://www.reddit.com/r/emacs/comments/pavjxj/how_to_make_compilegotoerror_use_the_current/
 
