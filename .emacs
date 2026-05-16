@@ -617,6 +617,13 @@
 (add-hook 'text-mode-hook 'my-non-special-modes-setup)
 (add-hook 'diff-mode-hook 'my-non-special-modes-setup)
 
+(add-hook 'diff-mode-hook
+  (lambda ()
+    (face-remap-add-relative 'tree-sitter-hl-face:punctuation.bracket
+      :inherit 'default :foreground nil)
+    (face-remap-add-relative 'tree-sitter-hl-face:punctuation.delimiter
+      :inherit 'default :foreground nil)))
+
 (add-hook 'prog-mode-hook 'my-prog-modes-hook)
 
 (require 'eglot)
