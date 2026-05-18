@@ -524,9 +524,6 @@
 (add-to-list 'auto-mode-alist '("\\.mtl\\'" . metal-mode))
 (require 'metal-mode)
 
-
-(quelpa '(modeline-posn :fetcher url :url "https://www.emacswiki.org/emacs/download/modeline-posn.el"))
-(require 'modeline-posn)
 (size-indication-mode 1)
 
 (require 'magit)
